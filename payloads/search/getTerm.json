@@ -1,0 +1,10 @@
+{
+  "from": 0,
+  "size": 10,
+  "_source": ["metadata", "entity", "glossary_term", "categories"],
+  "query": { "bool": { "must": [
+    {"term": {"metadata.name.keyword": "Adresse"}},
+    {"term": {"categories.primary_category_name.keyword": "Versicherte"}},
+    {"term": {"metadata.artifact_type": "glossary_term"}}
+  ]}}
+}

@@ -1,0 +1,10 @@
+[
+  {
+    "abbreviations": [
+      "Term"
+    ],
+    "long_description": "This is a new business term",
+    "name": "Demo term",
+    "short_description": "This is a new business term"
+  }
+]

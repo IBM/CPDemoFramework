@@ -1,0 +1,6 @@
+{
+        "conditions": [{
+            "type": "workflow_id",
+           "values": ["49c96ea8-9b62-11eb-a697-0a580a800239"]
+        }]
+}

@@ -1,0 +1,1 @@
+curl -k "https://$WKC_HOST/v3/workflow_user_tasks?artifact_id=$ARTIFACT_ID&version_id=$VERSION_ID" -H "accept: application/json" -H "Authorization: Bearer $TOKEN"

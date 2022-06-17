@@ -1,0 +1,145 @@
+{
+    "name": "ekv",
+    "description": "ekv asset type",
+    "fields": [
+        {
+            "key": "ekvnr",
+            "type": "string",
+            "facet": true,
+            "is_array": false,
+            "search_path": "ekvnr",
+            "is_searchable_across_types": true
+        },
+        {
+            "key": "ekvdatum",
+            "type": "date",
+            "facet": true,
+            "is_array": false,
+            "search_path": "ekvdatum",
+            "is_searchable_across_types": true
+        },
+        {
+            "key": "leistnr",
+            "type": "string",
+            "facet": true,
+            "is_array": false,
+            "search_path": "leistnr",
+            "is_searchable_across_types": false
+        },
+        {
+            "key": "kostnr",
+            "type": "string",
+            "facet": true,
+            "is_array": false,
+            "search_path": "kostnr",
+            "is_searchable_across_types": false
+        },
+        {
+            "key": "versnr",
+            "type": "string",
+            "facet": true,
+            "is_array": false,
+            "search_path": "versnr",
+            "is_searchable_across_types": false
+        },
+        {
+            "key": "hilfsnr",
+            "type": "string",
+            "facet": true,
+            "is_array": true,
+            "search_path": "hilfsnr",
+            "is_searchable_across_types": false
+        },
+        {
+            "key": "produkt",
+            "type": "string",
+            "facet": true,
+            "is_array": true,
+            "search_path": "produkt",
+            "is_searchable_across_types": false
+        },
+        {
+            "key": "arztnr",
+            "type": "string",
+            "facet": true,
+            "is_array": false,
+            "search_path": "arztnr",
+            "is_searchable_across_types": false
+        },
+        {
+            "key": "diagschl",
+            "type": "string",
+            "facet": true,
+            "is_array": true,
+            "search_path": "diagschl",
+            "is_searchable_across_types": false
+        },
+        {
+            "key": "diagorg",
+            "type": "string",
+            "facet": true,
+            "is_array": true,
+            "search_path": "diagorg",
+            "is_searchable_across_types": false
+        },
+        {
+            "key": "diagmined",
+            "type": "string",
+            "facet": true,
+            "is_array": true,
+            "search_path": "diagmined",
+            "is_searchable_across_types": false
+        },
+        {
+            "key": "xml",
+            "type": "string",
+            "facet": true,
+            "is_array": false,
+            "search_path": "xml",
+            "is_searchable_across_types": false
+        }
+    ],
+    "properties": {
+        "ekvnr": {
+            "type": "string",
+            "description": "Nummer des Kostenvoranschlag"
+        },
+        "ekvdatum": {
+            "type": "date",
+            "description": "Datum des Kostenvoranschlag"
+        },
+        "leistnr": {
+            "type": "string",
+            "description": "Nummer des Leistungserbringers"
+        },
+        "kostnr": {
+            "type": "string",
+            "description": "Nummer des Kostenträgers"
+        },
+        "hilfsnr": {
+            "type": "string",
+            "description": "Nummer des Hilfsmittels",
+            "is_array": true
+        },
+        "produkt": {
+            "type": "string",
+            "description": "Bezeichnung des Hilfsmittels",
+            "is_array": true
+        },
+        "diagschl": {
+            "type": "string",
+            "description": "Diagnoseschlüssel",
+            "is_array": true
+        },
+        "diagorg": {
+            "type": "string",
+            "description": "Original beschriebene Diagnose",
+            "is_array": true
+        },
+        "diagmined": {
+            "type": "string",
+            "description": "Per Text Mining ermittelte Diagnose",
+            "is_array": true
+        }
+    }
+}

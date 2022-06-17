@@ -1,0 +1,118 @@
+[
+    {
+      "abbreviations": [
+        "string"
+      ],
+      "categories": [
+        {
+          "description": "Description about the artifact relationship",
+          "id": "990e33f5-3108-4d45-a530-0307458362d4"
+        }
+      ],
+      "classifications": [
+        {
+          "description": "Description about the artifact relationship",
+          "id": "990e33f5-3108-4d45-a530-0307458362d4"
+        }
+      ],
+      "custom_attributes": [
+        {
+          "custom_attribute_definition_id": "string",
+          "name": "string",
+          "values": [
+            {
+              "value": {}
+            }
+          ]
+        }
+      ],
+      "custom_relationships": [
+        {
+          "definition_id": "string",
+          "relationships": [
+            {
+              "description": "Description about the artifact relationship",
+              "id": "990e33f5-3108-4d45-a530-0307458362d4"
+            }
+          ],
+          "reversed": true,
+          "target_type": "data_class"
+        }
+      ],
+      "data_classes": [
+        {
+          "description": "Description about the artifact relationship",
+          "id": "990e33f5-3108-4d45-a530-0307458362d4"
+        }
+      ],
+      "effective_end_date": "2021-05-05T12:19:42.539Z",
+      "effective_start_date": "2021-05-05T12:19:42.539Z",
+      "example": "string",
+      "has_terms": [
+        {
+          "description": "Description about the artifact relationship",
+          "id": "990e33f5-3108-4d45-a530-0307458362d4"
+        }
+      ],
+      "has_type_terms": [
+        {
+          "description": "Description about the artifact relationship",
+          "id": "990e33f5-3108-4d45-a530-0307458362d4"
+        }
+      ],
+      "import_source_created_by": "string",
+      "import_source_created_on": "2021-05-05T12:19:42.539Z",
+      "import_source_usage": "string",
+      "is_a_type_of_terms": [
+        {
+          "description": "Description about the artifact relationship",
+          "id": "990e33f5-3108-4d45-a530-0307458362d4"
+        }
+      ],
+      "is_of_terms": [
+        {
+          "description": "Description about the artifact relationship",
+          "id": "990e33f5-3108-4d45-a530-0307458362d4"
+        }
+      ],
+      "long_description": "string",
+      "name": "Customer Number",
+      "parent_category": {
+        "description": "Description about the artifact relationship",
+        "id": "990e33f5-3108-4d45-a530-0307458362d4"
+      },
+      "reference_copy": true,
+      "related_terms": [
+        {
+          "description": "Description about the artifact relationship",
+          "id": "990e33f5-3108-4d45-a530-0307458362d4"
+        }
+      ],
+      "replaced_by_terms": [
+        {
+          "description": "Description about the artifact relationship",
+          "id": "990e33f5-3108-4d45-a530-0307458362d4"
+        }
+      ],
+      "replaces_terms": [
+        {
+          "description": "Description about the artifact relationship",
+          "id": "990e33f5-3108-4d45-a530-0307458362d4"
+        }
+      ],
+      "short_description": "string",
+      "steward_ids": [
+        "string"
+      ],
+      "synonym_terms": [
+        {
+          "description": "Description about the artifact relationship",
+          "id": "990e33f5-3108-4d45-a530-0307458362d4"
+        }
+      ],
+      "tags": [
+        "string"
+      ],
+      "workflow_state": "string"
+    }
+  ]

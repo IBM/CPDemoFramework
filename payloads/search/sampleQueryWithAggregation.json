@@ -1,0 +1,11 @@
+{
+    "query": {
+      "query_string" : {
+        "query" : "Adresse"
+      }
+    },
+    "aggregations" : {
+      "num_tags" : {"terms" : { "field" : "metadata.tags" }},
+      "num_terms" : {"terms" : { "field" : "metadata.terms" }}    
+    }
+}

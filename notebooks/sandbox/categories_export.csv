@@ -1,0 +1,19 @@
+artifact_id,name,steward_ids,tags,description
+4f043e06-e9c6-4b33-a89e-98dbc93a1295,apicat,[],[],updated category long description for POT
+55de4f02-0130-4b9f-a5ec-90567ff66a60,cat1,[],[], cat1 long
+da9686ae-6827-4fc0-b851-9185122a05d3,cat5,[],[], cat5 long
+d93d184d-6cea-458d-8525-64be89ba578d,cat-1234,[],[],updated fsdfss
+adfaa0b1-5162-43eb-a125-23c96fc09974,Property,[],[],updated NaN
+f12a4eb2-87cb-4e5d-9f51-4aba4715e20c,cat53,[],[], cat53 long
+dfa16ce2-bf03-4743-b3dd-4a85348be6dd,AHU,[],[],updated Air handling unit
+b7027f1e-dfbc-409e-b9e9-50bba87e512f,cat13,[],[], cat13 long
+d4efb010-d158-4e47-a63d-3750ee9665d2,apicat2,[],[],updated category long description for POT
+cb22ab06-23b0-4504-be8b-28aa27dee8c7,cat54,[],[], cat54 long
+e39ada11-8338-3704-90e3-681a71e7c839,[uncategorized],[],[],updated This is the system default if a standard category is not assigned.
+b066a536-c294-48f0-8311-47f9c71947f6,new-cat-2345,[],[],updated NaN
+eebd338d-dbd5-37e4-9e4a-1296de82963a,Locations,[],[],updated Locations Category (LC) is defined as parent for locations reference datasets.
+932f0cd7-7142-4eeb-aa45-d8de49f2ad65,cat12,[],[], cat12 long
+caff718c-1247-4c75-a41b-a75d94b0d739,Employee,[],[],updated Employee information
+578c29ee-6173-4bd9-bd50-19c30b8729f5,cat14,[],[], cat14 long
+88868daf-18e8-4189-883f-09556dae20dc,IBM,[],[],All business information relating to IBM Data and AI
+14b1d5e8-6d2b-49b2-aa7a-8087f716ef58,cat52,[],[], cat52 long

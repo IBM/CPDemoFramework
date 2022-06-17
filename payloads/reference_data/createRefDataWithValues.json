@@ -1,0 +1,27 @@
+{
+  "long_description": "description of reference data set",
+  "name": "Gender2",
+  "rds_values": [
+    {
+      "code": "M",
+      "description": "Male",
+      "value": "Male"
+    },
+    {
+      "code": "F",
+      "description": "Female",
+      "value": "Female"
+    },
+    {
+      "code": "U",
+      "description": "Unknown",
+      "value": "Unknown"
+    },
+    {
+      "code": "D",
+      "description": "Diverse",
+      "value": "Diverse"
+    }
+  ],
+  "type": "TEXT"
+}

@@ -1,0 +1,21 @@
+{
+    "artifact_types": ["glossary_term"],
+    "default_value": "12345",
+    "description": "description of custom attribute definition",
+    "display_in_child_assets": true,
+    "hidden": false,
+    "max_length": 10,
+    "maximum": 0,
+    "min_length": 1,
+    "minimum": 0,
+    "multiple_values": true,
+    "name": "My Custom Attribute",
+    "placeholder": false,
+    "read_only": false,
+    "related_artifact_types": [
+      "string"
+    ],
+    "required": true,
+    "reverse_name": "Term related to category",
+    "type": "TEXT"
+  }

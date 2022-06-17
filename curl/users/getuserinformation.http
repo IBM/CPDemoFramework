@@ -1,0 +1,1 @@
+curl -k -X GET -H "Authorization: Bearer {token}" -H "cache-control: no-cache" "https://{cpd_cluster_host}/icp4d-api/v1/users/{user_name}"

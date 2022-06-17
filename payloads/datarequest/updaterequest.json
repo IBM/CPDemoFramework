@@ -1,0 +1,29 @@
+{
+
+    "Abstract": "string",
+    "AssignedTo": "string",
+    "DataIntent": "string",
+    "DataObj": 
+
+{
+
+    "DataFields": 
+
+[],
+"DataSets": 
+
+[],
+"DataSource": 
+
+        {}
+    },
+    "Deadline": "string",
+    "FulfilledBy": "string",
+    "IssueLink": "string",
+    "Project": "string",
+    "RequestedBy": "string",
+    "State": "string",
+    "Title": "string",
+    "project_id": "string"
+
+}

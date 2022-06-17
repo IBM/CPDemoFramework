@@ -1,0 +1,29 @@
+{
+  "effective_start_date": "2021-04-13T18:59:06.782Z",
+  "effective_end_date": "2021-04-13T18:59:06.782Z",
+  "long_description": "description of reference data set",
+  "name": "Gender2",
+  "rds_values": [
+    {
+      "code": "M",
+      "description": "Male",
+      "value": "Male"
+    },
+    {
+      "code": "F",
+      "description": "Female",
+      "value": "Female"
+    },
+    {
+      "code": "U",
+      "description": "Unknown",
+      "value": "Unknown"
+    },
+    {
+      "code": "D",
+      "description": "Diverse",
+      "value": "Diverse"
+    }
+  ],
+  "type": "TEXT"
+}

@@ -1,0 +1,8 @@
+{
+  "revision": "1",
+  "custom_attributes": [{
+      "custom_attribute_definition_id": "9d32bf51-4c2c-49b1-ab8f-cc82fe90785d",
+      "name": "Enterprise Data ID",
+      "values": [{"value": "A0059"}]
+  }]
+}

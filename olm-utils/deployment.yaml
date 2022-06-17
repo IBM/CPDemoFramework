@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: olm-utils
+spec:
+  containers:
+    - name: olm-utils
+      image: quay.io/ibm_cpd_zen/olm-utils:v14
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 3100
+      securityContext:
+        privileged: true
+  serviceAccount: olm-utils-sa

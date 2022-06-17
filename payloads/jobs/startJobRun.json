@@ -1,0 +1,5 @@
+{
+  "job_run": {
+    "configuration": {
+      "env_variables": ["key1=value1", "key2=value2"]
+}}}
