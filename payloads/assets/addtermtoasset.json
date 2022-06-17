@@ -1,0 +1,11 @@
+[{
+    "op": "replace",
+    "path": "/list",
+    "value": [
+        {
+            "term_display_name":"Versicherte Person",
+            "term_id":"5d2d5419-0032-4c64-90e2-ce68c6997bb5_e1d44823-b7aa-4a65-bfa3-d32e9180078a"
+        }
+    ],
+    "attribute": "asset_terms"
+}]

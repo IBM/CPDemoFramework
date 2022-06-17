@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "name": "Rest API 1",
+    "description": "Represents Rest API 1",
+    "tags": ["wkc"],
+    "asset_type": "rest_api",
+    "origin_country": "us",
+    "rov": {"mode": 0}
+  },
+  "entity": { "rest_api": { 
+    "product": {
+          "short_name": "WKC",
+          "long_name": "Watson Knowledge Catalog"
+    },
+    "type": "GET",
+    "url2": "https://{hostname}/v3/glossary_terms/api#/",
+    "version": "1.0"
+  }}
+}

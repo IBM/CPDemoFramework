@@ -1,0 +1,24 @@
+{
+    "end1": {
+      "default_display_name": "string",
+      "localized_display_name": {},
+      "relationship_name": "string",
+      "containing_asset_type": "book",
+      "container_id": "cb898dfa-9e0d-45d3-adc7-4de772d1d17f",
+      "multiplicity": "ONE",
+      "on_delete": "CASCADE",
+      "container_type": "CATALOG",
+      "qualifiedRelationshipName": "string"
+    },
+    "end2": {
+      "default_display_name": "string",
+      "localized_display_name": {},
+      "relationship_name": "string",
+      "containing_asset_type": "book",
+      "container_id": "cb898dfa-9e0d-45d3-adc7-4de772d1d17f",
+      "multiplicity": "ONE",
+      "on_delete": "CASCADE",
+      "container_type": "CATALOG",
+      "qualifiedRelationshipName": "string"
+    }
+  }

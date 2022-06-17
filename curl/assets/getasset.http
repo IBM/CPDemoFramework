@@ -1,0 +1,1 @@
+curl -k -X GET https://{hostname}/v2/assets/{asset_id}?catalog_id={catalog_id} -H 'cache-control: no-cache' -H 'content-type: application/json' -H 'Authorization: Bearer {TOKEN}'

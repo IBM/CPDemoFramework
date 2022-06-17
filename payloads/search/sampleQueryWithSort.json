@@ -1,0 +1,11 @@
+{
+    "_source":["provider_type_id", "artifact_id", "metadata.name"],
+    "query": {
+      "query_string" : {
+        "query" : "Adresse"
+      }
+    },
+    "sort": [
+        {"metadata.modified_on": {"order": "desc","unmapped_type": "date"}}
+     ]
+}

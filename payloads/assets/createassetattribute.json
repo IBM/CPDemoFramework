@@ -1,0 +1,48 @@
+{
+  "description":"Custom attributes for data asset type",
+    "fields": [
+      {
+         "key":"alias",
+         "type":"string",
+         "facet":false,
+         "is_array":false,
+         "is_searchable_across_types":true
+      },
+      {
+        "key":"environment",
+        "type":"string",
+        "facet":false,
+        "is_array":true,
+        "is_searchable_across_types":true
+     }
+
+   ],
+   "localized_metadata_attributes": {
+    "name": {
+      "default": "Custom Properties",
+      "en": "Custom Properties"
+    }
+  },
+    "relationships":[
+    ],
+   "properties": {
+        "alias": {
+          "type": "string",
+          "max_length": 100
+        },
+         "environment": {
+          "type": "string",
+          "max_length": 50,
+          "is_array": true
+        },
+        "review_date": {
+         "type": "date",
+         "description": "Review date for the data asset"
+       }
+   },
+   "decorates": [
+    {
+      "asset_type_name": "data_asset"
+    }
+  ]
+ }

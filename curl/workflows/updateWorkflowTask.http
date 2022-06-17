@@ -1,0 +1,1 @@
+curl -k -X POST -H "Content-Type: application/json" -H "accept: application/json" -H "Authorization: Bearer $TOKEN" "https://$WKC_HOST/v3/workflow_user_tasks/$TASK_ID/actions" -d "{ \"action\": \"complete\", \"form_properties\": [ { \"id\": \"action\", \"value\": \"#publish\" } ]}"
