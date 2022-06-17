@@ -1,0 +1,1 @@
+https://<hostname>/ibm/iis/common-utils/rest/v1/app/reindex?batchSize=300&solrBatchSize=200&threadCount=6

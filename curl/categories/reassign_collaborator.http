@@ -1,0 +1,1 @@
+curl -k -X POST "https://cpd-cp4d.apps.plnt.tec.uk.ibm.com/v3/categories/a70dd211-eed7-4aba-8908-47a971d9f67a/collaborators" -H  "accept: */*" -H  "Content-Type: */*" -H 'Authorization: Basic aWNwNGQtZGV2OnVBZGR4dDRheHJhMzg' -d '{"principal_id":"1000330999","role":"owner","user_type":"USER"}' -k

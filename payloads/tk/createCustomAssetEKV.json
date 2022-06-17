@@ -1,0 +1,29 @@
+{
+  "metadata": {
+    "name": "EKVName",
+    "description": "2021-Susi-01",
+    "tags": ["le_ik:330551143","kt_ik:105177505"],
+    "asset_type": "ekv",
+    "origin_country": "de",
+    "rov": {"mode": 0}
+  },
+  "entity": { "ekv": {
+    "ekvnr": "2021-Susi-01",
+    "ekvdatum": "2021-08-21",
+    "leistnr": "330551143",
+    "kostnr": "105177505",
+    "versnr": "3113461811",
+    "hilfsnr": ["1050040"],
+    "produkt": ["Pflegeirgendwas"],
+    "arztnr": "987269119",
+    "diagschl": ["F.45"],
+    "diagorg": ["IrgendeineDiagnose"],
+    "diagmined": ["Die geminte Diagnose"],
+    "xml": "<?xml?><kostenvoranschlag_message>.....</kostenvoranschlag_message>"},
+    "asset_terms": {"list": [{"term_display_name": "Elektronischer Kostenvoranschlag",
+      "term_id": "5d2d5419-0032-4c64-90e2-ce68c6997bb5_47011eed-f099-4dac-ac4a-62a0e6635cc1"}]},
+    "data_profile": {"data_classification_manual": [{"id": "f19bd342-c1ed-405b-89db-c10a8901d982",
+      "name": "Personally Identifiable Information (GDPR relevant)",
+      "global_id": "5d2d5419-0032-4c64-90e2-ce68c6997bb5_f19bd342-c1ed-405b-89db-c10a8901d982"}]
+  }} 
+}
