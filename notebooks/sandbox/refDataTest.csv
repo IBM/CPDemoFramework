@@ -1,0 +1,7 @@
+"code","value","description","parent","is_multi_mapped_to_Locations>>Physical Locations"
+"US","United States of America","United States of America",,"DAL"
+"UK","United Kingdom","United Kingdom",,"LON"
+"JP","Japan","Japan",,"TOK"
+"EU","European Union","European Union",,
+"AU","Australia","Australia",,
+"DE","Germany","Germany","EU","FRA"

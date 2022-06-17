@@ -1,0 +1,6 @@
+{
+    "_source":["provider_type_id", "artifact_id", "metadata.name"],
+    "query": {
+      "query_string" : { "query" : "Adresse" }
+    }
+}

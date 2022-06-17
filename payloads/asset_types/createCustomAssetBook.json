@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "name": "Getting Started with Assets 1",
+    "description": "Describes how to create and use metadata for assets 2",
+    "tags": ["getting", "started", "documentation"],
+    "asset_type": "book",
+    "origin_country": "us",
+    "rov": { "mode": 0 }
+  },
+  "entity": {
+    "book": {
+      "author": {
+          "first_name": "Douglas",
+          "last_name": "Adams"
+      },
+      "price": 29.95
+  }}
+}

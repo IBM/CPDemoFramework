@@ -1,0 +1,9 @@
+{
+    "action": "complete",
+    "form_properties": [
+        {
+            "id": "action",
+            "value": "#publish"
+        }
+    ]
+}

@@ -1,0 +1,6 @@
+"code","value","description","parent"
+"4","Keine Angabe","Es wurde keine Angabe zum Geschlecht gemacht",
+"3","Divers","Das Geschlecht konnte als Divers identifiziert werden",
+"2","Weiblich","Das Geschlecht konnte als Weiblich identifiziert werden",
+"1","Männlich","Das Geschlecht konnte als Männlich identifiziert werden",
+"0","Unbekannt","Das Geschlecht konnte nicht abgefragt oder erkannt werden",

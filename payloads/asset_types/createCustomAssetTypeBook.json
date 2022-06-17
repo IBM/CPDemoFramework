@@ -1,0 +1,16 @@
+{
+  "name": "book",
+  "description": "Book asset type",
+  "fields": [{
+    "key": "author.last_name",
+    "type": "string",
+    "facet": false,
+    "is_array": false,
+    "search_path": "author.last_name",
+    "is_searchable_across_types": true
+  }],
+  "properties": { "price": {
+    "type": "number",
+    "description": "Suggested retail price"
+  }}
+}

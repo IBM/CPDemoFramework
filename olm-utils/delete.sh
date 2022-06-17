@@ -1,0 +1,1 @@
+oc delete project olm-utils
