@@ -10,6 +10,10 @@ fi
 if [[ $PLAYGROUND_ENVIRONMENT == *"staging"* ]]; then
       branch="staging" 
 fi
+if [[ $PLAYGROUND_ENVIRONMENT == *"techzone"* ]]; then
+      branch="techzone" 
+fi
+
 github_url=https://github.com/IBM/ibmtechzone-demo-artifacts
 project_name=ibmtechzone-demo-artifacts 
 username=IBM
