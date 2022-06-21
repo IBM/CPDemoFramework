@@ -27,7 +27,7 @@ fi
 # TODO
 # Update the actual url
 cd /projects/techzone-demo/sandbox/$project_name
-git checkout -b $sandbox_username-$demo_name
+# git checkout -b $sandbox_username-$demo_name
 git sparse-checkout set $sandbox_username-$demo_name
 if [ -d "$sandbox_username-$demo_name" ]; then
   # Control will enter here if $DIRECTORY doesn't exist.
@@ -54,13 +54,13 @@ git add .
 git commit -am "sandbox demo commit by '$sandbox_username'"
 git push https://user_name:$gtd@github.com/$username/$project_name.git 
 
-curl \
-  -X POST \
-  -H 'Authorization: token '${gtd}'' \
-  https://api.github.com/repos/${username}/${project_name}/pulls \
-  -d '{"title":"Sandbox Demo by '$sandbox_username'","body":"","head":"'$sandbox_username-$demo_name'","base":"'$branch'"}'
+# curl \
+#   -X POST \
+#   -H 'Authorization: token '${gtd}'' \
+#   https://api.github.com/repos/${username}/${project_name}/pulls \
+#   -d '{"title":"Sandbox Demo by '$sandbox_username'","body":"","head":"'$sandbox_username-$demo_name'","base":"'$branch'"}'
 
 cd /projects/techzone-demo/sandbox
 rm -rf $project_name
-echo "Pull Request created successfully!"   
+echo "Demo Files Uploaded!"   
 
