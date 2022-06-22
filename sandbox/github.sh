@@ -10,6 +10,7 @@ fi
 if [[ $PLAYGROUND_ENVIRONMENT == *"staging"* ]]; then
       branch="staging" 
 fi
+
 if [[ $PLAYGROUND_ENVIRONMENT == *"techzone"* ]]; then
       branch="techzone" 
 fi
