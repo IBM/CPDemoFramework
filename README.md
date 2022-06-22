@@ -1,2 +1,1 @@
-# CPDemoFramework
-This Repo will have all the scripts required for the CP Demo Framework.
+This is the repo of scripts required for olm-utils and CP4d demo-builder
