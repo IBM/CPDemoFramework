@@ -1,8 +1,8 @@
 {
-    "paext": {
-        "techzone-olm-utils": "Techzone OLM Utils",
-        "techzone-export-demo-artifacts": "Techzone Export Demo Artifacts",
-        "techzone-import-demo-artifacts": "Techzone Import Demo Artifacts",
-        "test":"This is for testing!"
-    }
+  "paext": {
+    "techzone-olm-utils": "Techzone OLM Utils",
+    "techzone-export-demo-artifacts": "Techzone Export Demo Artifacts",
+    "techzone-import-demo-artifacts": "Techzone Import Demo Artifacts",
+    "test": "This is for testing!"
+  }
 }
