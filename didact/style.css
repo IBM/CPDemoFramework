@@ -1,0 +1,292 @@
+html,
+        div,
+        body {
+            background-color: #1a1a1a;
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 16px;
+            outline: none;
+        }
+        body {
+            font-family: Helvetica, sans-serif;
+        }
+        a:hover {
+            color: #A6C8FF;
+            text-decoration: underline;
+        }
+        a:visited {
+            color: #BE95FF;
+        }
+        .timeline-container {
+            margin-top: 2rem;
+        }
+        .timeline {
+            position: relative;
+            padding: 0.5rem 1rem 1rem 4rem;
+        }
+        .dot{
+            content: url("https://raw.githubusercontent.com/IBM/Developer-Playground/development/didact/images/check-mark.svg");
+            position: absolute;
+            width: 10px;
+            aspect-ratio: 1;
+            border: 0px solid #FF9F55;
+            border-radius: 50%;
+            background-color: white;
+            left: 1rem;
+            top: 0rem;
+            opacity: 0.5 !important;
+        }
+        .content {
+            color: white;
+            background: transparent;
+            margin-top: -2.22rem;
+            margin-left: -1.5rem;
+        }
+        .timeline:not(:last-child):before {
+            content: '';
+            position: absolute;
+            width: 1px;
+            background-color: white;
+            left: 1.25rem;
+            bottom: 0rem;
+            top: 0.6rem;
+        }
+        .button.is-dark.is-medium {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: transparent;
+            border-color: white;
+            color: #fff;
+            border: 1px solid white;
+            margin-bottom: 1.8rem !important;
+            margin-top: -0.5rem !important;
+            border-radius: 0rem;
+            min-width: 11.25rem;
+            font-size: 14px;
+            text-align: left;
+            min-height: 3rem;
+            margin: 0rem;
+            justify-content: left;
+        }
+        .button.is-dark.is-medium:hover {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: #2a67f5;
+            border-color: white;
+            color: #fff;
+            text-decoration: none;
+        }
+        input {
+            position: absolute;
+            display: none;
+            color: #fff !important;
+        }
+        .step, .footer-step{
+          opacity:0.5;
+          cursor: not-allowed;
+        }
+        #step{
+            pointer-events: none;
+        }
+        #icon{
+            display:none;
+        }
+        .footer-cta {
+            background-color: #343A3E !important;
+            min-width: 50%;
+            background-color: #343A3E;
+            padding: 30px;
+            padding-left: 60px;
+            padding-bottom: 0px;
+        }
+        .footer-cta a {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        input:checked~span #icon {
+            display: flex;
+            margin: 0.05rem auto;
+        }
+        input:checked~span {
+            width: 20px;
+            margin-top: -0.3rem;
+            margin-left: -0.36rem;
+            background-color: #0261FF;
+        }
+        input:checked .dot {
+            opacity: 1 !important;
+        }
+        input:checked~.timeline:not(:last-child):before {
+            opacity: 1;
+        }
+        .footer {
+            display: flex;
+            flex-direction: row;
+            width: auto;
+            background:transparent;
+            margin-left:2rem;
+            margin-top:2rem;
+        }
+        .image-content {
+            pointer-events: auto !important;
+            padding: 0.313rem 0.625rem;
+            color: black;
+            position: relative;
+            font-size: 27px;
+        }
+        .image-content a:hover {
+            text-decoration: underline;
+        }
+        .image-div {
+            display: block;
+            position: relative;
+            background-color: white;
+            min-width: 50%;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("https://raw.githubusercontent.com/IBM/Developer-Playground/master/didact/images/github.svg");
+            background-position: -8rem 120%;
+            background-size:contain;
+            background-repeat: no-repeat;
+            padding-top: 1.25rem;
+            padding-left: 1.25rem;
+        }
+        .image-btn {
+            position: absolute;
+            right:0;
+            bottom:0;
+            background-color: #0062FF;
+            width: 18.75rem;
+            padding: 0px;
+            padding-bottom: 1.25rem;
+        }
+        .image-link span {
+            float: right;
+            font-size: 32px;
+            padding-right: 1.25rem;
+        }
+        .image-btn .image-link:hover {
+            text-decoration: underline;
+            color: white !important;
+            background-color: #0353E9 !important;
+        }
+        .image-btn a:hover {
+            text-decoration: none !important;
+            color: white !important;
+        }
+        .image-link {
+            color: white !important;
+            display: block !important;
+            padding: 0.313rem 0.625rem 0.313rem 0.625rem !important;
+            line-height: 1.75rem !important;
+            font-size: 16px !important;
+        }
+        .header {
+            background-position: right;
+            width: 95%;
+            min-height: 4.375rem;
+            display: inline-block;
+            margin-top: 1.25rem !important;
+            margin-bottom: 1.25rem;
+            margin-left: 1.875rem;
+            margin-right: 1.875rem;
+            max-width: 75rem;
+            background-repeat: no-repeat;
+            background-size: 43.75rem 31.25rem;
+        }
+        .header .left-content {
+            float: left;
+            width: 50%;
+            background-color: #525252 !important;
+            min-height: 16.875rem;
+            font-size: 16px;
+            padding-top: 2.188rem;
+        }
+        .header .left-content h4 {
+            background: none;
+            color: #C1C7CD;
+            padding-left: 1.563rem;
+            padding-right: 1.563rem;
+        }
+        .header .left-content div {
+            background: none;
+            color: #C1C7CD;
+            padding-left: 0.938rem;
+            padding-right: 1.563rem;
+            font-size: 16px;
+            margin-bottom: 0.625rem;
+        }
+        .container a {
+            color: #BE95FF;
+            background-color: transparent;
+            text-decoration: none;
+        }
+        .container a:visited {
+            color: #8C43FC;
+            background-color: transparent;
+            text-decoration: none;
+        }
+        .apptitle {
+            margin-left: 1.563rem;
+            margin-top: 1.25rem;
+            margin-bottom: 0px;
+            font-size: 28px !important;
+            color: white !important;
+            background: transparent;
+        }
+        .subheading {
+            margin-left: 1.563rem;
+            margin-top: 0rem;
+            margin-bottom: 0rem;
+            font-size: 16px;
+            color: #c1c7cd;
+            background: transparent;
+        }
+        .no-hover:hover {
+            background-color: #A6C8FF !important;
+        }
+        .section {
+            margin-top: 0.313rem;
+            margin-bottom: -3.125rem;
+        }
+        .enable{
+            opacity:1 !important;
+            cursor: auto !important;
+        }
+        .allow-click{
+          opacity:1 !important;
+          pointer-events: auto !important;
+        }
+        .show-dot{
+          opacity: 1 !important;
+        }
+        .hidden-state{
+            display: none;
+        }
+        summary{
+            float:left;
+            display:flex;
+            justify-content: space-between;
+        }
+        summary::marker{
+            display:none;
+            content: "";
+        }
+        details > summary > span { 
+            content: url("https://raw.githubusercontent.com/IBM/Developer-Playground/master/didact/images/arrow-right.svg");
+            margin-left: 1rem;
+        }
+        details[open] > summary > span {
+            content: url("https://raw.githubusercontent.com/IBM/Developer-Playground/master/didact/images/arrow-down.svg");
+        }
+        details{
+            margin-bottom: 1.25rem;
+        }
+        .dropdown-ctas{
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        @media screen and (max-width: 50rem) {
+            .footer {
+                display: flex;
+                flex-direction: column;
+            }
+            .image-content {
+                height: 20rem;
+            }
+        }

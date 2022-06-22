@@ -8,9 +8,11 @@ fi
 if [[ $PLAYGROUND_ENVIRONMENT == *"staging"* ]]; then
       branch="staging" 
 fi
+
 if [[ $PLAYGROUND_ENVIRONMENT == *"techzone"* ]]; then
       branch="techzone" 
 fi
+
 github_url=https://github.com/IBM/ibmtechzone-demo-artifacts
 cd /projects/techzone-demo/sandbox
 rm -rf /projects/techzone-demo/sandbox/$project_name
