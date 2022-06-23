@@ -46,13 +46,12 @@ class GovArtifactAPI(subAPIs.SubAPI):
     payload = self.mainAPI._loadPayload(payloadFile)
     return self.mainAPI._POST(f'/v3/governance_artifact_types/{artifact_type}/custom_attribute_definitions', payload, statusCheck=201)
 
-  #TODO: create a _postFile function
   def importArtifactsZIP(self, filename):
     """Import artifacts from a zip file
     Requires CP4D 4.x"""
     files = {'file': (filename, open(filename, 'rb'), 'application/x-zip-compressed')}
     endpoint = f'/v3/governance_artifact_types/import'
-    self.mainAPI._putFile(endpoint, files=files, contentType='multipart/form-data', statusCheck=202)
+    self.mainAPI._postFile(endpoint, files=files, contentType='multipart/form-data', statusCheck=202)
 
   # DELETE functions
   def deleteCustomAttribute(self, artifact_type, custom_attribute_definition_id):
