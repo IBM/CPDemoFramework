@@ -65,13 +65,9 @@ requestNumber=$(echo "${result}" | python -c 'import json,sys;obj=json.load(sys.
 
 re='^[0-9]+$'
 if ! [[ $requestNumber =~ $re ]] ; then
-   echo "Something went wrong while creating the pull request" >&2; exit 2
+   echo "Something went wrong!" >&2; exit 2
 fi
 
-echo "Pull Request created successfully and the Number is : $requestNumber"
-
-
-echo "Auto merging the PR" 
 
 
 curl --location --request PUT "https://api.github.com/repos/${username}/${project_name}/pulls/$requestNumber/merge" \
