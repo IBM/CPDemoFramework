@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
     - name: olm-utils
-      image: quay.io/ibm_cpd_zen/olm-utils:v14
+      image: icr.io/cpopen/olm-utils:pre-release
       imagePullPolicy: Always
       ports:
         - containerPort: 3100
