@@ -54,7 +54,7 @@ alias run_utils="kubectl exec ${PROJECT_NAME} --";
 alias oclogin="run_utils login-to-ocp";
 alias get_pods="kubectl get pods -n $PROJECT_NAME";
 # alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}"
-alias get_preview="kubectl cp $PROJECT_NAME/$PROJECT_NAME:/tmp/work/preview.sh ${CHE_PROJECTS_ROOT}/techzone-demo/olm-utils/preview.sh"
+alias get_preview="kubectl cp $PROJECT_NAME/$PROJECT_NAME:/tmp/work/preview.sh ${CHE_PROJECTS_ROOT}/techzone/olm-utils/preview.sh"
 
 if  [ -n "$ICR_KEY" ]
 then
