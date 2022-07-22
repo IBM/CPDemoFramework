@@ -13,20 +13,20 @@ storage_vendor=sys.argv[2]
 with open('cpd-config.yaml') as f:
     list_doc = yaml.safe_load(f)
 
-if storage_vendor=="NFS" or "nfs":
-    list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]="nfs-storage"
+if storage_vendor=='NFS' or storage_vendor=='nfs':
+    list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]= "nfs-storage"
     list_doc["openshift"][0]["openshift_storage"][0]["storage_type"]= "nfs"
 
-elif storage_vendor=="OCS" or "ocs":
-    list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]="ocs-storage"
+elif storage_vendor=='OCS' or storage_vendor=='ocs':
+    list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]= "ocs-storage"
     list_doc["openshift"][0]["openshift_storage"][0]["storage_type"]= "ocs"
 
-elif storage_vendor=="portworx":
-    list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]="portworx-storage"
+elif storage_vendor=='portworx':
+    list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]= "portworx-storage"
     list_doc["openshift"][0]["openshift_storage"][0]["storage_type"]= "portworx"
 
-elif storage_vendor=="managed-nfs-storage":
-    list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]="nfs-storage"
+elif storage_vendor=='managed-nfs-storage':
+    list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]= "nfs-storage"
     list_doc["openshift"][0]["openshift_storage"][0]["storage_type"]= "nfs"
 
 i=0
