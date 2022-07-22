@@ -59,12 +59,12 @@ while [ "$pod_status" != "True" ] && [ $waittime -lt 300 ];do
     done
 
 
-export CONFIG_DIR=./cpd-config && mkdir -p $CONFIG_DIR/config
+CONFIG_DIR=./cpd-config && mkdir -p $CONFIG_DIR/config
 cp cpd-config.yaml $CONFIG_DIR/config
-export STATUS_DIR=./cpd-status && mkdir -p $STATUS_DIR
+STATUS_DIR=./cpd-status && mkdir -p $STATUS_DIR
 
 
-export DEPLOYER_POD=$(oc get po --no-headers -l deployment=cloud-pak-deployer | head -1 | awk '{print $1}')
+DEPLOYER_POD=$(oc get po --no-headers -l deployment=cloud-pak-deployer | head -1 | awk '{print $1}')
 oc rsh $DEPLOYER_POD rm -rf /Data/cpd-config && oc cp $CONFIG_DIR $DEPLOYER_POD:/Data/cpd-config/
 
 
