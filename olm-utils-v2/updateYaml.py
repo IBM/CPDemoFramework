@@ -7,7 +7,7 @@ from yaml.loader import SafeLoader
 component=sys.argv[1]
 component_list = component.split(',')
 
-storage_vendor=sys.argv[4]
+storage_vendor=sys.argv[2]
 
 # Open the file and load the file
 with open('cpd-config.yaml') as f:
