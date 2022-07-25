@@ -74,3 +74,6 @@ oc rsh $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault set \
   -vs cpd-demo-oc-login -vsv "oc login --server=$SERVER --token=$API_TOKEN"
 
 oc rsh $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault list
+
+# Run the deployer
+oc rsh $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh env apply -v 
