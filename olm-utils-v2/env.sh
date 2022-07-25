@@ -68,9 +68,9 @@ DEPLOYER_POD=$(oc get po --no-headers -l deployment=cloud-pak-deployer | head -1
 oc rsh $DEPLOYER_POD rm -rf /Data/cpd-config && oc cp $CONFIG_DIR $DEPLOYER_POD:/Data/cpd-config/
 
 
-oc rsh deploy/cloud-pak-deployer /cloud-pak-deployer/cp-deploy.sh vault set -vs cp_entitlement_key -vsv "$ICR_KEY"
+oc rsh $DEPLOYER_POD  /cloud-pak-deployer/cp-deploy.sh vault set -vs cp_entitlement_key -vsv "$ICR_KEY"
 
-oc rsh deploy/cloud-pak-deployer /cloud-pak-deployer/cp-deploy.sh vault set \
+oc rsh $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault set \
   -vs cpd-demo-oc-login -vsv "oc login --server=$SERVER --token=$API_TOKEN"
 
-oc rsh deploy/cloud-pak-deployer /cloud-pak-deployer/cp-deploy.sh vault list
+oc rsh $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault list
