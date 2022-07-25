@@ -3,7 +3,7 @@ global_config:
   cloud_platform: existing-ocp
 openshift:
 - name: cpd-demo
-  ocp_version: 4.8
+  ocp_version: 4.9
   cluster_name: cpd-demo
   domain_name: example.com
   openshift_storage:
@@ -21,6 +21,7 @@ cp4d:
       state: disabled
       threads_per_core: 2
   - name: lite
+    state: removed
   - name: scheduler
     state: removed
   - name: analyticsengine
