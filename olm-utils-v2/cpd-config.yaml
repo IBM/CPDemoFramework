@@ -7,12 +7,14 @@ openshift:
   cluster_name: cpd-demo
   domain_name: example.com
   openshift_storage:
-  - storage_name: nfs-storage
+  - ocp_storage_class_file: ibmc-file-gold
+    ocp_storage_class_block: ibmc-block-gold
     storage_type: nfs
+    storage_name: nfs-storage
 cp4d:
 - project: cpd-instance
   openshift_cluster_name: cpd-demo
-  cp4d_version: 4.0.9
+  cp4d_version: 4.5.0
   olm_utils: true
   accept_licenses: true
   cartridges:
@@ -21,13 +23,16 @@ cp4d:
       state: disabled
       threads_per_core: 2
   - name: lite
-    state: removed
-  - name: scheduler
-    state: removed
   - name: analyticsengine
     size: small
     state: removed
   - name: bigsql
+    state: removed
+  - name: ca
+    size: small
+    instances:
+    - name: ca-instance
+      metastore_ref: ca-metastore
     state: removed
   - name: cde
     state: removed
@@ -63,6 +68,10 @@ cp4d:
     state: removed
   - name: hadoop
     size: small
+    state: removed
+  - name: mdm
+    size: small
+    wkc_enabled: true
     state: removed
   - name: openpages
     state: removed
@@ -101,48 +110,5 @@ cp4d:
     replicas: 1
     size: small
     state: removed
-  - name: productmaster
-    size: small
-    state: removed
-  - name: cognos_analytics
-    state: removed
-  - name: cpd_platform
-    state: removed
-  - name: datarefinery
-    state: removed
-  - name: datastage_ent
-    state: removed
-  - name: db2aaservice
-    state: removed
-  - name: edb_cp4d
-    state: removed
-  - name: iis
-    state: removed
-  - name: informix
-    state: removed
-  - name: informix_cp4d
-    state: removed
-  - name: match360
-    state: removed
-  - name: model_train
-    state: removed
-  - name: mongodb
-    state: removed
-  - name: mongodb_cp4d
-    state: removed
-  - name: openpages_instance
-    state: removed
-  - name: postgresql
-    state: removed
-  - name: productmaster_instance
-    state: removed
-  - name: watson_gateway
-    state: removed
-  - name: ws
-    state: removed
-  - name: ws_pipelines
-    state: removed
-  - name: ws_runtimes
-    state: removed
-  - name: zen
+  - name: wsl
     state: removed
