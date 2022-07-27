@@ -1,1 +1,1 @@
-oc delete project olm-utils
+oc delete project cloud-pak-deployer
