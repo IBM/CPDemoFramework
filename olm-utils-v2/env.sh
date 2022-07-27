@@ -70,6 +70,8 @@ oc rsh $DEPLOYER_POD rm -rf /Data/cpd-config && oc cp $CONFIG_DIR $DEPLOYER_POD:
 
 oc rsh $DEPLOYER_POD  /cloud-pak-deployer/cp-deploy.sh vault set -vs cp_entitlement_key -vsv "$ICR_KEY"
 
+oc rsh $DEPLOYER_POD  /cloud-pak-deployer/cp-deploy.sh vault set -vs ibm_cp_entitlement_key -vsv "$ICR_KEY"
+
 oc rsh $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault set \
   -vs cpd-demo-oc-login -vsv "oc login --server=$SERVER --token=$API_TOKEN"
 
