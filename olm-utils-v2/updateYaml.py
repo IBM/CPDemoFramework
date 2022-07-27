@@ -13,21 +13,28 @@ storage_vendor=sys.argv[2]
 with open('cpd-config.yaml') as f:
     list_doc = yaml.safe_load(f)
 
-if storage_vendor=='NFS' or storage_vendor=='nfs':
+if storage_vendor.lower()=='nfs':
     list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]= "nfs-storage"
     list_doc["openshift"][0]["openshift_storage"][0]["storage_type"]= "nfs"
 
-elif storage_vendor=='OCS' or storage_vendor=='ocs':
+elif storage_vendor.lower()=='ocs':
     list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]= "ocs-storage"
     list_doc["openshift"][0]["openshift_storage"][0]["storage_type"]= "ocs"
 
-elif storage_vendor=='portworx':
+elif storage_vendor.lower()=='portworx':
     list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]= "portworx-storage"
     list_doc["openshift"][0]["openshift_storage"][0]["storage_type"]= "portworx"
 
-elif storage_vendor=='managed-nfs-storage':
+elif storage_vendor.lower()=='managed-nfs-storage':
     list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]= "nfs-storage"
     list_doc["openshift"][0]["openshift_storage"][0]["storage_type"]= "nfs"
+
+elif storage_vendor.lower()=='roks-classic':
+    list_doc["openshift"][0]["openshift_storage"][0]["storage_name"] = "nfs-storage"
+    list_doc["openshift"][0]["openshift_storage"][0]["storage_type"] = "nfs"
+
+    list_doc["openshift"][0]["openshift_storage"][0]["ocp_storage_class_block"]= "ibmc-block-gold"
+    list_doc["openshift"][0]["openshift_storage"][0]["ocp_storage_class_file"] = "ibmc-file-gold-gid"
 
 i=0
 for x in range(0,len(list_doc["cp4d"][0]["cartridges"])):

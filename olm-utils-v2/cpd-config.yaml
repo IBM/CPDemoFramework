@@ -7,9 +7,7 @@ openshift:
   cluster_name: cpd-demo
   domain_name: example.com
   openshift_storage:
-  - ocp_storage_class_file: ibmc-file-gold
-    ocp_storage_class_block: ibmc-block-gold
-    storage_type: nfs
+  - storage_type: nfs
     storage_name: nfs-storage
 cp4d:
 - project: cpd-instance
