@@ -7,6 +7,6 @@ import apis
 import os
 userApi = apis.endpoints.UsersAPI()
 
-os.system('cpd-cli user-mgmt bulk-upsert-users --from-csv-file'+ sys.argv[1]+'--profile sandbox-profile')
+os.system('cpd-cli user-mgmt bulk-upsert-users --from-csv-file '+ sys.argv[1] +' --profile sandbox-profile')
 #usersTable = pandas.read_csv(sys.argv[1])        
 #userApi.updateUsersFromTable(usersTable)
