@@ -3,9 +3,9 @@ import sys
 hostname = sys.argv[1]
 wkcuser=sys.argv[2]
 password=sys.argv[3]
-if(sys.argv[4]):
+try:
     api_key = sys.argv[4]
-else:
+except:
     api_key = "demo_api_key"
 
 f = open("../.env", "w")
