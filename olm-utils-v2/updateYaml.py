@@ -9,10 +9,13 @@ component_list = component.split(',')
 
 storage_vendor=sys.argv[2]
 
+cp4d_version=sys.argv[3]
+
 # Open the file and load the file
 with open('cpd-config.yaml') as f:
     list_doc = yaml.safe_load(f)
 
+list_doc["cp4d"][0]["cp4d_version"] = cp4d_version
 if storage_vendor.lower()=='nfs':
     list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]= "nfs-storage"
     list_doc["openshift"][0]["openshift_storage"][0]["storage_type"]= "nfs"
