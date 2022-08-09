@@ -4,12 +4,21 @@ import sys
 sys.path.append('../')
 import os
 from decouple import config
-
+import pandas
+import ast
 
 CPD_USER_NAME =  config('WKCUSER')
 CPD_USER_PASSWORD =  config('PASSWORD')
 CPD_URL = "https://"+config('TZHOSTNAME')
 CPD_API_KEY = config('APIKEY')
+
+userTableDeafult = pandas.read_csv(sys.argv[1])
+if "password" not in userTableDeafult.columns:
+    usersTable = pandas.DataFrame(columns=['username','password','email','displayName','user_roles'])
+    password = input("Please enter a password:\n")
+    for i in range(len(userTableDeafult)):
+        usersTable.loc[len(usersTable.index)] = [userTableDeafult.loc[i,'username'],CPD_USER_PASSWORD if userTableDeafult.loc[i,'username']==CPD_USER_NAME else password,userTableDeafult.loc[i,'email'],userTableDeafult.loc[i,'displayName'],";".join(ast.literal_eval(userTableDeafult.loc[i,'user_roles']))] 
+usersTable.to_csv(sys.argv[1],index=False)
 
 os.system('cpd-cli config users set '+ CPD_USER_NAME +' --username '+ CPD_USER_NAME + ' --apikey '+ CPD_API_KEY)
 
