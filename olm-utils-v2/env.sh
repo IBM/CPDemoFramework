@@ -14,7 +14,6 @@ KUBEADMIN_PASS=
 # Please enter the ICR KEY if the server value is pointing to IBM cloud ROKS cluster.
 ICR_KEY=
 
-
 # SCRIPT
 #Pod login and auto login to oc cluster from runutils
 if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ]
@@ -47,35 +46,37 @@ oc create serviceaccount cloud-pak-deployer-sa
 oc adm policy add-scc-to-user privileged -z cloud-pak-deployer-sa
 oc adm policy add-cluster-role-to-user cluster-admin -z cloud-pak-deployer-sa
 
-oc apply -f deployment.yaml
-
+oc apply -f deployer-job.yaml
 
 waittime=0
-while [ "$pod_status" != "True" ] && [ $waittime -lt 300 ];do
+while [ "$pod_schedule_status" != "True" ] && [ $waittime -lt 300 ];do
         sleep 5
-        pod_status=$(oc get po --no-headers -l deployment=cloud-pak-deployer -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}')
-        echo "Metadata pod ready: $pod_status"
+        pod_schedule_status=$(oc get po --no-headers -l app=cloud-pak-deployer -o 'jsonpath={..status.conditions[?(@.type=="PodScheduled")].status}')
+        echo "Cloud Pak Deployer scheduled: $pod_schedule_status"
         waittime=$((waittime+5))
-    done
-
+done
 
 CONFIG_DIR=./cpd-config && mkdir -p $CONFIG_DIR/config
 cp cpd-config.yaml $CONFIG_DIR/config
 STATUS_DIR=./cpd-status && mkdir -p $STATUS_DIR
 
+DEPLOYER_POD=$(oc get po --no-headers -l app=cloud-pak-deployer | head -1 | awk '{print $1}')
+oc cp -c wait-config $CONFIG_DIR $DEPLOYER_POD:/Data/cpd-config/
 
-DEPLOYER_POD=$(oc get po --no-headers -l deployment=cloud-pak-deployer | head -1 | awk '{print $1}')
-oc rsh $DEPLOYER_POD rm -rf /Data/cpd-config && oc cp $CONFIG_DIR $DEPLOYER_POD:/Data/cpd-config/
+oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault set \
+  -vs ibm_cp_entitlement_key -vsv "$ICR_KEY"
 
-
-oc rsh $DEPLOYER_POD  /cloud-pak-deployer/cp-deploy.sh vault set -vs cp_entitlement_key -vsv "$ICR_KEY"
-
-oc rsh $DEPLOYER_POD  /cloud-pak-deployer/cp-deploy.sh vault set -vs ibm_cp_entitlement_key -vsv "$ICR_KEY"
-
-oc rsh $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault set \
+oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault set \
   -vs cpd-demo-oc-login -vsv "oc login --server=$SERVER --token=$API_TOKEN"
 
-oc rsh $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault list
+oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault list
 
-# Run the deployer
-oc rsh $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh env apply -v 
+# Start the deployer
+echo "Starting the deployer"
+oc rsh -c wait-config $DEPLOYER_POD bash -c 'touch /Data/cpd-config/config-ready; chmod 777 /Data/cpd-config/config-ready'
+
+# Wait a few seconds for the deployer container to start
+sleep 5
+
+# Follow the logs
+oc logs -f $DEPLOYER_POD
