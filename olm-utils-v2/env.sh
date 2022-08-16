@@ -49,6 +49,7 @@ oc adm policy add-cluster-role-to-user cluster-admin -z cloud-pak-deployer-sa
 oc apply -f deployer-job.yaml
 
 waittime=0
+pod_status=""
 echo "Waiting until Cloud Pak Deployer pod has Init:0/1 status"
 while [ "$pod_status" != "Init:0/1" ] && [ $waittime -lt 300 ];do
         sleep 5
