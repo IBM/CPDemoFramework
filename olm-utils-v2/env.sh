@@ -49,10 +49,11 @@ oc adm policy add-cluster-role-to-user cluster-admin -z cloud-pak-deployer-sa
 oc apply -f deployer-job.yaml
 
 waittime=0
-while [ "$pod_schedule_status" != "True" ] && [ $waittime -lt 300 ];do
+echo "Waiting until Cloud Pak Deployer pod has Init:0/1 status"
+while [ "$pod_status" != "Init:0/1" ] && [ $waittime -lt 300 ];do
         sleep 5
-        pod_schedule_status=$(oc get po --no-headers -l app=cloud-pak-deployer -o 'jsonpath={..status.conditions[?(@.type=="PodScheduled")].status}')
-        echo "Cloud Pak Deployer scheduled: $pod_schedule_status"
+        pod_status=$(oc get po --no-headers -l app=cloud-pak-deployer | head -1 | awk '{print $3}')
+        echo "Cloud Pak Deployer status: $pod_status"
         waittime=$((waittime+5))
 done
 
