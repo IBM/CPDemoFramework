@@ -50,7 +50,7 @@ oc apply -f deployer-job.yaml
 
 waittime=0
 pod_status=""
-echo "Waiting until Cloud Pak Deployer pod has Init:0/1 status"
+echo "Waiting until Cloud Pak Deployer pod has Init:0/1 status..."
 while [ "$pod_status" != "Init:0/1" ] && [ $waittime -lt 300 ];do
         sleep 5
         pod_status=$(oc get po --no-headers -l app=cloud-pak-deployer | head -1 | awk '{print $3}')
@@ -58,11 +58,32 @@ while [ "$pod_status" != "Init:0/1" ] && [ $waittime -lt 300 ];do
         waittime=$((waittime+5))
 done
 
+if [ $waittime -ge 300 ];then
+    echo "Timout while waiting for Cloud Pak Deployer pod to start"
+    exit 1
+fi
+
+DEPLOYER_POD=$(oc get po --no-headers -l app=cloud-pak-deployer | head -1 | awk '{print $1}')
+
+command_exit=1
+waittime=0
+echo "Waiting until the pod accepts commands..."
+while [ "$command_exit" != "0" ] && [ $waittime -lt 300 ];do
+        sleep 5
+        oc rsh -c wait-config $DEPLOYER_POD touch /tmp/command-accepted
+        command_exit=$?
+        waittime=$((waittime+5))
+done
+
+if [ $waittime -ge 300 ];then
+    echo "Timout while waiting for Cloud Pak Deployer pod to accept commmands"
+    exit 1
+fi
+
 CONFIG_DIR=./cpd-config && mkdir -p $CONFIG_DIR/config
 cp cpd-config.yaml $CONFIG_DIR/config
 STATUS_DIR=./cpd-status && mkdir -p $STATUS_DIR
 
-DEPLOYER_POD=$(oc get po --no-headers -l app=cloud-pak-deployer | head -1 | awk '{print $1}')
 oc cp -c wait-config $CONFIG_DIR $DEPLOYER_POD:/Data/cpd-config/
 
 oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault set \
@@ -72,6 +93,8 @@ oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault set \
   -vs cpd-demo-oc-login -vsv "oc login --server=$SERVER --token=$API_TOKEN"
 
 oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault list
+
+exit 0
 
 # Start the deployer
 echo "Starting the deployer"
