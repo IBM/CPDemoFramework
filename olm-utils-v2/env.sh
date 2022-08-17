@@ -70,7 +70,7 @@ waittime=0
 echo "Waiting until the pod accepts commands..."
 while [ "$command_exit" != "0" ] && [ $waittime -lt 300 ];do
         sleep 5
-        oc rsh -c wait-config $DEPLOYER_POD touch /tmp/command-accepted
+        oc rsh -c wait-config $DEPLOYER_POD touch /tmp/command-accepted 2> /dev/null
         command_exit=$?
         waittime=$((waittime+5))
 done
@@ -94,7 +94,9 @@ oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault set \
 
 oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault list
 
-exit 0
+echo "Sleeping"
+sleep 300
+
 
 # Start the deployer
 echo "Starting the deployer"
