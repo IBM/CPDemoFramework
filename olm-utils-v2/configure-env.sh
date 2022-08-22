@@ -89,4 +89,4 @@ EOF
 fi
 
 # Update environment variables in env.sh scripot
-python3.8 update-env-vars.py $SERVER $API_TOKEN $KUBEADMIN_USER $KUBEADMIN_PASS $ICR_KEY
+python3.8 update-env-vars.py SERVER=$SERVER API_TOKEN=$API_TOKEN KUBEADMIN_USER=$KUBEADMIN_USER KUBEADMIN_PASS=$KUBEADMIN_PASS ICR_KEY=$ICR_KEY
