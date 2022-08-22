@@ -1,0 +1,22 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: cloud-pak-deployer-pvc-template
+  namespace: cloud-pak-deployer
+objects:
+- kind: PersistentVolumeClaim
+  apiVersion: v1
+  metadata:
+    name: cloud-pak-deployer-status
+    namespace: cloud-pak-deployer
+  spec:
+    accessModes:
+    - ReadWriteMany
+    resources:
+      requests:
+        storage: 10Gi
+    storageClassName: ${DEPLOYER_SC}
+parameters:
+- name: DEPLOYER_SC
+  description: "Storage class for the Cloud Pak Deployer job"

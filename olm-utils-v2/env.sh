@@ -37,15 +37,49 @@ if [ $? -eq 0 ]; then
     echo "Logged in Successfully";
 else
     echo "Login Failed";
+    exit 1
 fi
 
+# Check if the deployer job is still running, it must not exist
+if oc get job cloud-pak-deployer -n cloud-pak-deployer > /dev/null 2>&1;then
+    echo "Deployer job is still present in the cloud-pak-deployer project. Will show progress instead of starting the deployer."
+    sleep 1
+    oc logs -f -n cloud-pak-deployer job/cloud-pak-deployer
+    exit 0
+fi
 
-oc new-project cloud-pak-deployer
-oc project cloud-pak-deployer
-oc create serviceaccount cloud-pak-deployer-sa
-oc adm policy add-scc-to-user privileged -z cloud-pak-deployer-sa
-oc adm policy add-cluster-role-to-user cluster-admin -z cloud-pak-deployer-sa
+# Temporary: set storage class to use for the deployer job
+if oc get sc managed-nfs-storage > /dev/null 2>&1;then
+    export DEPLOYER_SC=managed-nfs-storage
+elif oc get sc ocs-storagecluster-cephfs > /dev/null 2>&1;then
+    export DEPLOYER_SC=ocs-storagecluster-cephfs
+else
+    echo "No supported storage class found for the deployer job, exiting."
+    exit 1
+fi
 
+# Wait until the deployer image has been built
+echo "Wait for image to be built and pushed to internal registry..."
+waittime=0
+while ! oc get istag -n cloud-pak-deployer cloud-pak-deployer:latest 2>/dev/null && [ $waittime -lt 300 ];do
+    sleep 5
+done
+if [ $waittime -ge 300 ];then
+    echo "Timeout while waiting for Cloud Pak Deployer image to be built"
+    exit 1
+fi
+
+# Create and populate the configmap with the configuration
+echo "Setting the deployer configuration..."
+oc create cm -n cloud-pak-deployer cloud-pak-deployer-config 2>/dev/null
+oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./cpd-config.yaml
+
+# Create PVC for deployer job
+echo "Creating the PVC if not already present..."
+oc process -f deployer-pvc.yaml | oc apply -f -
+
+# Start deployer job
+echo "Starting the deployer job..."
 oc apply -f deployer-job.yaml
 
 waittime=0
@@ -59,11 +93,11 @@ while [ "$pod_status" != "Init:0/1" ] && [ $waittime -lt 300 ];do
 done
 
 if [ $waittime -ge 300 ];then
-    echo "Timout while waiting for Cloud Pak Deployer pod to start"
+    echo "Timeout while waiting for Cloud Pak Deployer pod to start"
     exit 1
 fi
 
-DEPLOYER_POD=$(oc get po --no-headers -l app=cloud-pak-deployer | head -1 | awk '{print $1}')
+DEPLOYER_POD=$(oc get po -n cloud-pak-deployer --no-headers -l app=cloud-pak-deployer | head -1 | awk '{print $1}')
 
 command_exit=1
 waittime=0
@@ -76,15 +110,9 @@ while [ "$command_exit" != "0" ] && [ $waittime -lt 300 ];do
 done
 
 if [ $waittime -ge 300 ];then
-    echo "Timout while waiting for Cloud Pak Deployer pod to accept commmands"
+    echo "Timeout while waiting for Cloud Pak Deployer pod to accept commmands"
     exit 1
 fi
-
-CONFIG_DIR=./cpd-config && mkdir -p $CONFIG_DIR/config
-cp cpd-config.yaml $CONFIG_DIR/config
-STATUS_DIR=./cpd-status && mkdir -p $STATUS_DIR
-
-oc cp -c wait-config $CONFIG_DIR $DEPLOYER_POD:/Data/cpd-config/
 
 oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault set \
   -vs ibm_cp_entitlement_key -vsv "$ICR_KEY"
@@ -95,11 +123,11 @@ oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault set \
 oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault list
 
 # Start the deployer
-echo "Starting the deployer"
+echo "Starting the deployer..."
 oc rsh -c wait-config $DEPLOYER_POD bash -c 'touch /Data/cpd-config/config-ready; chmod 777 /Data/cpd-config/config-ready'
 
 # Wait a few seconds for the deployer container to start
 sleep 5
 
 # Follow the logs
-oc logs -f $DEPLOYER_POD
+oc logs -n cloud-pak-deployer -f $DEPLOYER_POD
