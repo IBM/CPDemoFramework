@@ -1,12 +1,6 @@
 #!/bin/sh
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
 
-server = sys.argv[1]
-api_token = sys.argv[2]
-kubeadmin_user = sys.argv[3]
-kubeadmin_password = sys.argv[4]
-icr_key = sys.argv[5]
-
 # Retrieve parameters
 SERVER=$1
 API_TOKEN=$2
@@ -82,10 +76,6 @@ EOF
   oc delete build -n cloud-pak-deployer -l buildconfig=cloud-pak-deployer-bc
   oc start-build -n cloud-pak-deployer bc/cloud-pak-deployer-bc
 
-  echo "Wait for image to be built and pushed to internal registry..."
-  while ! oc get istag -n cloud-pak-deployer cloud-pak-deployer:latest 2>/dev/null;do
-    sleep 1
-  done
 fi
 
 # Update environment variables in env.sh scripot
