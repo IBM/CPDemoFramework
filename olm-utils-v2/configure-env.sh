@@ -70,6 +70,7 @@ spec:
     type: Git
     git:
       uri: https://github.com/IBM/cloud-pak-deployer
+      ref: deployer-logs
   strategy:
     type: Docker                      
   output:
