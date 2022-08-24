@@ -1,42 +1,10 @@
 #!/bin/sh
-SERVER=
 
-# APITOKEN
-API_TOKEN=
-
-# OR
-
-# Username and password
-KUBEADMIN_USER=
-KUBEADMIN_PASS=
-
-# ICR KEY
-# Please enter the ICR KEY if the server value is pointing to IBM cloud ROKS cluster.
-ICR_KEY=
-
-# SCRIPT
-#Pod login and auto login to oc cluster from runutils
-if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ]
-    then
-        alias oclogin_auto="run_utils login-to-ocp -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server=${SERVER}";
-        alias pod_login="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER}";
-    else
-        if  [ -z "$API_TOKEN" ]
-            then
-                    echo "Invalid api token, please check env.sh file";
-            else
-                alias pod_login="oc login --token=${API_TOKEN} --server=${SERVER}";
-                alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";
-        fi
-fi
-# Pod login
-pod_login
-
+# Check if we can access the cluster
+oc cluster-info
 # Check if the last command executed properly
-if [ $? -eq 0 ]; then
-    echo "Logged in Successfully";
-else
-    echo "Login Failed";
+if [ $? -ne 0 ]; then
+    echo "OpenShift cluster is not accessible, make sure you run the configuration steps";
     exit 1
 fi
 
@@ -55,17 +23,6 @@ elif oc get sc ocs-storagecluster-cephfs > /dev/null 2>&1;then
     export DEPLOYER_SC=ocs-storagecluster-cephfs
 else
     echo "No supported storage class found for the deployer job, exiting."
-    exit 1
-fi
-
-# Wait until the deployer image has been built
-echo "Wait for image to be built and pushed to internal registry..."
-waittime=0
-while ! oc get istag -n cloud-pak-deployer cloud-pak-deployer:latest 2>/dev/null && [ $waittime -lt 300 ];do
-    sleep 5
-done
-if [ $waittime -ge 300 ];then
-    echo "Timeout while waiting for Cloud Pak Deployer image to be built"
     exit 1
 fi
 
