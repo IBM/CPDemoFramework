@@ -83,7 +83,7 @@ oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault list
 
 # Start the deployer
 echo "Starting the deployer..."
-oc rsh -c wait-config $DEPLOYER_POD bash -c 'touch /Data/cpd-config/config-ready; chmod 777 /Data/cpd-config/config-ready'
+oc rsh -c wait-config $DEPLOYER_POD bash -c 'touch /tmp/config-ready; chmod 777 /tmp/config-ready'
 
 # Wait a few seconds for the deployer container to start
 sleep 5
