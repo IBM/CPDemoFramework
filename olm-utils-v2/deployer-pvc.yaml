@@ -1,6 +1,6 @@
 ---
 kind: Template
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 metadata:
   name: cloud-pak-deployer-pvc-template
   namespace: cloud-pak-deployer
