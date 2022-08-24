@@ -18,7 +18,7 @@ spec:
     spec:
       initContainers:
       - name: wait-config
-        image: cloud-pak-deployer:latest
+        image: quay.io/devplayground/cloud-pak-deployer:latest
         command: ['sh', '-c', 'until [ -f /tmp/cpd-config-ready ]; do echo Waiting for /tmp/cpd-config-ready file; sleep 1; done; echo "Configuration is ready, starting deployer"']
         env:
         - name: CONFIG_DIR
@@ -32,7 +32,7 @@ spec:
           mountPath: /Data/cpd-status
       containers:
       - name: cloud-pak-deployer
-        image: cloud-pak-deployer:latest
+        image: quay.io/devplayground/cloud-pak-deployer:latest
         imagePullPolicy: Always
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
