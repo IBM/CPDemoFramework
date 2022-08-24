@@ -11,12 +11,16 @@ if [ $? -ne 0 ]; then
 fi
 
 # Check if the deployer job is still running, it must not exist
-if oc get job cloud-pak-deployer -n cloud-pak-deployer > /dev/null 2>&1;then
+job_status=$(oc get job cloud-pak-deployer -n cloud-pak-deployer -o jsonpath='{.status.active}' 2>/dev/null)
+if [ "$job_status" == "1" ];then
     echo "Deployer job is still present in the cloud-pak-deployer project. Will show progress instead of starting the deployer."
     sleep 1
     oc logs -f -n cloud-pak-deployer job/cloud-pak-deployer
     exit 0
 fi
+
+# Just in case the job exists and it has completed or is in invalid state, delete it
+oc delete job -n cloud-pak-deployer cloud-pak-deployer 2>/dev/null
 
 # Temporary: set storage class to use for the deployer job
 if oc get sc managed-nfs-storage > /dev/null 2>&1;then
@@ -83,7 +87,7 @@ oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault list
 
 # Start the deployer
 echo "Starting the deployer..."
-oc rsh -c wait-config $DEPLOYER_POD bash -c 'touch /tmp/config-ready; chmod 777 /tmp/config-ready'
+oc rsh -c wait-config $DEPLOYER_POD bash -c 'touch /tmp/cpd-config-ready; chmod 777 /tmp/cpd-config-ready'
 
 # Wait a few seconds for the deployer container to start
 sleep 5
