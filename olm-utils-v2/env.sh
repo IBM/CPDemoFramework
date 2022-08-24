@@ -33,7 +33,7 @@ oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./cpd
 
 # Create PVC for deployer job
 echo "Creating the PVC if not already present..."
-oc process -f deployer-pvc.yaml | oc apply -f -
+oc process -f deployer-pvc.yaml -p DEPLOYER_SC=${DEPLOYER_SC} | oc apply -f -
 
 # Start deployer job
 echo "Starting the deployer job..."
