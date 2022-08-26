@@ -16,7 +16,7 @@ if [ "$job_status" == "1" ];then
     echo "Deployer job is still present in the cloud-pak-deployer project. Will show progress instead of starting the deployer."
     sleep 1
     oc logs -f -n cloud-pak-deployer job/cloud-pak-deployer
-    exit 0
+    exit 1
 fi
 
 # Just in case the job exists and it has completed or is in invalid state, delete it
