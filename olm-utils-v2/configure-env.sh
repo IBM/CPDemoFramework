@@ -30,6 +30,14 @@ if [ $? != 0 ];then
     exit 1
 fi
 
+# Get the updated config file from cloud-pak-deployer-config
+oc extract -n cloud-pak-deployer  cm/cloud-pak-deployer-config --to=. --confirm 2>/dev/null
+if [ $? != 0 ];then
+    echo "cloud-pak-deployer-config does not exist! it will be created in the next step!."
+else
+    echo "cloud-pak-deployer-config already exists in the cluster! The script will make use of the same file!"
+fi
+
 # Store variables in shell script
 echo "ICR_KEY=$ICR_KEY" > ./env-vars.sh
 echo "API_TOKEN=$API_TOKEN" >> ./env-vars.sh
