@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source ./env-vars.sh
+bash ./env-vars.sh
 
 # Check if we can access the cluster
 oc cluster-info
