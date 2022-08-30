@@ -94,3 +94,10 @@ sleep 5
 
 # Follow the logs
 oc logs -n cloud-pak-deployer -f $DEPLOYER_POD
+
+# If the job is still running when the previous command terminated, tail the logs
+while [ "$(oc get job cloud-pak-deployer -n cloud-pak-deployer -o jsonpath='{.status.active}' 2>/dev/null)" == "1" ];do
+    echo "Deployer job is still running, continuing to tail the logs."
+    sleep 1
+    oc logs --tail 10 -f -n cloud-pak-deployer job/cloud-pak-deployer
+done
