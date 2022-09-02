@@ -10,13 +10,77 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+get_logtime() {
+  echo $(date "+%Y-%m-%d %H:%M:%S")
+}
+
+log() {
+  LOG_TIME=$(get_logtime)
+  printf "[${LOG_TIME}] ${1}\n"
+}
+
+show_deployer_output() {
+CP4D_PROJECT=cpd-instance
+temp_dir=$(mktemp -d)
+while true; do
+    # Check if Cloud Pak Deployer job is active
+    deployer_status=$(oc get job cloud-pak-deployer -n cloud-pak-deployer -o jsonpath='{.status.active}' 2>/dev/null)
+    if [ "${deployer_status}" == "1" ];then
+        log "Cloud Pak Deployer job is ACTIVE"
+    else
+        log "Cloud Pak Deployer job is NOT ACTIVE"
+    fi
+    # Get current stage of the deployer
+    current_stage=$(oc logs -n cloud-pak-deployer job/cloud-pak-deployer | grep -E 'PLAY \[' | tail -1)
+    log "Current stage: ${current_stage}"
+    # Get current task of the deployer
+    current_task=$(oc logs -n cloud-pak-deployer job/cloud-pak-deployer | grep -E 'TASK \[' | tail -1)
+    log "Current task: ${current_task}"
+    log "Sleeping for 2 minutes..."
+    # Get catalog sources
+    log "Listing IBM catalog sources"
+    oc get catsrc -n openshift-marketplace --no-headers -o custom-columns=':.metadata.name'
+    # Listing subscriptions
+    log "Listing IBM subscriptions"
+    oc get sub -n ibm-common-services --no-headers -o custom-columns=':.metadata.name'
+    # Listing CSVs
+    log "Listing CSVs"
+    oc get csv -n ibm-common-services --no-headers -o custom-columns=':.metadata.name'
+    # Listing custom resources 
+    log "Getting Custom Resources in OpenShift project ${CP4D_PROJECT}..."
+    oc get --no-headers -n $CP4D_PROJECT $(oc api-resources --namespaced=true --verbs=list -o name | grep ibm | awk '{printf "%s%s",sep,$0;sep=","}')  --ignore-not-found -o=custom-columns=KIND:.kind,NAME:.metadata.name --sort-by='kind' > ${temp_dir}/cp4d-resources.out
+    while read -r line;do
+        read -r CR CR_NAME <<< "${line}"
+        case $CR in
+            Ibmcpd|CommonService|OperandRequest)
+            ;;
+            *)
+            cr_status=$(oc get -n $CP4D_PROJECT $CR $CR_NAME -o jsonpath='{.status}' | jq -r '. | to_entries | map(select(.key | match("Status"))) | map(.value) | first')
+            if [[ "${cr_status}" != "" ]] && [[ ${cr_status} != "null" ]];then
+                echo "${CR} - ${CR_NAME} - ${cr_status}"
+            fi
+            ;;
+        esac
+    done < ${temp_dir}/cp4d-resources.out
+    cp4d_host=$(oc get route -n ${CP4D_PROJECT} cpd -o jsonpath='{.spec.host}')
+    cp4d_admin_password=$(oc extract -n ${CP4D_PROJECT} secret/admin-user-details --to=- 2>/dev/null)
+    if [ "${cp4d_host}" != "" ];then
+        log "Cloud Pak for Data URL: https://${cp4d_host}"
+        log "Cloud Pak for Data admin password: ${cp4d_admin_password}"
+    fi
+    if [ "${deployer_status}" != "1" ];then
+        break
+    fi
+    log "Sleeping for 2 minutes..."
+    sleep 120
+done
+}
+
 # Check if the deployer job is still running, it must not exist
-job_status=$(oc get job cloud-pak-deployer -n cloud-pak-deployer -o jsonpath='{.status.active}' 2>/dev/null)
-if [ "$job_status" == "1" ];then
+if [ "$(oc get job cloud-pak-deployer -n cloud-pak-deployer -o jsonpath='{.status.active}' 2>/dev/null)" == "1" ];then
     echo "Deployer job is still present in the cloud-pak-deployer project. Will show progress instead of starting the deployer."
-    sleep 1
-    oc logs -f -n cloud-pak-deployer job/cloud-pak-deployer
-    exit 1
+    show_deployer_output
+    exit 0
 fi
 
 # Just in case the job exists and it has completed or is in invalid state, delete it
@@ -94,12 +158,5 @@ oc rsh -c wait-config $DEPLOYER_POD bash -c 'touch /tmp/cpd-config-ready; chmod 
 # Wait a few seconds for the deployer container to start
 sleep 5
 
-# Follow the logs
-oc logs -n cloud-pak-deployer -f $DEPLOYER_POD
-
-# If the job is still running when the previous command terminated, tail the logs
-while [ "$(oc get job cloud-pak-deployer -n cloud-pak-deployer -o jsonpath='{.status.active}' 2>/dev/null)" == "1" ];do
-    echo "Deployer job is still running, continuing to tail the logs."
-    sleep 1
-    oc logs --tail 10 -f -n cloud-pak-deployer job/cloud-pak-deployer
-done
+# Show deployer status
+show_deployer_output
