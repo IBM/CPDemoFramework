@@ -27,6 +27,8 @@ if oc get sc managed-nfs-storage > /dev/null 2>&1;then
     export DEPLOYER_SC=managed-nfs-storage
 elif oc get sc ocs-storagecluster-cephfs > /dev/null 2>&1;then
     export DEPLOYER_SC=ocs-storagecluster-cephfs
+elif oc get sc ibmc-file-gold-gid > /dev/null 2>&1;then
+    export DEPLOYER_SC=ibmc-file-gold-gid
 else
     echo "No supported storage class found for the deployer job, exiting."
     exit 1
