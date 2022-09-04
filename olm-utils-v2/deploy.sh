@@ -30,22 +30,27 @@ while true; do
     else
         log "Cloud Pak Deployer job is NOT ACTIVE"
     fi
+    echo
     # Get current stage of the deployer
     current_stage=$(oc logs -n cloud-pak-deployer job/cloud-pak-deployer | grep -E 'PLAY \[' | tail -1)
     log "Current stage: ${current_stage}"
+    echo
     # Get current task of the deployer
     current_task=$(oc logs -n cloud-pak-deployer job/cloud-pak-deployer | grep -E 'TASK \[' | tail -1)
     log "Current task: ${current_task}"
-    log "Sleeping for 2 minutes..."
+    echo
     # Get catalog sources
-    log "Listing IBM catalog sources"
+    log "Listing catalog sources"
     oc get catsrc -n openshift-marketplace --no-headers -o custom-columns=':.metadata.name'
+    echo
     # Listing subscriptions
     log "Listing IBM subscriptions"
     oc get sub -n ibm-common-services --no-headers -o custom-columns=':.metadata.name'
+    echo
     # Listing CSVs
     log "Listing CSVs"
     oc get csv -n ibm-common-services --no-headers -o custom-columns=':.metadata.name'
+    echo
     # Listing custom resources 
     log "Getting Custom Resources in OpenShift project ${CP4D_PROJECT}..."
     oc get --no-headers -n $CP4D_PROJECT $(oc api-resources --namespaced=true --verbs=list -o name | grep ibm | awk '{printf "%s%s",sep,$0;sep=","}')  --ignore-not-found -o=custom-columns=KIND:.kind,NAME:.metadata.name --sort-by='kind' > ${temp_dir}/cp4d-resources.out
@@ -62,7 +67,8 @@ while true; do
             ;;
         esac
     done < ${temp_dir}/cp4d-resources.out
-    cp4d_host=$(oc get route -n ${CP4D_PROJECT} cpd -o jsonpath='{.spec.host}')
+    echo
+    cp4d_host=$(oc get route -n ${CP4D_PROJECT} cpd -o jsonpath='{.spec.host}' 2> /dev/null)
     cp4d_admin_password=$(oc extract -n ${CP4D_PROJECT} secret/admin-user-details --to=- 2>/dev/null)
     if [ "${cp4d_host}" != "" ];then
         log "Cloud Pak for Data URL: https://${cp4d_host}"
@@ -72,6 +78,7 @@ while true; do
         break
     fi
     log "Sleeping for 2 minutes..."
+    log "--------------------------------------"
     sleep 120
 done
 }
