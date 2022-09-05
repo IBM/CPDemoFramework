@@ -16,6 +16,7 @@ with open('cpd-config.yaml') as f:
     list_doc = yaml.safe_load(f)
 
 list_doc["cp4d"][0]["cp4d_version"] = cp4d_version
+list_doc["cp4d"][0]["olm_utils"] = "false"
 if storage_vendor.lower()=='nfs':
     list_doc["openshift"][0]["openshift_storage"][0]["storage_name"]= "nfs-storage"
     list_doc["openshift"][0]["openshift_storage"][0]["storage_type"]= "nfs"
