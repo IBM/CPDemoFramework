@@ -116,3 +116,4 @@ EXPORT_ID = result
 print('Export ID: {}'.format(EXPORT_ID))
 EXPORT_ID=EXPORT_ID.strip()
 os.system('cpdctl asset export download --project-id '+PROJECT_ID+' --export-id '+EXPORT_ID+' --output-file '+ sys.argv[2] +' --progress')
+print("success")

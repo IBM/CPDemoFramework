@@ -80,3 +80,5 @@ curl --location --request PUT "https://api.github.com/repos/${username}/${projec
 
 cd /projects/techzone-demo/sandbox
 rm -rf $project_name
+
+echo "success"
