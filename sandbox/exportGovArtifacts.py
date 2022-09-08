@@ -9,3 +9,4 @@ from apis import endpoints, MainAPI, usecases
 mainAPI = MainAPI()
 governanceArtifactAPI = endpoints.GovArtifactAPI(mainAPI)
 governanceArtifactAPI.exportArtifactsZIP(sys.argv[1],"always",sys.argv[2],"all_top_level")
+print("success")
