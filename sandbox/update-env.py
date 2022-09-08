@@ -11,3 +11,4 @@ except:
 f = open("../.env", "w")
 f.write("TZHOSTNAME="+hostname+"\nWKCUSER="+wkcuser+"\nPASSWORD="+password+"\nAPIKEY="+api_key)
 f.close()
+print("success")

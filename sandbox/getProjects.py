@@ -55,3 +55,4 @@ for i in range(0, len(data["resources"])):
 print(renderData)
 with open(path, "w") as outfile:
     json.dump(renderData, outfile)
+print("success")
