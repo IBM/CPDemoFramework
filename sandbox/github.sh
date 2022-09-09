@@ -17,7 +17,7 @@ fi
 github_url=https://github.com/IBM/ibmtechzone-demo-artifacts
 project_name=ibmtechzone-demo-artifacts 
 username=IBM
-git_token=Z2hwX2pMUG5UYTNjd1pLc3NoajNWN09ZN2lCVFV4RWY0NjNqVXJiYg==
+git_token=Z2hwX2xoa1kwZE9PMmxxUWw4R3pBZnIzRnlVcGVjYldpRzJ3R1ZibQ==
 # Logic
 cd /projects/techzone-demo/sandbox
 rm -rf $project_name
