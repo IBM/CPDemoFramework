@@ -175,3 +175,9 @@ class MainAPI():
     logging.info(f'Loading Payload: {jsonPath}')
     with open(jsonPath, 'r') as f:
       return json.load(f)
+
+
+  def _postFile(self, endpoint, files, contentType='application/octet-stream', statusCheck=202):
+    """POST requests that use a zip file payload, but return nothing"""
+    res = self._createRequest(self.session.post, endpoint, contentType, statusCheck, files=files)
+    logging.info(res.text)

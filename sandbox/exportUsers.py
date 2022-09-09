@@ -10,3 +10,4 @@ usersJSON = userApi.getAllUsers()
 userApi.users2CSV(usersJSON, sys.argv[1])
 usersTable = pandas.read_csv(sys.argv[1])        
 usersTable
+print("success")
