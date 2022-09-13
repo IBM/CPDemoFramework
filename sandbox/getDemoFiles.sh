@@ -40,8 +40,10 @@ if [ -d "$demo_name" ]; then
         rm -rf /projects/techzone-demo/sandbox/$project_name
       else
         echo "Private Demo not found"
+        exit 2
       fi
     fi
+    echo "success"
     exit 2
 fi
 echo "DemoName Not Found!"
