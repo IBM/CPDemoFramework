@@ -56,9 +56,9 @@ if cpak.lower()=='cp4i':
 
 #update cp4d configuration yaml
 elif cpak.lower()=='cp4d':
-    list_cp4d["cp4d"][0]["cp4d_version"] = version
     with open('cp4d-config.yaml') as f:
         list_cp4d = yaml.safe_load(f)
+    list_cp4d["cp4d"][0]["cp4d_version"] = version
     for x in range(0,len(list_cp4d["cp4d"][0]["cartridges"])):
         for y in range(0,len(component_list)):
             if list_cp4d["cp4d"][0]["cartridges"][x]["name"] == component_list[y]:
