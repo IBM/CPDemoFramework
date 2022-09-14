@@ -40,7 +40,7 @@ elif storage_vendor.lower()=='roks-classic':
         yaml.dump(list_os, f, sort_keys=False)
 
 #update cp4i congifuration yaml
-if(cpak.lower()=='cp4i'):
+if cpak.lower()=='cp4i':
     with open('cp4i-config.yaml') as f:
         list_cp4i = yaml.safe_load(f)
     list_cp4i["cp4i"][0]["cp4i_version"] = version
@@ -55,7 +55,7 @@ if(cpak.lower()=='cp4i'):
         yaml.dump(list_cp4i, f, sort_keys=False)
 
 #update cp4d configuration yaml
-if(cpak.lower()=='cp4d'):
+elif cpak.lower()=='cp4d':
     list_cp4d["cp4d"][0]["cp4d_version"] = version
     with open('cp4d-config.yaml') as f:
         list_cp4d = yaml.safe_load(f)
