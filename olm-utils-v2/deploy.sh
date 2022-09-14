@@ -2,6 +2,9 @@
 
 source ./env-vars.sh
 
+#cloud pak
+cpak=$1
+
 # Check if we can access the cluster
 oc cluster-info
 # Check if the last command executed properly
