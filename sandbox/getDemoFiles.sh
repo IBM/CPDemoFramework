@@ -1,5 +1,6 @@
 #!/bin/bash  
 demo_name=$1
+private_git_token=$2
 project_name=ibmtechzone-demo-artifacts 
 branch="main"
 if [[ $PLAYGROUND_ENVIRONMENT == *"development"* ]]; then
@@ -31,7 +32,16 @@ if [ -d "$demo_name" ]; then
       echo "This is a private demo. Lets retrieve the demo files from the private github repo"
       privateGitRepoUrl=`cat /projects/techzone-demo/sandbox/readme.json | jq '.privateGitRepoUrl'`
       cd /projects/techzone-demo/sandbox
-      privateGitRepoUrl="${privateGitRepoUrl:1:-1}"
+
+      #if privateGitRepoUrl starts with a " remove it. 
+      if [ ${privateGitRepoUrl:0:1}='"' ]; then
+        privateGitRepoUrl="${privateGitRepoUrl:1:-1}"
+      fi
+
+      #If the git token is provided, lets add it to the git url. 
+      if [ "$private_git_token" ]; then
+        private_github_url="${private_github_url:0:8}$private_git_token@${private_github_url:8}"
+      fi
       git clone --sparse $privateGitRepoUrl $project_name
       cd /projects/techzone-demo/sandbox/$project_name
       git sparse-checkout set $demo_name
