@@ -2,7 +2,9 @@
 
 source ./env-vars.sh
 
-#cloud pak
+source ./functions.sh
+
+#cloud pak(s)
 cpak=$1
 
 # Check if we can access the cluster
@@ -13,18 +15,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-get_logtime() {
-  echo $(date "+%Y-%m-%d %H:%M:%S")
-}
-
-log() {
-  LOG_TIME=$(get_logtime)
-  printf "[${LOG_TIME}] ${1}\n"
-}
-
 show_deployer_output() {
-CP4D_PROJECT=cpd-instance
-temp_dir=$(mktemp -d)
+SLEEP_TIME=300
+export temp_dir=$(mktemp -d)
 while true; do
     # Check if Cloud Pak Deployer job is active
     deployer_status=$(oc get job cloud-pak-deployer -n cloud-pak-deployer -o jsonpath='{.status.active}' 2>/dev/null)
@@ -34,6 +27,7 @@ while true; do
         log "Cloud Pak Deployer job is NOT ACTIVE"
     fi
     echo
+
     # Get current stage of the deployer
     current_stage=$(oc logs -n cloud-pak-deployer job/cloud-pak-deployer | grep -E 'PLAY \[' | tail -1)
     log "Current stage: ${current_stage}"
@@ -54,35 +48,30 @@ while true; do
     log "Listing CSVs"
     oc get csv -n ibm-common-services --no-headers -o custom-columns=':.metadata.name'
     echo
-    # Listing custom resources 
-    log "Getting Custom Resources in OpenShift project ${CP4D_PROJECT}..."
-    oc get --no-headers -n $CP4D_PROJECT $(oc api-resources --namespaced=true --verbs=list -o name | grep ibm | awk '{printf "%s%s",sep,$0;sep=","}')  --ignore-not-found -o=custom-columns=KIND:.kind,NAME:.metadata.name --sort-by='kind' > ${temp_dir}/cp4d-resources.out
-    while read -r line;do
-        read -r CR CR_NAME <<< "${line}"
-        case $CR in
-            Ibmcpd|CommonService|OperandRequest)
-            ;;
-            *)
-            cr_status=$(oc get -n $CP4D_PROJECT $CR $CR_NAME -o jsonpath='{.status}' | jq -r '. | to_entries | map(select(.key | match("Status"))) | map(.value) | first')
-            if [[ "${cr_status}" != "" ]] && [[ ${cr_status} != "null" ]];then
-                echo "${CR} - ${CR_NAME} - ${cr_status}"
-            fi
-            ;;
-        esac
-    done < ${temp_dir}/cp4d-resources.out
-    echo
-    cp4d_host=$(oc get route -n ${CP4D_PROJECT} cpd -o jsonpath='{.spec.host}' 2> /dev/null)
-    cp4d_admin_password=$(oc extract -n ${CP4D_PROJECT} secret/admin-user-details --to=- 2>/dev/null)
-    if [ "${cp4d_host}" != "" ];then
-        log "Cloud Pak for Data URL: https://${cp4d_host}"
-        log "Cloud Pak for Data admin password: ${cp4d_admin_password}"
+
+    # Now do Cloud Pak specific checks
+    if [[ "${cpak}" == *"cp4d"* ]];then
+        ./deploy-status-cp4d.sh
     fi
-    if [ "${deployer_status}" != "1" ];then
+    if [[ "${cpak}" == *"cp4i"* ]];then
+        ./deploy-status-cp4i.sh
+    fi
+
+    # Now retrieve logs if the deployer is still active
+    deployer_status=$(oc get job cloud-pak-deployer -n cloud-pak-deployer -o jsonpath='{.status.active}' 2>/dev/null)
+    if [ "${deployer_status}" == "1" ];then
+        DEPLOYER_POD=$(oc get po -n cloud-pak-deployer --no-headers -l app=cloud-pak-deployer | head -1 | awk '{print $1}')
+        log "Retrieving deployer logs into ./log"
+        mkdir -p log
+        oc cp -n cloud-pak-deployer -c cloud-pak-deployer \
+            ${DEPLOYER_POD}:/Data/cpd-status/log ./log/
+    else
         break
     fi
-    log "Sleeping for 2 minutes..."
-    log "--------------------------------------"
-    sleep 120
+
+    log "Deployer is ACTIVE, Sleeping for ${SLEEP_TIME} seconds..."
+    log "-----------------------------------------------------------"
+    sleep ${SLEEP_TIME}
 done
 }
 
@@ -110,8 +99,19 @@ fi
 
 # Create and populate the configmap with the configuration
 echo "Setting the deployer configuration..."
+oc delete cm -n cloud-pak-deployer cloud-pak-deployer-config --ignore-not-found
 oc create cm -n cloud-pak-deployer cloud-pak-deployer-config 2>/dev/null
-oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./cpd-config.yaml
+# Conditionally set the CP4D configuration
+if [[ "${cpak}" == *"cp4d"* ]];then
+    oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./cp4d-config.yaml
+fi
+# Conditionally set the CP4I configuration
+if [[ "${cpak}" == *"cp4i"* ]];then
+    oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./cp4i-config.yaml
+fi
+
+# Always set the global and OpenShift configuration
+oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./openshift-config.yaml
 
 # Create PVC for deployer job
 echo "Creating the PVC if not already present..."
@@ -170,3 +170,5 @@ sleep 5
 
 # Show deployer status
 show_deployer_output
+
+exit 0
