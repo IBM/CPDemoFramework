@@ -34,7 +34,7 @@ elif cpak == "cp4i":
         list_doc = yaml.safe_load(f)
     #iterate the state of each instance in the config yaml to get installed services
     for x in range(0,len(list_doc["cp4i"][0]["instances"])):
-        if "state" in list_doc["cp4d"][0]["instances"][x] and list_doc["cp4i"][0]["instances"][x]["state"] == "installed":
+        if "state" in list_doc["cp4i"][0]["instances"][x] and list_doc["cp4i"][0]["instances"][x]["state"] == "installed":
             serviceInstalled["service"].append(list_doc["cp4i"][0]["instances"][x]["type"])
 #########################################################################
 
