@@ -19,7 +19,7 @@ serviceInstalled = {
 #####################For cp4d get the installed services#####################
 # Open & load the config file into a list
 if cpak == "cp4d":
-    with open('cpd-config.yaml') as f:
+    with open('cp4d-config.yaml') as f:
         list_doc = yaml.safe_load(f)
     #iterate the state of each instance in the config yaml to get installed services
     for x in range(0,len(list_doc["cp4d"][0]["cartridges"])):
@@ -30,7 +30,7 @@ if cpak == "cp4d":
 #####################For cp4i get installed services#####################
 # Open & load the config file into a list
 elif cpak == "cp4i":
-    with open('cpi-config.yaml') as f:
+    with open('cp4i-config.yaml') as f:
         list_doc = yaml.safe_load(f)
     #iterate the state of each instance in the config yaml to get installed services
     for x in range(0,len(list_doc["cp4i"][0]["instances"])):
