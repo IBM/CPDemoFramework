@@ -24,7 +24,7 @@ if cpak == "cp4d":
     #iterate the state of each instance in the config yaml to get installed services
     for x in range(0,len(list_doc["cp4d"][0]["cartridges"])):
         if "state" in list_doc["cp4d"][0]["cartridges"][x] and list_doc["cp4d"][0]["cartridges"][x]["state"]=="installed":
-            serviceInstalled["data"].append(list_doc["cp4d"][0]["cartridges"][x]["name"])
+            serviceInstalled["data"].append(list_doc["cp4d"][0]["cartridges"][x])
 #########################################################################
 
 #####################For cp4i get installed services#####################
@@ -35,7 +35,7 @@ elif cpak == "cp4i":
     #iterate the state of each instance in the config yaml to get installed services
     for x in range(0,len(list_doc["cp4i"][0]["instances"])):
         if "state" in list_doc["cp4i"][0]["instances"][x] and list_doc["cp4i"][0]["instances"][x]["state"] == "installed":
-            serviceInstalled["service"].append(list_doc["cp4i"][0]["instances"][x]["type"])
+            serviceInstalled["service"].append(list_doc["cp4i"][0]["instances"][x])
 #########################################################################
 
 # Serializing json
