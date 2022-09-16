@@ -44,3 +44,4 @@ json_object = json.dumps(serviceInstalled, indent=4)
 # Writing to the json
 with open(path, "w") as outfile:
     outfile.write(json_object)
+print("success")
