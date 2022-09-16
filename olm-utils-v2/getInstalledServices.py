@@ -5,8 +5,9 @@ import yaml
 from yaml.loader import SafeLoader
 import json
 
-path = sys.argv[1]
-cpak = sys.argv[2]
+cpak = sys.argv[1]
+path = sys.argv[2]
+
 # Dict of list of services already installed
 serviceInstalled = {
     "parentId" : "service-list",
