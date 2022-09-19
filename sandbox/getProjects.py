@@ -48,9 +48,10 @@ for i in range(0, len(data["resources"])):
     renderData["dataToRender"].append({
         "elementToRender": "li",
         "attributes": {
+            "id": "li_"+data['resources'][i]['metadata']['guid'],
             "innerHTML" : data['resources'][i]['entity']['name'],
             "name": data['resources'][i]['metadata']['guid']
-        }
+        },
         "children": []
     })
 
