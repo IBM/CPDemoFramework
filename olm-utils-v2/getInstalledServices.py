@@ -90,7 +90,7 @@ if cpak == "cp4d":
             if list_doc["cp4d"][0]["cartridges"][x]["state"] == "installed":
                 temp["children"][0]["attributes"]["checked"] = True
             elif list_doc["cp4d"][0]["cartridges"][x]["state"] == "removed":
-                temp["children"][0]["attributes"]["checked"] = True
+                temp["children"][0]["attributes"]["checked"] = False
             serviceInstalled["dataToRender"].append(temp)
             i=i+1
 #########################################################################
@@ -153,7 +153,7 @@ if cpak == "cp4i":
             if list_doc["cp4i"][0]["instances"][x]["state"] == "installed":
                 temp["children"][0]["attributes"]["checked"] = True
             elif list_doc["cp4i"][0]["instances"][x]["state"] == "removed":
-                temp["children"][0]["attributes"]["checked"] = True
+                temp["children"][0]["attributes"]["checked"] = False
             serviceInstalled["dataToRender"].append(temp)
             i=i+1
 #########################################################################
