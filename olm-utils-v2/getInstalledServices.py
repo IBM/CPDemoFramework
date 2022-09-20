@@ -14,6 +14,8 @@ serviceInstalled = {
     "dataToRender": []
 }
 
+#####################For cp4d get the installed services#####################
+
 ############ Hard coded service list ############
 services = {
     "analyticsengine": 'Analytics Engine Powered by Apache Spark',
@@ -46,10 +48,6 @@ services = {
     "wml-accelerator": 'Watson Machine Learning Accelerator',
     "wsl": 'Watson Studio'
 }
-
-################################################
-
-#####################For cp4d get the installed services#####################
 # Open & load the config file into a list
 i=0
 if cpak == "cp4d":
@@ -98,14 +96,68 @@ if cpak == "cp4d":
 #########################################################################
 
 #####################For cp4i get installed services#####################
+
+############ Hard coded service list ############
+
+servicescpi = {
+        "platform-navigator": "Platform Navigator",
+        "api-management": "API Management",
+        "automation-assets": "Automation Assets",
+        "enterprise-gateway": "Enterprise Gateway",
+        "event-endpoint-management": "Event Endpoint Management",
+        "event-streams": "Event Steam",
+        "high-speed-transfer-server": "High Speed Transfer Server",
+        "integration-dashboard": "Integration Dashboard",
+        "integration-design": "Integration Design",
+        "integration-tracing": "Integration tracing",
+        "messaging": "Messaging"
+}
+
 # Open & load the config file into a list
-# elif cpak == "cp4i":
-#     with open('cp4i-config.yaml') as f:
-#         list_doc = yaml.safe_load(f)
-#     #iterate the state of each instance in the config yaml to get installed services
-#     for x in range(0,len(list_doc["cp4i"][0]["instances"])):
-#         if "state" in list_doc["cp4i"][0]["instances"][x] and list_doc["cp4i"][0]["instances"][x]["state"] == "installed":
-#             serviceInstalled["service"].append(list_doc["cp4i"][0]["instances"][x])
+i=0
+if cpak == "cp4i":
+    with open('cp4i-config.yaml') as f:
+        list_doc = yaml.safe_load(f)
+    #iterate the state of each instance in the config yaml to get installed services
+    for x in range(0,len(list_doc["cp4i"][0]["instances"])):
+        #iterate config yaml to get details of the services
+        temp = {
+                    "elementToRender": "li",
+                    "attributes": {
+                        "id": ""   #index of li tag
+                    },
+                    "children": [
+                        {
+                            "elementToRender": "input",
+                            "attributes": {
+                                "id": "",   #index of children id tag
+                                "value": "",  #value of the service
+                                "name": "cpi-services",   #name of the service
+                                "type": "checkbox",
+                                "checked": True       #installed/removed
+                            },
+                            "children": False
+                        },
+                        {
+                            "elementToRender": "TEXT_NODE",
+                            "attributes": {
+                                "value": ""     #name of the service
+                            },
+                            "children": False
+                        }
+                    ]
+                }
+        if "state" in list_doc["cp4i"][0]["instances"][x]:
+            temp["attributes"]["id"] = "li_option"+str(i)
+            temp["children"][0]["attributes"]["id"] = "input_option"+str(i)
+            temp["children"][0]["attributes"]["value"] = list_doc["cp4i"][0]["instances"][x]["type"]
+            temp["children"][1]["attributes"]["value"] = servicescpi[list_doc["cp4i"][0]["instances"][x]["type"]]
+            if list_doc["cp4i"][0]["instances"][x]["state"] == "installed":
+                temp["children"][0]["attributes"]["checked"] = True
+            elif list_doc["cp4i"][0]["instances"][x]["state"] == "removed":
+                temp["children"][0]["attributes"]["checked"] = True
+            serviceInstalled["dataToRender"].append(temp)
+            i=i+1
 #########################################################################
 
 # Serializing json
