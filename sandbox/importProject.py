@@ -123,4 +123,4 @@ print("The new import ID is: {}".format(IMPORT_ID))
 os.system('cpdctl asset import get --project-id '+DEMO_PROJECT_ID+' --import-id '+IMPORT_ID)
 
 os.system('cpdctl asset search --query \'*:*\' --type-name asset --project-id '+DEMO_PROJECT_ID)
-
+print("success")

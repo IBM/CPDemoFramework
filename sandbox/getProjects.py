@@ -14,10 +14,8 @@ from decouple import config
 path = sys.argv[1]
 
 renderData = {
-    "parentId" : "project-list",
-    "parentTagName": "ul",
-    "elementToRender" : "li",
-    "data" : []
+    "parentId" : "project-list-ul",
+    "dataToRender" : []
 }
 # ## CPD Credentials
 
@@ -47,9 +45,14 @@ os.system('cpdctl config context use cpd')
 
 data = json.loads(os.popen("cpdctl project list --output json").read())
 for i in range(0, len(data["resources"])):
-    renderData["data"].append({
-        "name": data['resources'][i]['entity']['name'],
-        "guid": data['resources'][i]['metadata']['guid']
+    renderData["dataToRender"].append({
+        "elementToRender": "li",
+        "attributes": {
+            "id": "li_"+data['resources'][i]['metadata']['guid'],
+            "innerHTML" : data['resources'][i]['entity']['name'],
+            "name": data['resources'][i]['metadata']['guid']
+        },
+        "children": []
     })
 
 print(renderData)
