@@ -10,14 +10,14 @@ path = sys.argv[2]
 
 # Dict of list of services already installed
 serviceInstalled = {
-    "parentId": "cr-git-services",
+    "parentId": "git-services",
     "dataToRender": []
 }
 
 #####################For cp4d get the installed services#####################
 
 ############ Hard coded service list ############
-services = {
+servicescp4d = {
     "analyticsengine": 'Analytics Engine Powered by Apache Spark',
     "bigsql": 'Db2 Big SQL',
     "ca": 'Cognos Analytics',
@@ -67,7 +67,7 @@ if cpak == "cp4d":
                             "attributes": {
                                 "id": "",   #index of children id tag
                                 "value": "",  #value of the service
-                                "name": "cr-services",   #name of the service
+                                "name": "services",   #name of the service
                                 "type": "checkbox",
                                 "checked": True       #installed/removed
                             },
@@ -86,7 +86,7 @@ if cpak == "cp4d":
             temp["attributes"]["id"] = "li_option"+str(i)
             temp["children"][0]["attributes"]["id"] = "input_option"+str(i)
             temp["children"][0]["attributes"]["value"] = list_doc["cp4d"][0]["cartridges"][x]["name"]
-            temp["children"][1]["attributes"]["value"] = services[list_doc["cp4d"][0]["cartridges"][x]["name"]]
+            temp["children"][1]["attributes"]["value"] = servicescp4d[list_doc["cp4d"][0]["cartridges"][x]["name"]]
             if list_doc["cp4d"][0]["cartridges"][x]["state"] == "installed":
                 temp["children"][0]["attributes"]["checked"] = True
             elif list_doc["cp4d"][0]["cartridges"][x]["state"] == "removed":
@@ -99,7 +99,7 @@ if cpak == "cp4d":
 
 ############ Hard coded service list ############
 
-servicescpi = {
+servicescp4i = {
         "platform-navigator": "Platform Navigator",
         "api-management": "API Management",
         "automation-assets": "Automation Assets",
@@ -132,7 +132,7 @@ if cpak == "cp4i":
                             "attributes": {
                                 "id": "",   #index of children id tag
                                 "value": "",  #value of the service
-                                "name": "cpi-services",   #name of the service
+                                "name": "services",   #name of the service
                                 "type": "checkbox",
                                 "checked": True       #installed/removed
                             },
@@ -151,7 +151,7 @@ if cpak == "cp4i":
             temp["attributes"]["id"] = "li_option"+str(i)
             temp["children"][0]["attributes"]["id"] = "input_option"+str(i)
             temp["children"][0]["attributes"]["value"] = list_doc["cp4i"][0]["instances"][x]["type"]
-            temp["children"][1]["attributes"]["value"] = servicescpi[list_doc["cp4i"][0]["instances"][x]["type"]]
+            temp["children"][1]["attributes"]["value"] = servicescp4i[list_doc["cp4i"][0]["instances"][x]["type"]]
             if list_doc["cp4i"][0]["instances"][x]["state"] == "installed":
                 temp["children"][0]["attributes"]["checked"] = True
             elif list_doc["cp4i"][0]["instances"][x]["state"] == "removed":
