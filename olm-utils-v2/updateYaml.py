@@ -68,3 +68,4 @@ elif cpak.lower()=='cp4d':
                     x=0
     with open("cp4d-config.yaml", "w") as f:
         yaml.dump(list_cp4d, f, sort_keys=False)
+print("success")
