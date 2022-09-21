@@ -29,6 +29,7 @@ if [ $? != 0 ];then
     echo "Error logging in to OpenShift, please check your credentials"
     exit 1
 fi
+echo "success"
 
 # Get the updated config file from cloud-pak-deployer-config
 oc extract -n cloud-pak-deployer  cm/cloud-pak-deployer-config --to=. --confirm 2>/dev/null
