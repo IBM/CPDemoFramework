@@ -36,8 +36,8 @@ elif storage_vendor.lower()=='roks-classic':
     list_os["openshift"][0]["openshift_storage"][0]["ocp_storage_class_block"]= "ibmc-block-gold"
     list_os["openshift"][0]["openshift_storage"][0]["ocp_storage_class_file"] = "ibmc-file-gold-gid"
 
-    with open("openshift-config.yaml", "w") as f:
-        yaml.dump(list_os, f, sort_keys=False)
+with open("openshift-config.yaml", "w") as f:
+    yaml.dump(list_os, f, sort_keys=False)
 
 #update cp4i congifuration yaml
 if cpak.lower()=='cp4i':
