@@ -50,7 +50,8 @@ for i in range(0, len(data["resources"])):
         "attributes": {
             "id": "li_"+data['resources'][i]['metadata']['guid'],
             "innerHTML" : data['resources'][i]['entity']['name'],
-            "name": data['resources'][i]['metadata']['guid']
+            "name": data['resources'][i]['metadata']['guid'],
+            "addEventListener": ["click", "selectProject"]
         },
         "children": []
     })
