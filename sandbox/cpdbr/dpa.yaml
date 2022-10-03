@@ -1,0 +1,48 @@
+apiVersion: oadp.openshift.io/v1alpha1
+kind: DataProtectionApplication
+metadata:
+  name: dpa-sample
+spec:
+  configuration:
+    velero:
+      customPlugins:
+      - image: image-registry.openshift-image-registry.svc:5000/oadp-operator/cpdbr-velero-plugin:4.0.0-beta1-1-x86_64
+        name: cpdbr-velero-plugin
+      defaultPlugins:
+      - aws
+      - openshift
+      - csi
+      podConfig:
+        resourceAllocations:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 256Mi
+    restic:
+      enable: true
+      timeout: 2h
+      podConfig:
+        resourceAllocations:
+          limits:
+            cpu: "1"
+            memory: 4Gi
+          requests:
+            cpu: 500m
+            memory: 256Mi
+  backupImages: false
+  backupLocations:
+    - velero:
+        provider: aws
+        default: true
+        objectStorage:
+          bucket: <s3-bucket-name>
+          prefix: cp-demo-cpdbr
+        config:
+          region: <s3-storage-region>
+          s3ForcePathStyle: "true"
+          s3Url: <s3-public-url>
+        credential:
+          name: cloud-credentials
+          key: cloud
