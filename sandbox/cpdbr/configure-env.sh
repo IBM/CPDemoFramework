@@ -8,8 +8,9 @@ SRC_KUBEADMIN_PASS=$4
 ICR_KEY=$5
 S3_URL=$6
 BUCKET=$7
-ACCESS_KEY=$8
-ACCESS_ID=$9
+REGION=$8
+ACCESS_KEY=$9
+ACCESS_ID=$10
 
 # SCRIPT
 #Pod login and auto login to oc cluster from runutils
@@ -36,13 +37,16 @@ fi
 echo "success"
 
 # Store variables in shell script
-echo "ICR_KEY=$ICR_KEY" > ./env-vars.sh
-echo "S3_URL=$S3_URL" >> ./env-vars.sh
-echo "BUCKET=$BUCKET" >> ./env-vars.sh
-echo "ACCESS_KEY=$ACCESS_KEY" >> ./env-vars.sh
-echo "ACCESS_ID=$ACCESS_ID" >> ./env-vars.sh
-echo "SRC_API_TOKEN=$SRC_API_TOKEN" >> ./env-vars.sh
-echo "SRC_KUBEADMIN_USER=$SRC_KUBEADMIN_USER" >> ./env-vars.sh
-echo "SRC_KUBEADMIN_PASS=$SRC_KUBEADMIN_PASS" >> ./env-vars.sh
-echo "SRC_SERVER=$SRC_SERVER" >> ./env-vars.sh
-chmod +x ./env-vars.sh
+echo "ICR_KEY=$ICR_KEY" > .env
+echo "S3_URL=$S3_URL" >> .env
+echo "BUCKET=$BUCKET" >> .env
+echo "REGION=$REGION" >> .env
+echo "ACCESS_KEY=$ACCESS_KEY" >> .env
+echo "ACCESS_ID=$ACCESS_ID" >> .env
+echo "SRC_API_TOKEN=$SRC_API_TOKEN" >> .env
+echo "SRC_KUBEADMIN_USER=$SRC_KUBEADMIN_USER" >> .env
+echo "SRC_KUBEADMIN_PASS=$SRC_KUBEADMIN_PASS" >> .env
+echo "SRC_SERVER=$SRC_SERVER" >> .env
+echo "\naws_access_key_id=$ACCESS_ID" >> credentials-velero.txt
+echo "aws_secret_access_key=$ACCESS_KEY" >> credentials-velero.txt
+chmod +x .env
