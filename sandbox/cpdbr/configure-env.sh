@@ -8,9 +8,9 @@ SRC_KUBEADMIN_PASS=$4
 ICR_KEY=$5
 S3_URL=$6
 BUCKET=$7
-REGION=$8
-ACCESS_KEY=$9
-ACCESS_ID=$10
+# REGION=$8
+ACCESS_KEY=$8
+ACCESS_ID=$9
 
 # SCRIPT
 #Pod login and auto login to oc cluster from runutils
@@ -47,4 +47,6 @@ echo "SRC_API_TOKEN=$SRC_API_TOKEN" >> .env
 echo "SRC_KUBEADMIN_USER=$SRC_KUBEADMIN_USER" >> .env
 echo "SRC_KUBEADMIN_PASS=$SRC_KUBEADMIN_PASS" >> .env
 echo "SRC_SERVER=$SRC_SERVER" >> .env
+echo "\naws_access_key_id=$ACCESS_ID" >> credentials-velero.txt
+echo "aws_secret_access_key=$ACCESS_KEY" >> credentials-velero.txt
 chmod +x .env
