@@ -15,3 +15,4 @@ dpa["spec"]["backupLocations"][0]["velero"]["config"]["region"] = config["REGION
 dpa["spec"]["backupLocations"][0]["velero"]["config"]["s3Url"] = config["S3_URL"]
 with open("dpa.yaml", "w") as f:
     yaml.dump(dpa, f, sort_keys=False)
+print("success")
