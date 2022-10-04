@@ -8,8 +8,8 @@ BUILD_NUM=1
 # Podman steps (working on removing)
 
 # then oadp installation
-oc apply -f operatorgroup.yaml
-oc apply -f sub.yaml
+oc apply -f oadp-operatorgroup.yaml 
+oc apply -f oadp-sub.yaml 
 
 oc annotate namespace oadp-operator openshift.io/node-selector=""
 
