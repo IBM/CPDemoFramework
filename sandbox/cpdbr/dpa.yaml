@@ -6,7 +6,7 @@ spec:
   configuration:
     velero:
       customPlugins:
-      - image: image-registry.openshift-image-registry.svc:5000/oadp-operator/cpdbr-velero-plugin:4.0.0-beta1-1-x86_64
+      - image: quay.io/devplayground/cpdbr-velero-plugin:4.0.0-beta1-1-x86_64
         name: cpdbr-velero-plugin
       defaultPlugins:
       - aws
