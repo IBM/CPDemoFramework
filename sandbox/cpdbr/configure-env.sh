@@ -50,3 +50,21 @@ echo "SRC_SERVER=$SRC_SERVER" >> .env
 echo "\naws_access_key_id=$ACCESS_ID" >> credentials-velero.txt
 echo "aws_secret_access_key=$ACCESS_KEY" >> credentials-velero.txt
 chmod +x .env
+
+echo "##### Configuring the cluster #####"
+echo "Creating oadp-operator namespace..."
+oc create namespace oadp-operator
+oc annotate namespace oadp-operator openshift.io/node-selector=""
+echo "Creating secret..."
+oc create secret generic cloud-credentials --namespace oadp-operator --from-file cloud=./credentials-velero.txt
+echo "Installing OADP Operator..."
+oc apply -f oadp-operatorgroup.yaml
+oc apply -f oadp-sub.yaml
+echo "Creating DPA..."
+oc create -f dpa.yaml -n oadp-operator
+echo "Set namespaces..."
+cpd-cli oadp client config set namespace=oadp-operator
+cpd-cli oadp client config set cpd-namespace=cpd-instance
+
+# pull secret
+oc get secret/pull-secret -n openshift-config --template='{{index .data ".dockerconfigjson" | base64decode}}' > source-secret.json
