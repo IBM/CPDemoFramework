@@ -15,10 +15,10 @@ path = sys.argv[1]
 
 renderData = {
     "componentsToRender" : 
-    [
+    [{
         "parentId" : "project-list-ul",
         "dataToRender" : []
-    ]
+    }]
 }
 # ## CPD Credentials
 
