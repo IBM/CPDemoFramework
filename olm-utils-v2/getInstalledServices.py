@@ -16,19 +16,6 @@ serviceInstalled = {
         {
             "parentId": "git-services",
             "dataToRender": []
-        },
-        {
-            "parentId":"cp4d-deploy",
-            "dataToRender":[
-                {
-                    "elementToRender": "input",
-                    "attributes": {
-                        "id": "cp4d_version",
-                        "value": "4.5.1"  
-                    },
-                    "children": []
-                }
-            ]
         }
     ]
 }
@@ -168,19 +155,22 @@ if cpak == "cp4i":
                             "elementToRender": "input",
                             "attributes": {
                                 "id": "",   #index of children id tag
+                                "class": "store-data",
                                 "value": "",  #value of the service
                                 "name": "services",   #name of the service
                                 "type": "checkbox",
-                                "checked": True       #installed/removed
+                                "checked": True,      #installed/removed
+                                "addEventListener" : ["change","updateSelectedServices"],
+                                "dispatchEvent" : "change"
                             },
-                            "children": False
+                            "children": []
                         },
                         {
                             "elementToRender": "TEXT_NODE",
                             "attributes": {
                                 "value": ""     #name of the service
                             },
-                            "children": False
+                            "children": []
                         }
                     ]
                 }
@@ -215,7 +205,7 @@ if cpak == "cp4i":
 #########################################################################
 
 # Serializing json
-json_object = json.dumps(serviceInstalled["componentsToRender"][0], indent=4)
+json_object = json.dumps(serviceInstalled, indent=4)
  
 # Writing to the json
 with open(path, "w") as outfile:
