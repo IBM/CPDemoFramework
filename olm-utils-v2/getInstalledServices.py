@@ -119,7 +119,7 @@ if cpak == "cp4d":
             cp4d_version = list_doc["cp4d"][0]["cp4d_version"]
         except:
             pass
-        serviceInstalled.append({
+        serviceInstalled["componentsToRender"].append({
             "parentId":"cp4d-deploy",
             "dataToRender":[
                 {
@@ -199,7 +199,7 @@ if cpak == "cp4i":
             cp4i_version = list_doc["cp4i"][0]["cp4i_version"]
         except:
             pass
-        serviceInstalled.append({
+        serviceInstalled["componentsToRender"].append({
             "parentId":"cp4i-deploy",
             "dataToRender":[
                 {
