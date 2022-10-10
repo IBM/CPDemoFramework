@@ -1,48 +1,62 @@
-apiVersion: oadp.openshift.io/v1alpha1
-kind: DataProtectionApplication
-metadata:
-  name: dpa-sample
-spec:
-  configuration:
-    velero:
-      customPlugins:
-      - image: quay.io/devplayground/cpdbr-velero-plugin:4.0.0-beta1-1-x86_64
-        name: cpdbr-velero-plugin
-      defaultPlugins:
-      - aws
-      - openshift
-      - csi
-      podConfig:
-        resourceAllocations:
-          limits:
-            cpu: "1"
-            memory: 1Gi
-          requests:
-            cpu: 500m
-            memory: 256Mi
-    restic:
-      enable: true
-      timeout: 2h
-      podConfig:
-        resourceAllocations:
-          limits:
-            cpu: "1"
-            memory: 4Gi
-          requests:
-            cpu: 500m
-            memory: 256Mi
-  backupImages: false
-  backupLocations:
-    - velero:
-        provider: aws
-        default: true
-        objectStorage:
-          bucket: ${BUCKET}
-          prefix: cp-demo-cpdbr
-        config:
-          region: ${REGION}
-          s3ForcePathStyle: "true"
-          s3Url: ${S3_URL}
-        credential:
-          name: cloud-credentials
-          key: cloud
+---
+    kind: Template
+    apiVersion: template.openshift.io/v1
+    metadata:
+      name: cloud-pak-br-job-template
+      namespace: cloud-pak-br
+    objects:
+    - apiVersion: oadp.openshift.io/v1alpha1
+      kind: DataProtectionApplication
+      metadata:
+        name: dpa-sample
+      spec:
+        configuration:
+          velero:
+            customPlugins:
+            - image: quay.io/devplayground/cpdbr-velero-plugin:4.0.0-beta1-1-x86_64
+              name: cpdbr-velero-plugin
+            defaultPlugins:
+            - aws
+            - openshift
+            - csi
+            podConfig:
+              resourceAllocations:
+                limits:
+                  cpu: "1"
+                  memory: 1Gi
+                requests:
+                  cpu: 500m
+                  memory: 256Mi
+          restic:
+            enable: true
+            timeout: 2h
+            podConfig:
+              resourceAllocations:
+                limits:
+                  cpu: "1"
+                  memory: 4Gi
+                requests:
+                  cpu: 500m
+                  memory: 256Mi
+        backupImages: false
+        backupLocations:
+          - velero:
+              provider: aws
+              default: true
+              objectStorage:
+                bucket: ${BUCKET}
+                prefix: cp-demo-cpdbr
+              config:
+                region: ${REGION}
+                s3ForcePathStyle: "true"
+                s3Url: ${S3_URL}
+              credential:
+                name: cloud-credentials
+                key: cloud
+    parameters:
+    - name: BUCKET
+      description: "S3 Bucket name"
+    - name: REGION
+      description: "S3 Bucket Region"
+    - name: S3_URL
+      description: "S3 Bucket Public URL"
