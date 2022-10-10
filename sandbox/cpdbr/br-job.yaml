@@ -1,0 +1,62 @@
+---
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      labels:
+        app: cloud-pak-br
+      name: cloud-pak-br
+      namespace: cloud-pak-br
+    spec:
+      parallelism: 1
+      completions: 1
+      backoffLimit: 0
+      template:
+        metadata:
+          name: cloud-pak-br
+          labels:
+            app: cloud-pak-br
+        spec:
+          initContainers:
+          - name: wait-config
+            image: quay.io/devplayground/developer-container-utilities:latest
+            command: ['sh', '-c', 'until [ -f /tmp/cpd-config-ready ]; do echo Waiting for /tmp/cpd-config-ready file; sleep 1; done; echo "Configuration is ready, starting deployer"']
+            env:
+            - name: CONFIG_DIR
+              value: /Data/cpd-config
+            - name: STATUS_DIR
+              value: /Data/cpd-status
+            volumeMounts:
+            - name: config-volume
+              mountPath: /Data/cpd-config/config
+            - name: status-volume
+              mountPath: /Data/cpd-status
+          containers:
+          - name: cloud-pak-br
+            image: quay.io/devplayground/developer-container-utilities:latest
+            imagePullPolicy: Always
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            env:
+            - name: CONFIG_DIR
+              value: /Data/cpdbr-config
+            - name: STATUS_DIR
+              value: /Data/cpdbr-status
+            volumeMounts:
+            - name: config-volume
+              mountPath: /Data/cpdbr-config/config
+            - name: status-volume
+              mountPath: /Data/cpdbr-status
+            command: ["/bin/sh","-xc"]
+            args: 
+              - cpd-cli oadp backup create --include-namespaces=cpd-instance --exclude-resources='Event,Event.events.k8s.io' --default-volumes-to-restic --snapshot-volumes=false --cleanup-completed-resources cpd-instance-backup1 --log-level=debug --verbose
+          restartPolicy: Never
+          securityContext:
+            runAsUser: 0
+          serviceAccountName: cloud-pak-br-sa
+          volumes:
+          - name: config-volume
+            configMap:
+              name: cloud-pak-br-config
+          - name: status-volume
+            persistentVolumeClaim:
+              claimName: cloud-pak-br-status

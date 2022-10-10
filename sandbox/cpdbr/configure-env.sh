@@ -5,12 +5,11 @@ SRC_SERVER=$1
 SRC_API_TOKEN=$2
 SRC_KUBEADMIN_USER=$3
 SRC_KUBEADMIN_PASS=$4
-ICR_KEY=$5
-S3_URL=$6
-BUCKET=$7
-REGION=$8
-ACCESS_KEY=$9
-ACCESS_ID=$10
+S3_URL=$5
+BUCKET=$6
+REGION=$7
+ACCESS_KEY=$8
+ACCESS_ID=$9
 
 # SCRIPT
 #Pod login and auto login to oc cluster from runutils
@@ -37,7 +36,6 @@ fi
 echo "success"
 
 # Store variables in shell script
-echo "ICR_KEY=$ICR_KEY" > .env
 echo "S3_URL=$S3_URL" >> .env
 echo "BUCKET=$BUCKET" >> .env
 echo "REGION=$REGION" >> .env
@@ -66,5 +64,16 @@ echo "Set namespaces..."
 cpd-cli oadp client config set namespace=oadp-operator
 cpd-cli oadp client config set cpd-namespace=cpd-instance
 
+
+echo "Setting up the backup execution pod..."
+oc new-project cloud-pak-br 2> /dev/null
+oc project cloud-pak-br 2>&1 > /dev/null
+oc create serviceaccount cloud-pak-br-sa 2> /dev/null
+oc adm policy add-scc-to-user privileged -z cloud-pak-br-sa
+oc adm policy add-cluster-role-to-user cluster-admin -z cloud-pak-br-sa
+
+oc create cm -n cloud-pak-br cloud-pak-br-config 2>/dev/null
+
+
 # pull secret
-oc get secret/pull-secret -n openshift-config --template='{{index .data ".dockerconfigjson" | base64decode}}' > source-secret.json
+# oc get secret/pull-secret -n openshift-config --template='{{index .data ".dockerconfigjson" | base64decode}}' > source-secret.json
