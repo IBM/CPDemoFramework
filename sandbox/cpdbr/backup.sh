@@ -16,7 +16,7 @@ if [ $? -ne 0 ]; then
 fi
 
 show_backup_output() {
-SLEEP_TIME=300
+SLEEP_TIME=60
 export temp_dir=$(mktemp -d)
 while true; do
     # Check if Cloud Pak backup job is active
