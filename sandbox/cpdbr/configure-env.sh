@@ -60,7 +60,8 @@ echo "Installing OADP Operator..."
 oc apply -f oadp-operatorgroup.yaml
 oc apply -f oadp-sub.yaml
 echo "Creating DPA..."
-oc process -f dpa.yaml -p BUCKET=${BUCKET} REGION=${REGION} S3_URL=${S3_URL} -n oadp-operator | oc create -f -
+oc project oadp-operator
+oc process -f dpa.yaml -p BUCKET=${BUCKET} -p REGION=${REGION} -p S3_URL=${S3_URL} | oc create -f -
 echo "Set namespaces..."
 cpd-cli oadp client config set namespace=oadp-operator
 cpd-cli oadp client config set cpd-namespace=cpd-instance

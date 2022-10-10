@@ -15,26 +15,26 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-show_deployer_output() {
+show_backup_output() {
 SLEEP_TIME=300
 export temp_dir=$(mktemp -d)
 while true; do
     # Check if Cloud Pak backup job is active
     backup_status=$(oc get job cloud-pak-br -n cloud-pak-br -o jsonpath='{.status.active}' 2>/dev/null)
     if [ "${backup_status}" == "1" ];then
-        log "Cloud Pak Backup job is ACTIVE"
+        echo "Cloud Pak Backup job is ACTIVE"
     else
-        log "Cloud Pak Backup job is NOT ACTIVE"
+        echo "Cloud Pak Backup job is NOT ACTIVE"
     fi
     echo
 
     # Get current stage of the backup
     current_stage=$(oc logs -n cloud-pak-br job/cloud-pak-br | grep -E 'PLAY \[' | tail -1)
-    log "Current stage: ${current_stage}"
+    echo "Current stage: ${current_stage}"
     echo
     # Get current task of the backup
     current_task=$(oc logs -n cloud-pak-br job/cloud-pak-br | grep -E 'TASK \[' | tail -1)
-    log "Current task: ${current_task}"
+    echo "Current task: ${current_task}"
     echo
     # # Get catalog sources
     # log "Listing catalog sources"
@@ -61,7 +61,7 @@ while true; do
     backup_status=$(oc get job cloud-pak-br -n cloud-pak-br -o jsonpath='{.status.active}' 2>/dev/null)
     if [ "${backup_status}" == "1" ];then
         BACKUP_POD=$(oc get po -n cloud-pak-br --no-headers -l app=cloud-pak-br | head -1 | awk '{print $1}')
-        log "Retrieving Backup logs into ./log"
+        echo "Retrieving Backup logs into ./log"
         mkdir -p log
         oc cp -n cloud-pak-br -c cloud-pak-br \
             ${BACKUP_POD}:/Data/cpd-status/log ./log/
@@ -69,8 +69,8 @@ while true; do
         break
     fi
 
-    log "Deployer is ACTIVE, Sleeping for ${SLEEP_TIME} seconds..."
-    log "-----------------------------------------------------------"
+    echo "Backup is ACTIVE, Sleeping for ${SLEEP_TIME} seconds..."
+    echo "-----------------------------------------------------------"
     sleep ${SLEEP_TIME}
 done
 }
@@ -78,7 +78,7 @@ done
 # Check if the backup job is still running, it must not exist
 if [ "$(oc get job cloud-pak-br -n cloud-pak-br -o jsonpath='{.status.active}' 2>/dev/null)" == "1" ];then
     echo "Backup job is still present in the cloud-pak-br project. Will show progress instead of starting the backup."
-    show_deployer_output
+    show_backup_output
     exit 0
 fi
 
@@ -93,7 +93,7 @@ elif oc get sc ocs-storagecluster-cephfs > /dev/null 2>&1;then
 elif oc get sc ibmc-file-gold-gid > /dev/null 2>&1;then
     export BACKUP_SC=ibmc-file-gold-gid
 else
-    echo "No supported storage class found for the deployer job, exiting."
+    echo "No supported storage class found for the backup job, exiting."
     exit 1
 fi
 
@@ -117,9 +117,11 @@ oc set data -n cloud-pak-br cm/cloud-pak-br-config --from-file=./openshift-confi
 echo "Creating the PVC if not already present..."
 oc process -f br-pvc.yaml -p BACKUP_SC=${BACKUP_SC} | oc apply -f -
 
-# Start deployer job
-echo "Starting the deployer job..."
-oc apply -f br-job.yaml
+# Start backup job
+echo "Starting the backup job..."
+CPD_INSTANCE= "cpd-instance"
+CPD_BACKUP="cpd-instance-backup1"
+oc process -f br-job.yaml -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_BACKUP=${CPD_BACKUP} | oc apply -f -
 
 waittime=0
 pod_status=""
@@ -163,15 +165,15 @@ fi
 
 # oc rsh -c wait-config $BACKUP_POD /cloud-pak-deployer/cp-deploy.sh vault list
 
-# Start the deployer
+# Start the backup
 echo "Starting the backup..."
 oc rsh -c wait-config $BACKUP_POD bash -c 'touch /tmp/cpd-config-ready; chmod 777 /tmp/cpd-config-ready'
 
-# # Wait a few seconds for the deployer container to start
-# sleep 5
+# Wait a few seconds for the backup container to start
+sleep 5
 
-# Show deployer status
-show_deployer_output
+# Show backup status
+show_backup_output
 echo "success"
 echo "all done"
 exit 0
