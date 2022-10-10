@@ -29,10 +29,6 @@ while true; do
     echo
 
     # Get current stage of the backup
-    BACKUP_POD=$(oc get po -n cloud-pak-br --no-headers -l app=cloud-pak-br | head -1 | awk '{print $1}')
-    echo ${BACKUP_POD}
-    echo "Current pod status:"
-    oc logs ${BACKUP_POD} --tail=100
     # oc logs -n cloud-pak-br job/cloud-pak-br | grep -E 'PLAY \[' | tail -1
     # echo "Current stage: ${current_stage}"
     # echo
@@ -62,16 +58,17 @@ while true; do
     # fi
 
     # Now retrieve logs if the backup is still active
-    # backup_status=$(oc get job cloud-pak-br -n cloud-pak-br -o jsonpath='{.status.active}' 2>/dev/null)
-    # if [ "${backup_status}" == "1" ];then
-    #     BACKUP_POD=$(oc get po -n cloud-pak-br --no-headers -l app=cloud-pak-br | head -1 | awk '{print $1}')
-    #     echo "Retrieving Backup logs into ./log"
-    #     mkdir -p log
-    #     oc cp -n cloud-pak-br -c cloud-pak-br \
-    #         $(oc logs ${BACKUP_POD} --tail=100) ./log/
-    # else
-    #     break
-    # fi
+    backup_status=$(oc get job cloud-pak-br -n cloud-pak-br -o jsonpath='{.status.active}' 2>/dev/null)
+    if [ "${backup_status}" == "1" ];then
+        BACKUP_POD=$(oc get po -n cloud-pak-br --no-headers -l app=cloud-pak-br | head -1 | awk '{print $1}')
+        echo "Retrieving Backup logs into ./log"
+        # mkdir -p log
+        # oc cp -n cloud-pak-br -c cloud-pak-br \
+        #     $(oc logs ${BACKUP_POD} --tail=100) ./log/
+        oc logs ${BACKUP_POD} --tail=100
+    else
+        break
+    fi
 
     echo "Backup is ACTIVE, Sleeping for ${SLEEP_TIME} seconds..."
     echo "-----------------------------------------------------------"
@@ -124,7 +121,7 @@ oc process -f br-pvc.yaml -p BACKUP_SC=${BACKUP_SC} | oc apply -f -
 # Start backup job
 echo "Starting the backup job..."
 CPD_INSTANCE=cpd-instance
-CPD_BACKUP=cpd-instance-backup2
+CPD_BACKUP=cpd-instance-backup5
 oc process -f br-job.yaml -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_BACKUP=${CPD_BACKUP} | oc apply -f -
 
 waittime=0
