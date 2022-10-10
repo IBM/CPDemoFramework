@@ -37,12 +37,12 @@ spec:
         provider: aws
         default: true
         objectStorage:
-          bucket: <s3-bucket-name>
+          bucket: ${BUCKET}
           prefix: cp-demo-cpdbr
         config:
-          region: <s3-storage-region>
+          region: ${REGION}
           s3ForcePathStyle: "true"
-          s3Url: <s3-public-url>
+          s3Url: ${S3_URL}
         credential:
           name: cloud-credentials
           key: cloud
