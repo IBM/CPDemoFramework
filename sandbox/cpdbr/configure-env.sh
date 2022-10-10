@@ -36,18 +36,19 @@ fi
 echo "success"
 
 # Store variables in shell script
-echo "S3_URL=$S3_URL" >> .env
-echo "BUCKET=$BUCKET" >> .env
-echo "REGION=$REGION" >> .env
-echo "ACCESS_KEY=$ACCESS_KEY" >> .env
-echo "ACCESS_ID=$ACCESS_ID" >> .env
-echo "SRC_API_TOKEN=$SRC_API_TOKEN" >> .env
-echo "SRC_KUBEADMIN_USER=$SRC_KUBEADMIN_USER" >> .env
-echo "SRC_KUBEADMIN_PASS=$SRC_KUBEADMIN_PASS" >> .env
-echo "SRC_SERVER=$SRC_SERVER" >> .env
+# echo "S3_URL=$S3_URL" >> .env
+# echo "BUCKET=$BUCKET" >> .env
+# echo "REGION=$REGION" >> .env
+# echo "ACCESS_KEY=$ACCESS_KEY" >> .env
+# echo "ACCESS_ID=$ACCESS_ID" >> .env
+# echo "SRC_API_TOKEN=$SRC_API_TOKEN" >> .env
+# echo "SRC_KUBEADMIN_USER=$SRC_KUBEADMIN_USER" >> .env
+# echo "SRC_KUBEADMIN_PASS=$SRC_KUBEADMIN_PASS" >> .env
+# echo "SRC_SERVER=$SRC_SERVER" >> .env
+
 echo "\naws_access_key_id=$ACCESS_ID" >> credentials-velero.txt
 echo "aws_secret_access_key=$ACCESS_KEY" >> credentials-velero.txt
-chmod +x .env
+# chmod +x .env
 
 echo "##### Configuring the cluster #####"
 echo "Creating oadp-operator namespace..."
@@ -59,7 +60,7 @@ echo "Installing OADP Operator..."
 oc apply -f oadp-operatorgroup.yaml
 oc apply -f oadp-sub.yaml
 echo "Creating DPA..."
-oc create -f dpa.yaml -n oadp-operator
+oc process -f dpa.yaml -p BUCKET=${BUCKET} REGION=${REGION} S3_URL=${S3_URL} -n oadp-operator | oc create -f -
 echo "Set namespaces..."
 cpd-cli oadp client config set namespace=oadp-operator
 cpd-cli oadp client config set cpd-namespace=cpd-instance
