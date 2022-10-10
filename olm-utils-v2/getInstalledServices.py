@@ -92,8 +92,8 @@ if cpak == "cp4d":
                     ]
                 }
         if "state" in list_doc["cp4d"][0]["cartridges"][x]:
-            temp["attributes"]["id"] = "li_option"+str(i)
-            temp["children"][0]["attributes"]["id"] = "input_option"+str(i)
+            temp["attributes"]["id"] = "li_option"+list_doc["cp4d"][0]["cartridges"][x]["name"]
+            temp["children"][0]["attributes"]["id"] = "input_option"+list_doc["cp4d"][0]["cartridges"][x]["name"]
             temp["children"][0]["attributes"]["value"] = list_doc["cp4d"][0]["cartridges"][x]["name"]
             temp["children"][1]["attributes"]["value"] = servicescp4d[list_doc["cp4d"][0]["cartridges"][x]["name"]]
             if list_doc["cp4d"][0]["cartridges"][x]["state"] == "installed":
@@ -102,23 +102,23 @@ if cpak == "cp4d":
                 temp["children"][0]["attributes"]["checked"] = False
             serviceInstalled["componentsToRender"][0]["dataToRender"].append(temp)
             i=i+1
-        try:
-            cp4d_version = list_doc["cp4d"][0]["cp4d_version"]
-        except:
-            pass
-        serviceInstalled["componentsToRender"].append({
-            "parentId":"cp4d-deploy",
-            "dataToRender":[
-                {
-                    "elementToRender": "input",
-                    "attributes": {
-                        "id": "cp4d_version",
-                        "value": cp4d_version
-                    },
-                    "children": []
-                }
-            ]
-        })
+    try:
+        cp4d_version = list_doc["cp4d"][0]["cp4d_version"]
+    except:
+        pass
+    serviceInstalled["componentsToRender"].append({
+        "parentId":"cp4d-deploy",
+        "dataToRender":[
+            {
+                "elementToRender": "input",
+                "attributes": {
+                    "id": "cp4d_version",
+                    "value": cp4d_version
+                },
+                "children": []
+            }
+        ]
+    })
 #########################################################################
 
 #####################For cp4i get installed services#####################
@@ -175,8 +175,8 @@ if cpak == "cp4i":
                     ]
                 }
         if "state" in list_doc["cp4i"][0]["instances"][x]:
-            temp["attributes"]["id"] = "li_option"+str(i)
-            temp["children"][0]["attributes"]["id"] = "input_option"+str(i)
+            temp["attributes"]["id"] = "li_option"+list_doc["cp4i"][0]["instances"][x]["type"]
+            temp["children"][0]["attributes"]["id"] = "input_option"+list_doc["cp4i"][0]["instances"][x]["type"]
             temp["children"][0]["attributes"]["value"] = list_doc["cp4i"][0]["instances"][x]["type"]
             temp["children"][1]["attributes"]["value"] = servicescp4i[list_doc["cp4i"][0]["instances"][x]["type"]]
             if list_doc["cp4i"][0]["instances"][x]["state"] == "installed":
@@ -185,23 +185,23 @@ if cpak == "cp4i":
                 temp["children"][0]["attributes"]["checked"] = False
             serviceInstalled["componentsToRender"][0]["dataToRender"].append(temp)
             i=i+1
-        try:
-            cp4i_version = list_doc["cp4i"][0]["cp4i_version"]
-        except:
-            pass
-        serviceInstalled["componentsToRender"].append({
-            "parentId":"cp4i-deploy",
-            "dataToRender":[
-                {
-                    "elementToRender": "input",
-                    "attributes": {
-                        "id": "cp4i_version",
-                        "value": cp4i_version
-                    },
-                    "children": []
-                }
-            ]
-        })
+    try:
+        cp4i_version = list_doc["cp4i"][0]["cp4i_version"]
+    except:
+        pass
+    serviceInstalled["componentsToRender"].append({
+        "parentId":"cp4i-deploy",
+        "dataToRender":[
+            {
+                "elementToRender": "input",
+                "attributes": {
+                    "id": "cp4i_version",
+                    "value": cp4i_version
+                },
+                "children": []
+            }
+        ]
+    })
 #########################################################################
 
 # Serializing json
