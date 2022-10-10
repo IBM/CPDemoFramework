@@ -54,7 +54,7 @@
                 mountPath: /Data/cpdbr-status
               command: ["/bin/sh","-xc"]
               args: 
-                - cpd-cli oadp backup create --include-namespaces=${CPD_INSTANCE} --exclude-resources='Event,Event.events.k8s.io' --default-volumes-to-restic --snapshot-volumes=false --cleanup-completed-resources ${CPD_BACKUP} log-level=debug --verbose
+                - cpd-cli oadp backup create --include-namespaces=${CPD_INSTANCE} --exclude-resources='Event,Event.events.k8s.io' --default-volumes-to-restic --snapshot-volumes=false --cleanup-completed-resources ${CPD_BACKUP} --log-level=debug --verbose
             restartPolicy: Never
             securityContext:
               runAsUser: 0
@@ -70,4 +70,4 @@
     - name: CPD_INSTANCE
       description: "CPD Instance namespace to backup"
     - name: CPD_BACKUP
-      description: "CPD Instance backup name"   
+      description: "CPD Instance backup name"
