@@ -49,7 +49,7 @@
               config:
                 region: ${REGION}
                 s3ForcePathStyle: "true"
-                s3Url: ${S3_URL}
+                s3Url: http://${S3_URL}
               credential:
                 name: cloud-credentials
                 key: cloud
