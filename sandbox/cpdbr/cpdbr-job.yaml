@@ -62,7 +62,7 @@
             volumes:
             - name: config-volume
               configMap:
-                name: ${BR_JOB}-config
+                name: cloud-pak-br-config
             - name: status-volume
               persistentVolumeClaim:
                 claimName: ${BR_JOB}-status

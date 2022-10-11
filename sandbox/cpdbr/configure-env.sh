@@ -11,6 +11,7 @@ REGION=$7
 ACCESS_KEY=$8
 ACCESS_ID=$9
 
+BR_JOB=
 # SCRIPT
 #Pod login and auto login to oc cluster from runutils
 if  [ -n "$SRC_KUBEADMIN_USER" ] && [ -n "$SRC_KUBEADMIN_PASS" ]
@@ -61,7 +62,7 @@ oc apply -f oadp-operatorgroup.yaml
 oc apply -f oadp-sub.yaml
 echo "Creating DPA..."
 oc project oadp-operator
-oc process -f dpa.yaml -p BR_JOB=${BR_JOB} -p BUCKET=${BUCKET} -p REGION=${REGION} -p S3_URL=${S3_URL} | oc create -f -
+oc process -f oadp-dpa.yaml -p BUCKET=${BUCKET} -p REGION=${REGION} -p S3_URL=${S3_URL} | oc create -f -
 echo "Set namespaces..."
 cpd-cli oadp client config set namespace=oadp-operator
 cpd-cli oadp client config set cpd-namespace=cpd-instance
