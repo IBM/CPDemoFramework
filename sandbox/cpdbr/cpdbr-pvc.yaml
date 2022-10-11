@@ -8,7 +8,7 @@
     - kind: PersistentVolumeClaim
       apiVersion: v1
       metadata:
-        name: cloud-pak-br-status
+        name: ${BR_JOB}-status
         namespace: cloud-pak-br
       spec:
         accessModes:
@@ -16,7 +16,9 @@
         resources:
           requests:
             storage: 10Gi
-        storageClassName: ${BACKUP_SC}
+        storageClassName: ${BR_SC}
     parameters:
-    - name: BACKUP_SC
-      description: "Storage class for the Cloud Pak br job"
+    - name: BR_SC
+      description: "Storage class for the Cloud Pak BR job"
+    - name: BR_JOB
+      description: "Job name"
