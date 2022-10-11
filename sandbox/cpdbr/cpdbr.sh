@@ -102,12 +102,13 @@ if [[ "${operation}" == *"backup"* ]];then
     # Create PVC for br job
     echo "Creating the PVC if not already present..."
     oc process -f cpdbr-pvc.yaml -p BR_SC=${BR_SC} -p BR_JOB=${BR_JOB} | oc apply -f -
-    # Start br job
+    # Start backup job
     echo "Starting the ${operation} job..."
     oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
 fi
 # Conditionally set the restore configuration
 if [[ "${operation}" == *"restore"* ]];then
+    # Start backup job
 fi
 
 waittime=0
