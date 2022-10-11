@@ -11,6 +11,7 @@ REGION=$7
 ACCESS_KEY=$8
 ACCESS_ID=$9
 
+BR_JOB=
 # SCRIPT
 #Pod login and auto login to oc cluster from runutils
 if  [ -n "$SRC_KUBEADMIN_USER" ] && [ -n "$SRC_KUBEADMIN_PASS" ]
