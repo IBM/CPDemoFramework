@@ -145,6 +145,7 @@ fi
 
 #Copy br script
 echo "Coping ${operation} script to ${operation} pod..."
+chmod +x ${BR_SCRIPT}
 oc cp ${BR_SCRIPT} ${BR_POD}:/Data/cpd-status/ -c wait-config
 
 # Start the br
