@@ -27,6 +27,7 @@ fi
 if [[ "${operation}" == *"restore"* ]];then
     BR_SCRIPT=pod-restore.sh                  #script to run in pod
     BR_JOB=cloud-pak-restore                  #Job name to be used
+    BR_PVC=cloud-pak-restore-status           #PVC name to be used
 fi
 
 show_br_output() {
@@ -34,7 +35,7 @@ SLEEP_TIME=60
 export temp_dir=$(mktemp -d)
 while true; do
     # Check if Cloud Pak br job is active
-    br_status=$(oc get job cloud-pak-br -n cloud-pak-br -o jsonpath='{.status.active}' 2>/dev/null)
+    br_status=$(oc get job ${BR_JOB} -n cloud-pak-br -o jsonpath='{.status.active}' 2>/dev/null)
     if [ "${br_status}" == "1" ];then
         echo "Cloud Pak ${operation} job is ACTIVE"
     else
@@ -43,7 +44,7 @@ while true; do
     echo
 
     # Now retrieve logs if the br is still active
-    br_status=$(oc get job cloud-pak-br -n cloud-pak-br -o jsonpath='{.status.active}' 2>/dev/null)
+    br_status=$(oc get job ${BR_JOB} -n cloud-pak-br -o jsonpath='{.status.active}' 2>/dev/null)
     if [ "${br_status}" == "1" ];then
         BR_POD=$(oc get po -n cloud-pak-br --no-headers -l app=cloud-pak-br | head -1 | awk '{print $1}')
         oc logs ${BR_POD} --tail=100
@@ -101,7 +102,7 @@ if [[ "${operation}" == *"backup"* ]];then
     # Create PVC for br job
     echo "Creating the PVC if not already present..."
     oc process -f cpdbr-pvc.yaml -p BR_SC=${BR_SC} -p BR_JOB=${BR_JOB} | oc apply -f -
-    # Start backup job
+    # Start br job
     echo "Starting the ${operation} job..."
     oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
 fi
