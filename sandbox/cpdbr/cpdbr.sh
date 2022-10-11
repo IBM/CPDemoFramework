@@ -27,7 +27,6 @@ fi
 if [[ "${operation}" == *"restore"* ]];then
     BR_SCRIPT=pod-restore.sh                  #script to run in pod
     BR_JOB=cloud-pak-restore                  #Job name to be used
-    BR_PVC=cloud-pak-restore-status           #PVC name to be used
 fi
 
 show_br_output() {
@@ -108,7 +107,7 @@ if [[ "${operation}" == *"backup"* ]];then
 fi
 # Conditionally set the restore configuration
 if [[ "${operation}" == *"restore"* ]];then
-    # Start backup job
+    # Start restore job
 fi
 
 waittime=0
