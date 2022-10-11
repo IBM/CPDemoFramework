@@ -2,7 +2,7 @@ CPD_INSTANCE=$1
 CPD_INSTANCE_BACKUP=$2
 CPD_OPERATOR_BACKUP=$3
 echo "Backing up CPD instance..."
-cpd-cli oadp backup create --include-namespaces=${CPD_INSTANCE} --exclude-resources='Event,Event.events.k8s.io' --default-volumes-to-restic --snapshot-volumes=false --cleanup-completed-resources ${CPD_BACKUP} --log-level=debug --verbose
+cpd-cli oadp backup create --include-namespaces=${CPD_INSTANCE} --exclude-resources='Event,Event.events.k8s.io' --default-volumes-to-restic --snapshot-volumes=false --cleanup-completed-resources ${CPD_INSTANCE_BACKUP} --log-level=debug --verbose
 
 echo "Backing up CPD operators.."
 wget https://raw.githubusercontent.com/IBM/cpd-cli/master/cpdops/files/cpd-operators.sh
