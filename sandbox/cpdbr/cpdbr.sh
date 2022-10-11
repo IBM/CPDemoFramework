@@ -15,6 +15,21 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Conditionally set the backup configuration
+if [[ "${operation}" == *"backup"* ]];then
+    BR_SCRIPT=pod-backup.sh                  #script to run in pod
+    BR_JOB=cloud-pak-backup                  #Job name to be used
+    CPD_INSTANCE=cpd-instance                #Namespace where cpd is installed
+    CPD_INSTANCE_BACKUP=cpd-instance-backup  #cpd instance backup will be saved with this name
+    CPD_OPERATOR_BACKUP=cpd-operator-backup  #cpd operator backup will be saved with this name
+fi
+# Conditionally set the restore configuration
+if [[ "${operation}" == *"restore"* ]];then
+    BR_SCRIPT=pod-restore.sh                  #script to run in pod
+    BR_JOB=cloud-pak-restore                  #Job name to be used
+    BR_PVC=cloud-pak-restore-status           #PVC name to be used
+fi
+
 show_br_output() {
 SLEEP_TIME=60
 export temp_dir=$(mktemp -d)
@@ -84,12 +99,6 @@ oc set data -n cloud-pak-br cm/cloud-pak-br-config --from-file=./openshift-confi
 
 # Conditionally set the backup configuration
 if [[ "${operation}" == *"backup"* ]];then
-    BR_SCRIPT=pod-backup.sh                  #script to run in pod
-    BR_JOB=cloud-pak-backup                  #Job name to be used
-    CPD_INSTANCE=cpd-instance                #Namespace where cpd is installed
-    CPD_INSTANCE_BACKUP=cpd-instance-backup  #cpd instance backup will be saved with this name
-    CPD_OPERATOR_BACKUP=cpd-operator-backup  #cpd operator backup will be saved with this name
-
     # Create PVC for br job
     echo "Creating the PVC if not already present..."
     oc process -f cpdbr-pvc.yaml -p BR_SC=${BR_SC} -p BR_JOB=${BR_JOB} | oc apply -f -
@@ -99,9 +108,6 @@ if [[ "${operation}" == *"backup"* ]];then
 fi
 # Conditionally set the restore configuration
 if [[ "${operation}" == *"restore"* ]];then
-    BR_SCRIPT=pod-restore.sh                  #script to run in pod
-    BR_JOB=cloud-pak-restore                  #Job name to be used
-    BR_PVC=cloud-pak-restore-status           #PVC name to be used
 fi
 
 waittime=0
