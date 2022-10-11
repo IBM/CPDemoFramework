@@ -8,7 +8,7 @@
     - kind: PersistentVolumeClaim
       apiVersion: v1
       metadata:
-        name: ${BR_PVC}
+        name: ${BR_JOB}-status
         namespace: cloud-pak-br
       spec:
         accessModes:
@@ -20,5 +20,5 @@
     parameters:
     - name: BR_SC
       description: "Storage class for the Cloud Pak BR job"
-    - name: BR_PVC
-      description: "PVC name"
+    - name: BR_JOB
+      description: "Job name"

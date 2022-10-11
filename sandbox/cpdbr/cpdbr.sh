@@ -89,11 +89,10 @@ if [[ "${operation}" == *"backup"* ]];then
     CPD_INSTANCE=cpd-instance                #Namespace where cpd is installed
     CPD_INSTANCE_BACKUP=cpd-instance-backup  #cpd instance backup will be saved with this name
     CPD_OPERATOR_BACKUP=cpd-operator-backup  #cpd operator backup will be saved with this name
-    BR_PVC=cloud-pak-backup-status           #PVC name to be used
 
     # Create PVC for br job
     echo "Creating the PVC if not already present..."
-    oc process -f cpdbr-pvc.yaml -p BR_SC=${BR_SC} -p BR_PVC=${BR_PVC} | oc apply -f -
+    oc process -f cpdbr-pvc.yaml -p BR_SC=${BR_SC} -p BR_JOB=${BR_JOB} | oc apply -f -
     # Start br job
     echo "Starting the ${operation} job..."
     oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
