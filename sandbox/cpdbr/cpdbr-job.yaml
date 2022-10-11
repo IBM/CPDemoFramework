@@ -10,7 +10,7 @@
       metadata:
         labels:
           app: cloud-pak-br
-        name: cloud-pak-br
+        name: ${BR_JOB}
         namespace: cloud-pak-br
       spec:
         parallelism: 1
@@ -18,7 +18,7 @@
         backoffLimit: 0
         template:
           metadata:
-            name: cloud-pak-br
+            name: ${BR_JOB}
             labels:
               app: cloud-pak-br
           spec:
@@ -37,24 +37,24 @@
               - name: status-volume
                 mountPath: /Data/cpd-status
             containers:
-            - name: cloud-pak-br
+            - name: ${BR_JOB}
               image: quay.io/devplayground/developer-container-utilities:latest
               imagePullPolicy: Always
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
               env:
               - name: CONFIG_DIR
-                value: /Data/cpdbr-config
+                value: /Data/cpd-config
               - name: STATUS_DIR
-                value: /Data/cpdbr-status
+                value: /Data/cpd-status
               volumeMounts:
               - name: config-volume
-                mountPath: /Data/cpdbr-config/config
+                mountPath: /Data/cpd-config/config
               - name: status-volume
-                mountPath: /Data/cpdbr-status
+                mountPath: /Data/cpd-status
               command: ["/bin/sh","-xc"]
               args: 
-                - cpd-cli oadp backup create --include-namespaces=${CPD_INSTANCE} --exclude-resources='Event,Event.events.k8s.io' --default-volumes-to-restic --snapshot-volumes=false --cleanup-completed-resources ${CPD_BACKUP} --log-level=debug --verbose
+                - /Data/cpd-status/${BR_SCRIPT} ${CPD_INSTANCE} ${CPD_INSTANCE_BACKUP} ${CPD_OPERATOR_BACKUP}
             restartPolicy: Never
             securityContext:
               runAsUser: 0
@@ -62,12 +62,18 @@
             volumes:
             - name: config-volume
               configMap:
-                name: cloud-pak-br-config
+                name: ${BR_JOB}-config
             - name: status-volume
               persistentVolumeClaim:
-                claimName: cloud-pak-br-status
+                claimName: ${BR_JOB}-status
     parameters:
+    - name: BR_JOB
+      description: "CPD Job name"
+    - name: BR_SCRIPT
+      description: "Operation specific script to run"
     - name: CPD_INSTANCE
       description: "CPD Instance namespace to backup"
-    - name: CPD_BACKUP
+    - name: CPD_OPERATOR_BACKUP
+      description: "CPD Operator backup name"
+    - name: CPD_INSTANCE_BACKUP
       description: "CPD Instance backup name"

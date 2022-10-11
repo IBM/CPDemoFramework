@@ -8,7 +8,7 @@
     - apiVersion: oadp.openshift.io/v1alpha1
       kind: DataProtectionApplication
       metadata:
-        name: dpa-sample
+        name: dpa-${BR_JOB}
       spec:
         configuration:
           velero:
@@ -54,6 +54,8 @@
                 name: cloud-credentials
                 key: cloud
     parameters:
+    - name: BR_JOB
+      description: "CPD Job name"
     - name: BUCKET
       description: "S3 Bucket name"
     - name: REGION
