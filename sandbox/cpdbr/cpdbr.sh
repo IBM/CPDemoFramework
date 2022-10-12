@@ -7,6 +7,8 @@ cpak=$1
 #backup or restore operation
 operation=$2
 
+backupName=$3
+
 # Check if we can access the cluster
 oc cluster-info
 # Check if the last command executed properly
@@ -17,11 +19,11 @@ fi
 
 # Conditionally set the backup configuration
 if [[ "${operation}" == *"backup"* ]];then
-    BR_SCRIPT=pod-backup.sh                  #script to run in pod
-    BR_JOB=cloud-pak-backup                  #Job name to be used
-    CPD_INSTANCE=cpd-instance                #Namespace where cpd is installed
-    CPD_INSTANCE_BACKUP=cpd-instance-backup  #cpd instance backup will be saved with this name
-    CPD_OPERATOR_BACKUP=cpd-operator-backup  #cpd operator backup will be saved with this name
+    BR_SCRIPT=pod-backup.sh                     #script to run in pod
+    BR_JOB=cloud-pak-backup                     #Job name to be used
+    CPD_INSTANCE=cpd-instance                   #Namespace where cpd is installed
+    CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
+    CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
 # Conditionally set the restore configuration
 if [[ "${operation}" == *"restore"* ]];then
