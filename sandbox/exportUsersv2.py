@@ -22,10 +22,10 @@ for user in usersJSON:
     if "email" not in user:
         user["email"] = '--'
 
-password = input("Please enter a password:\n")
+password = ""
 usersTable = pandas.DataFrame(columns=['username','password','email','displayName','user_roles'])
 
 for user in usersJSON:
     usersTable.loc[len(usersTable.index)] = [user['username'],CPD_USER_PASSWORD if user['username']==CPD_USER_NAME else password,user['email'],user['displayName'],";".join(user['user_roles'])] 
-print(usersTable)
 usersTable.to_csv(sys.argv[1],index=False)
+print("success")
