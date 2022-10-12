@@ -6,12 +6,13 @@ sys.path.append('../')
 import os
 from decouple import config
 import json
+import cpdCLIUtils
 
 CPD_USER_NAME =  config('WKCUSER')
 CPD_USER_PASSWORD =  config('PASSWORD')
 CPD_URL = "https://"+config('TZHOSTNAME')
-CPD_API_KEY = config('APIKEY')
-os.system('cpd-cli config users set '+ CPD_USER_NAME +' --username '+ CPD_USER_NAME + ' --apikey '+ CPD_API_KEY)
+cpdAPIKey = cpdCLIUtils.getAPIKey(CPD_URL, CPD_USER_NAME, CPD_USER_PASSWORD)
+os.system('cpd-cli config users set '+ CPD_USER_NAME +' --username '+ CPD_USER_NAME + ' --apikey '+ cpdAPIKey)
 
 os.system('cpd-cli config profiles set sandbox-profile --user '+ CPD_USER_NAME + ' --url '+ CPD_URL)
 usersJSON = json.loads(os.popen("cpd-cli user-mgmt list-users --profile sandbox-profile --output json  ").read())
