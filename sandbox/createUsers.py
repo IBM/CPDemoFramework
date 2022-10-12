@@ -6,11 +6,12 @@ import os
 from decouple import config
 import pandas
 import ast
+import cpdCLIUtils
 
 CPD_USER_NAME =  config('WKCUSER')
 CPD_USER_PASSWORD =  config('PASSWORD')
 CPD_URL = "https://"+config('TZHOSTNAME')
-CPD_API_KEY = config('APIKEY')
+cpdAPIKey = cpdCLIUtils.getAPIKey(CPD_URL, CPD_USER_NAME, CPD_USER_PASSWORD)
 
 userTableDeafult = pandas.read_csv(sys.argv[1])
 if "password" not in userTableDeafult.columns:
@@ -20,7 +21,7 @@ if "password" not in userTableDeafult.columns:
         usersTable.loc[len(usersTable.index)] = [userTableDeafult.loc[i,'username'],CPD_USER_PASSWORD if userTableDeafult.loc[i,'username']==CPD_USER_NAME else password,userTableDeafult.loc[i,'email'],userTableDeafult.loc[i,'displayName'],";".join(ast.literal_eval(userTableDeafult.loc[i,'user_roles']))] 
 usersTable.to_csv(sys.argv[1],index=False)
 
-os.system('cpd-cli config users set '+ CPD_USER_NAME +' --username '+ CPD_USER_NAME + ' --apikey '+ CPD_API_KEY)
+os.system('cpd-cli config users set '+ CPD_USER_NAME +' --username '+ CPD_USER_NAME + ' --apikey '+ cpdAPIKey)
 
 os.system('cpd-cli config profiles set sandbox-profile --user '+ CPD_USER_NAME + ' --url '+ CPD_URL)
 
