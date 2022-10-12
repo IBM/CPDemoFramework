@@ -14,5 +14,4 @@ def getAPIKey(cpdURL, cpdUserName, cpdPassword):
     headers['Authorization'] = f'Bearer {access_token}'
     response = requests.get(apikey_url, headers=headers, verify=False)
     output = response.json()
-    print(output)
     return output["apiKey"]
