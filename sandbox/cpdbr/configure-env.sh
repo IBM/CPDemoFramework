@@ -59,6 +59,7 @@ oc create secret generic cloud-credentials --namespace oadp-operator --from-file
 echo "Installing OADP Operator..."
 oc apply -f oadp-operatorgroup.yaml
 oc apply -f oadp-sub.yaml
+sleep 30
 echo "Creating DPA..."
 oc project oadp-operator
 oc process -f oadp-dpa.yaml -p BUCKET=${BUCKET} -p REGION=${REGION} -p S3_URL=${S3_URL} | oc create -f -

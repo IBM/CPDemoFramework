@@ -2,9 +2,11 @@ CPD_INSTANCE=$1
 CPD_INSTANCE_BACKUP=$2
 CPD_OPERATOR_BACKUP=$3
 
+cpd-cli oadp client config set namespace=oadp-operator
+cpd-cli oadp client config set cpd-namespace=${CPD_INSTANCE}
+
 echo "Restoring CPD operators..."
 
-cpd-cli oadp client config set namespace=oadp-operator
 wget https://raw.githubusercontent.com/IBM/cpd-cli/master/cpdops/files/cpd-operators.sh
 chmod +x cpd-operators.sh
 cpd-cli oadp restore create --from-backup=${CPD_OPERATOR_BACKUP} operator-restore1-${CPD_OPERATOR_BACKUP} --include-resources='crd' --include-cluster-resources=true --skip-hooks --log-level=debug --verbose

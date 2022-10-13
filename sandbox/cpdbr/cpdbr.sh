@@ -29,7 +29,9 @@ fi
 if [[ "${operation}" == *"restore"* ]];then
     BR_SCRIPT=pod-restore.sh                  #script to run in pod
     BR_JOB=cloud-pak-restore                  #Job name to be used
-    BR_PVC=cloud-pak-restore-status           #PVC name to be used
+    CPD_INSTANCE=cpd-instance                   #Namespace where cpd is installed
+    CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
+    CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
 
 show_br_output() {
@@ -109,9 +111,15 @@ if [[ "${operation}" == *"backup"* ]];then
     oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
 fi
 # Conditionally set the restore configuration
-# if [[ "${operation}" == *"restore"* ]];then
-#     # Start restore job
-# fi
+if [[ "${operation}" == *"restore"* ]];then
+    # Create PVC for br job
+    echo "Creating the PVC if not already present..."
+    oc process -f cpdbr-pvc.yaml -p BR_SC=${BR_SC} -p BR_JOB=${BR_JOB} | oc apply -f -
+    # Start br job
+    echo "Starting the ${operation} job..."
+    oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
+
+fi
 
 waittime=0
 pod_status=""
