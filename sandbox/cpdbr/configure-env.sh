@@ -51,6 +51,15 @@ echo "aws_secret_access_key=$ACCESS_KEY" >> credentials-velero.txt
 # chmod +x .env
 
 echo "##### Configuring the cluster #####"
+
+# Get the updated config file from cloud-pak-deployer-config
+oc extract -n cloud-pak-deployer  cm/cloud-pak-deployer-config --to=. --confirm 2>/dev/null
+if [ $? != 0 ];then
+    echo "cloud-pak-deployer-config does not exist! it will be created in the next step!."
+else
+    echo "cloud-pak-deployer-config already exists in the cluster! The script will make use of the same file!"
+fi
+
 echo "Creating oadp-operator namespace..."
 oc create namespace oadp-operator
 oc annotate namespace oadp-operator openshift.io/node-selector=""
@@ -63,9 +72,6 @@ sleep 30
 echo "Creating DPA..."
 oc project oadp-operator
 oc process -f oadp-dpa.yaml -p BUCKET=${BUCKET} -p REGION=${REGION} -p S3_URL=${S3_URL} | oc create -f -
-echo "Set namespaces..."
-cpd-cli oadp client config set namespace=oadp-operator
-cpd-cli oadp client config set cpd-namespace=cpd-instance
 
 
 echo "Setting up the backup execution pod..."
@@ -75,7 +81,7 @@ oc create serviceaccount cloud-pak-br-sa 2> /dev/null
 oc adm policy add-scc-to-user privileged -z cloud-pak-br-sa
 oc adm policy add-cluster-role-to-user cluster-admin -z cloud-pak-br-sa
 
-oc create cm -n cloud-pak-br cloud-pak-br-config 2>/dev/null
+# oc create cm -n cloud-pak-br cloud-pak-br-config 2>/dev/null
 
 
 # pull secret
