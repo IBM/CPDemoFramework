@@ -52,12 +52,12 @@ echo "aws_secret_access_key=$ACCESS_KEY" >> credentials-velero.txt
 
 echo "##### Configuring the cluster #####"
 
-# Get the updated config file from cloud-pak-deployer-config
-oc extract -n cloud-pak-deployer  cm/cloud-pak-deployer-config --to=. --confirm 2>/dev/null
+# Get the updated config file from cloud-pak-br-config
+oc extract -n cloud-pak-br  cm/cloud-pak-br-config --to=. --confirm 2>/dev/null
 if [ $? != 0 ];then
-    echo "cloud-pak-deployer-config does not exist! it will be created in the next step!."
+    echo "cloud-pak-br-config does not exist! it will be created in the next step!."
 else
-    echo "cloud-pak-deployer-config already exists in the cluster! The script will make use of the same file!"
+    echo "cloud-pak-br-config already exists in the cluster! The script will make use of the same file!"
 fi
 
 echo "Creating oadp-operator namespace..."
