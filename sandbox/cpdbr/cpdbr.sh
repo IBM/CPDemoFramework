@@ -154,9 +154,11 @@ if [ $waittime -ge 300 ];then
 fi
 
 #Copy br script
-echo "Coping ${operation} script to ${operation} pod..."
+echo "Coping ${operation} script and configuration yamls to ${operation} pod..."
 chmod +x ${BR_SCRIPT}
 oc cp ${BR_SCRIPT} ${BR_POD}:/Data/cpd-status/ -c wait-config
+oc cp cp4d-config.yaml ${BR_POD}:/Data/cpd-config/ -c wait-config
+oc cp openshift-config.yaml ${BR_POD}:/Data/cpd-config/ -c wait-config
 
 # Start the br
 echo "Starting the ${operation}..."
