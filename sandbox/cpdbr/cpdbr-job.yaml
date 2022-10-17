@@ -54,7 +54,7 @@
                 mountPath: /Data/cpd-status
               command: ["/bin/sh","-xc"]
               args: 
-                - /cloud-pak-deployer/cp-deploy.sh --skip-cp-install env apply -v; /Data/cpd-status/${BR_SCRIPT} ${CPD_INSTANCE} ${CPD_INSTANCE_BACKUP} ${CPD_OPERATOR_BACKUP}
+                - wget https://github.com/IBM/cpd-cli/releases/download/v11.2.0/cpd-cli-linux-SE-11.2.0.tgz; tar -xvf cpd-cli-linux-SE-11.2.0.tgz; cp -r /opt/ansible/cpd-cli-linux-SE-11.2.0-40/* /opt/ansible/bin/; cpd-cli; /cloud-pak-deployer/cp-deploy.sh --skip-cp-install env apply -v; /Data/cpd-status/${BR_SCRIPT} ${CPD_INSTANCE} ${CPD_INSTANCE_BACKUP} ${CPD_OPERATOR_BACKUP}
             restartPolicy: Never
             securityContext:
               runAsUser: 0
