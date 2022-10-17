@@ -22,7 +22,7 @@ for user in usersJSON:
     if "email" not in user:
         user["email"] = '--'
 
-password = sys.argv[2]
+password = ""
 usersTable = pandas.DataFrame(columns=['username','password','email','displayName','user_roles'])
 
 for user in usersJSON:
