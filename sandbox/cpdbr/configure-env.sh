@@ -1,29 +1,30 @@
 #!/bin/sh
 
 # Retrieve parameters
-SRC_SERVER=$1
-SRC_API_TOKEN=$2
-SRC_KUBEADMIN_USER=$3
-SRC_KUBEADMIN_PASS=$4
-S3_URL=$5
-BUCKET=$6
-REGION=$7
-ACCESS_KEY=$8
-ACCESS_ID=$9
+ICR=$1
+SERVER=$2
+API_TOKEN=$3
+KUBEADMIN_USER=$4
+KUBEADMIN_PASS=$5
+S3_URL=$6
+BUCKET=$7
+REGION=$8
+ACCESS_KEY=$9
+ACCESS_ID=$10
 
 # SCRIPT
 #Pod login and auto login to oc cluster from runutils
-if  [ -n "$SRC_KUBEADMIN_USER" ] && [ -n "$SRC_KUBEADMIN_PASS" ]
+if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ]
     then
-        alias oclogin_auto="run_utils login-to-ocp -u ${SRC_KUBEADMIN_USER} -p ${SRC_KUBEADMIN_PASS} --server=${SRC_SERVER}";
-        alias pod_login="oc login -u ${SRC_KUBEADMIN_USER} -p ${SRC_KUBEADMIN_PASS} --server ${SRC_SERVER}";
+        alias oclogin_auto="run_utils login-to-ocp -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server=${SERVER}";
+        alias pod_login="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER}";
     else
-        if  [ -z "$SRC_API_TOKEN" ]
+        if  [ -z "$API_TOKEN" ]
             then
                     echo "Invalid api token, please check env.sh file";
             else
-                alias pod_login="oc login --token=${SRC_API_TOKEN} --server=${SRC_SERVER}";
-                alias oclogin_auto="run_utils login-to-ocp --token=${SRC_API_TOKEN} --server=${SRC_SERVER}";
+                alias pod_login="oc login --token=${API_TOKEN} --server=${SERVER}";
+                alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";
         fi
 fi
 
@@ -36,19 +37,20 @@ fi
 echo "success"
 
 # Store variables in shell script
-# echo "S3_URL=$S3_URL" >> .env
-# echo "BUCKET=$BUCKET" >> .env
-# echo "REGION=$REGION" >> .env
-# echo "ACCESS_KEY=$ACCESS_KEY" >> .env
-# echo "ACCESS_ID=$ACCESS_ID" >> .env
-# echo "SRC_API_TOKEN=$SRC_API_TOKEN" >> .env
-# echo "SRC_KUBEADMIN_USER=$SRC_KUBEADMIN_USER" >> .env
-# echo "SRC_KUBEADMIN_PASS=$SRC_KUBEADMIN_PASS" >> .env
-# echo "SRC_SERVER=$SRC_SERVER" >> .env
+echo "ICR=$ICR" >> .env
+echo "S3_URL=$S3_URL" >> .env
+echo "BUCKET=$BUCKET" >> .env
+echo "REGION=$REGION" >> .env
+echo "ACCESS_KEY=$ACCESS_KEY" >> .env
+echo "ACCESS_ID=$ACCESS_ID" >> .env
+echo "API_TOKEN=$API_TOKEN" >> .env
+echo "KUBEADMIN_USER=$KUBEADMIN_USER" >> .env
+echo "KUBEADMIN_PASS=$KUBEADMIN_PASS" >> .env
+echo "SERVER=$SERVER" >> .env
 
 echo "\naws_access_key_id=$ACCESS_ID" >> credentials-velero.txt
 echo "aws_secret_access_key=$ACCESS_KEY" >> credentials-velero.txt
-# chmod +x .env
+chmod +x .env
 
 echo "##### Configuring the cluster #####"
 
