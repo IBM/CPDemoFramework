@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # # source ./functions.sh
-
+source ./.env
 #cloud pak(s)
 cpak=$1
 #backup or restore operation
@@ -152,6 +152,12 @@ if [ $waittime -ge 300 ];then
     echo "Timeout while waiting for Cloud Pak ${operation} pod to accept commmands"
     exit 1
 fi
+
+oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault set \
+ -vs ibm_cp_entitlement_key -vsv "$ICR_KEY"
+oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault set \
+ -vs cpd-demo-oc-login -vsv "oc login --server=$SERVER --token=$API_TOKEN"
+oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault list
 
 #Copy br script
 echo "Coping ${operation} script and configuration yamls to ${operation} pod..."
