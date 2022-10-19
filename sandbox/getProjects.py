@@ -52,7 +52,9 @@ for i in range(0, len(data["resources"])):
         "elementToRender": "li",
         "attributes": {
             "id": "li_"+data['resources'][i]['metadata']['guid'],
-            "class" : "store-data",
+            "classList" : {
+                "add" : ["store-data"],
+            },
             "innerHTML" : data['resources'][i]['entity']['name'],
             "name": data['resources'][i]['metadata']['guid'],
             "addEventListener": ["click", "selectProject"]
