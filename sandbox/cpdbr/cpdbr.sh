@@ -175,5 +175,14 @@ sleep 5
 
 # Show br status
 show_br_output
+# Condition to display deployment credentials incase of restore 
+if [[ "${operation}" == *"restore"* ]];then
+    deployment_host=$(oc get route -n cpd-instance cpd -o jsonpath='{.spec.host}' 2> /dev/null)
+    deployment_admin_password=$(oc extract -n cpd-instance secret/admin-user-details --to=- 2>/dev/null)
+    if [ "${deployment_host}" != "" ];then
+        log "Cloud Pak URL: https://${deployment_host}"
+        log "Cloud Pak admin password: ${deployment_admin_password}"
+    fi
+fi
 echo "success"
 exit 0
