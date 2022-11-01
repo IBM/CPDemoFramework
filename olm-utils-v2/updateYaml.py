@@ -45,7 +45,8 @@ if cpak.lower()=='cp4i':
         list_cp4i = yaml.safe_load(f)
     list_cp4i["cp4i"][0]["cp4i_version"] = version
     for x in range(0,len(list_cp4i["cp4i"][0]["instances"])):
-        list_cp4i["cp4i"][0]["instances"][x]["state"] = "removed"
+        if "state" in list_cp4i["cp4i"][0]["instances"][x]:
+            list_cp4i["cp4i"][0]["instances"][x]["state"] = "removed"
         # print(list_cp4i["cp4i"][0]["instances"][x])
         for y in range(0,len(component_list)):
             if list_cp4i["cp4i"][0]["instances"][x]["type"] == component_list[y]:
@@ -62,7 +63,8 @@ elif cpak.lower()=='cp4d':
         list_cp4d = yaml.safe_load(f)
     list_cp4d["cp4d"][0]["cp4d_version"] = version
     for x in range(0,len(list_cp4d["cp4d"][0]["cartridges"])):
-        list_cp4d["cp4d"][0]["cartridges"][x]["state"] = "removed"
+        if "state" in list_cp4d["cp4d"][0]["cartridges"][x]:
+            list_cp4d["cp4d"][0]["cartridges"][x]["state"] = "removed"
         for y in range(0,len(component_list)):
             if list_cp4d["cp4d"][0]["cartridges"][x]["name"] == component_list[y]:
                 list_cp4d["cp4d"][0]["cartridges"][x]["state"] = "installed"
