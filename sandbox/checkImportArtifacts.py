@@ -7,7 +7,7 @@ import json
 import os
 import copy
 
-global disableImportGovernanceArtifacts, numSuccessImportGovernanceArtifacts, availableArifacts
+
 disableImportGovernanceArtifacts = True
 numSuccessImportGovernanceArtifacts = 0
 availableArifacts = 3
