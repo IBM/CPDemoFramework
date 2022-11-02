@@ -9,4 +9,3 @@ from apis import endpoints, MainAPI, usecases
 mainAPI = MainAPI()
 rulesAPI = endpoints.RulesAPI(mainAPI)
 rulesAPI.exportDataProtectionRules(sys.argv[1])
-print("success")
