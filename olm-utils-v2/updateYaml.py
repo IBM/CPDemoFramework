@@ -45,6 +45,7 @@ if cpak.lower()=='cp4i':
         list_cp4i = yaml.safe_load(f)
     list_cp4i["cp4i"][0]["cp4i_version"] = version
     for x in range(0,len(list_cp4i["cp4i"][0]["instances"])):
+
         if "state" in list_cp4i["cp4i"][0]["instances"][x]:
             list_cp4i["cp4i"][0]["instances"][x]["state"] = "removed"
         # print(list_cp4i["cp4i"][0]["instances"][x])
