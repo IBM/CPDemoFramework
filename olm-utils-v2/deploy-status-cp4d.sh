@@ -15,7 +15,7 @@ if [ ! -z ${API_RESOURCES} ];then
             Ibmcpd|CommonService|OperandRequest)
             ;;
             *)
-            cr_status=$(oc get -n $CP4D_PROJECT $CR $CR_NAME -o jsonpath='{.status}' | jq -r '. | to_entries | map(select(.key | match("Status"))) | map(.value) | first')
+            cr_status=$(oc get -n $CP4D_PROJECT $CR $CR_NAME -o jsonpath='{.status}' 2>/dev/null | jq -r '. | to_entries | map(select(.key | match("Status"))) | map(.value) | first')
             if [[ "${cr_status}" != "" ]] && [[ ${cr_status} != "null" ]];then
                 echo "${CR} - ${CR_NAME} - ${cr_status}"
             fi
