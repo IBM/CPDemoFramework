@@ -27,10 +27,6 @@ usersTable.to_csv(sys.argv[1],index=False)
 
 os.system('cpd-cli config users set '+ CPD_USER_NAME +' --username '+ CPD_USER_NAME + ' --apikey '+ cpdAPIKey)
 
-usersTable.to_csv(sys.argv[1],index=False)
-
-os.system('cpd-cli config users set '+ CPD_USER_NAME +' --username '+ CPD_USER_NAME + ' --apikey '+ cpdAPIKey)
-
 os.system('cpd-cli config profiles set sandbox-profile --user '+ CPD_USER_NAME + ' --url '+ CPD_URL)
 
 data = os.popen('cpd-cli user-mgmt bulk-upsert-users --from-csv-file '+ sys.argv[1] +' --profile sandbox-profile').read()
