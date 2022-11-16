@@ -1,3 +1,4 @@
+import json
 from utilities import subAPIs
 
 class RulesAPI(subAPIs.SubAPI):
@@ -18,6 +19,6 @@ class RulesAPI(subAPIs.SubAPI):
   
   def importDataProtectionRules(self, dataprotectionrulefile):
     payload = json.load(open(dataprotectionrulefile, encoding= 'utf-8' ))
-    expected = [element for element in payload["rules"] if element['governance_type_id'] != "ResourceControl" ]
-    payload["rules"]=expected
+    #expected = [element for element in payload["rules"] if element['governance_type_id'] != "ResourceControl" ]
+    #payload["rules"]=expected
     return self.mainAPI._POST('/v3/enforcement/rules/import',payload,'application/octet-stream',200) 

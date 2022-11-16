@@ -1,11 +1,13 @@
 #!/bin/bash
 
 # # source ./functions.sh
-
+source ./.env
 #cloud pak(s)
 cpak=$1
 #backup or restore operation
 operation=$2
+
+backupName=$3
 
 # Check if we can access the cluster
 oc cluster-info
@@ -17,17 +19,19 @@ fi
 
 # Conditionally set the backup configuration
 if [[ "${operation}" == *"backup"* ]];then
-    BR_SCRIPT=pod-backup.sh                  #script to run in pod
-    BR_JOB=cloud-pak-backup                  #Job name to be used
-    CPD_INSTANCE=cpd-instance                #Namespace where cpd is installed
-    CPD_INSTANCE_BACKUP=cpd-instance-backup  #cpd instance backup will be saved with this name
-    CPD_OPERATOR_BACKUP=cpd-operator-backup  #cpd operator backup will be saved with this name
+    BR_SCRIPT=pod-backup.sh                     #script to run in pod
+    BR_JOB=cloud-pak-backup                     #Job name to be used
+    CPD_INSTANCE=cpd-instance                   #Namespace where cpd is installed
+    CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
+    CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
 # Conditionally set the restore configuration
 if [[ "${operation}" == *"restore"* ]];then
     BR_SCRIPT=pod-restore.sh                  #script to run in pod
     BR_JOB=cloud-pak-restore                  #Job name to be used
-    BR_PVC=cloud-pak-restore-status           #PVC name to be used
+    CPD_INSTANCE=cpd-instance                   #Namespace where cpd is installed
+    CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
+    CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
 
 show_br_output() {
@@ -107,9 +111,15 @@ if [[ "${operation}" == *"backup"* ]];then
     oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
 fi
 # Conditionally set the restore configuration
-# if [[ "${operation}" == *"restore"* ]];then
-#     # Start restore job
-# fi
+if [[ "${operation}" == *"restore"* ]];then
+    # Create PVC for br job
+    echo "Creating the PVC if not already present..."
+    oc process -f cpdbr-pvc.yaml -p BR_SC=${BR_SC} -p BR_JOB=${BR_JOB} | oc apply -f -
+    # Start br job
+    echo "Starting the ${operation} job..."
+    oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
+
+fi
 
 waittime=0
 pod_status=""
@@ -143,10 +153,18 @@ if [ $waittime -ge 300 ];then
     exit 1
 fi
 
+oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault set \
+ -vs ibm_cp_entitlement_key -vsv "$ICR"
+oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault set \
+ -vs cpd-demo-oc-login -vsv "oc login --server=$SERVER --token=$API_TOKEN"
+oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault list
+
 #Copy br script
-echo "Coping ${operation} script to ${operation} pod..."
+echo "Coping ${operation} script and configuration yamls to ${operation} pod..."
 chmod +x ${BR_SCRIPT}
 oc cp ${BR_SCRIPT} ${BR_POD}:/Data/cpd-status/ -c wait-config
+oc cp cp4d-config.yaml ${BR_POD}:/Data/cpd-config/ -c wait-config
+oc cp openshift-config.yaml ${BR_POD}:/Data/cpd-config/ -c wait-config
 
 # Start the br
 echo "Starting the ${operation}..."
@@ -157,5 +175,14 @@ sleep 5
 
 # Show br status
 show_br_output
+# Condition to display deployment credentials incase of restore 
+if [[ "${operation}" == *"restore"* ]];then
+    deployment_host=$(oc get route -n cpd-instance cpd -o jsonpath='{.spec.host}' 2> /dev/null)
+    deployment_admin_password=$(oc extract -n cpd-instance secret/admin-user-details --to=- 2>/dev/null)
+    if [ "${deployment_host}" != "" ];then
+        log "Cloud Pak URL: https://${deployment_host}"
+        log "Cloud Pak admin password: ${deployment_admin_password}"
+    fi
+fi
 echo "success"
 exit 0
