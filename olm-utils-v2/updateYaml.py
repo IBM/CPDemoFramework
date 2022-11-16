@@ -36,8 +36,8 @@ elif storage_vendor.lower()=='roks-classic':
     list_os["openshift"][0]["openshift_storage"][0]["ocp_storage_class_block"]= "ibmc-block-gold"
     list_os["openshift"][0]["openshift_storage"][0]["ocp_storage_class_file"] = "ibmc-file-gold-gid"
 
-    with open("openshift-config.yaml", "w") as f:
-        yaml.dump(list_os, f, sort_keys=False)
+with open("openshift-config.yaml", "w") as f:
+    yaml.dump(list_os, f, sort_keys=False)
 
 #update cp4i congifuration yaml
 if cpak.lower()=='cp4i':
@@ -45,6 +45,10 @@ if cpak.lower()=='cp4i':
         list_cp4i = yaml.safe_load(f)
     list_cp4i["cp4i"][0]["cp4i_version"] = version
     for x in range(0,len(list_cp4i["cp4i"][0]["instances"])):
+
+        if "state" in list_cp4i["cp4i"][0]["instances"][x]:
+            list_cp4i["cp4i"][0]["instances"][x]["state"] = "removed"
+        # print(list_cp4i["cp4i"][0]["instances"][x])
         for y in range(0,len(component_list)):
             if list_cp4i["cp4i"][0]["instances"][x]["type"] == component_list[y]:
                 list_cp4i["cp4i"][0]["instances"][x]["state"] = "installed"
@@ -60,6 +64,8 @@ elif cpak.lower()=='cp4d':
         list_cp4d = yaml.safe_load(f)
     list_cp4d["cp4d"][0]["cp4d_version"] = version
     for x in range(0,len(list_cp4d["cp4d"][0]["cartridges"])):
+        if "state" in list_cp4d["cp4d"][0]["cartridges"][x]:
+            list_cp4d["cp4d"][0]["cartridges"][x]["state"] = "removed"
         for y in range(0,len(component_list)):
             if list_cp4d["cp4d"][0]["cartridges"][x]["name"] == component_list[y]:
                 list_cp4d["cp4d"][0]["cartridges"][x]["state"] = "installed"
@@ -68,3 +74,4 @@ elif cpak.lower()=='cp4d':
                     x=0
     with open("cp4d-config.yaml", "w") as f:
         yaml.dump(list_cp4d, f, sort_keys=False)
+print("success")

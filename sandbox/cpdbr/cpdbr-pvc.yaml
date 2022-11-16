@@ -1,0 +1,24 @@
+---
+    kind: Template
+    apiVersion: template.openshift.io/v1
+    metadata:
+      name: cloud-pak-br-pvc-template
+      namespace: cloud-pak-br
+    objects:
+    - kind: PersistentVolumeClaim
+      apiVersion: v1
+      metadata:
+        name: ${BR_JOB}-status
+        namespace: cloud-pak-br
+      spec:
+        accessModes:
+        - ReadWriteMany
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: ${BR_SC}
+    parameters:
+    - name: BR_SC
+      description: "Storage class for the Cloud Pak BR job"
+    - name: BR_JOB
+      description: "Job name"

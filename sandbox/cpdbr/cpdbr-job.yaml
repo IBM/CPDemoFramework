@@ -1,0 +1,79 @@
+---
+    kind: Template
+    apiVersion: template.openshift.io/v1
+    metadata:
+      name: cloud-pak-br-job-template
+      namespace: cloud-pak-br
+    objects:
+    - apiVersion: batch/v1
+      kind: Job
+      metadata:
+        labels:
+          app: cloud-pak-br
+        name: ${BR_JOB}
+        namespace: cloud-pak-br
+      spec:
+        parallelism: 1
+        completions: 1
+        backoffLimit: 0
+        template:
+          metadata:
+            name: ${BR_JOB}
+            labels:
+              app: cloud-pak-br
+          spec:
+            initContainers:
+            - name: wait-config
+              image: quay.io/devplayground/cloud-pak-deployer:latest
+              command: ['sh', '-c', 'until [ -f /tmp/cpd-config-ready ]; do echo Waiting for /tmp/cpd-config-ready file; sleep 1; done; echo "Configuration is ready, starting deployer"']
+              env:
+              - name: CONFIG_DIR
+                value: /Data/cpd-config
+              - name: STATUS_DIR
+                value: /Data/cpd-status
+              volumeMounts:
+              - name: config-volume
+                mountPath: /Data/cpd-config/config
+              - name: status-volume
+                mountPath: /Data/cpd-status
+            containers:
+            - name: ${BR_JOB}
+              image: quay.io/devplayground/cloud-pak-deployer:latest
+              imagePullPolicy: Always
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              env:
+              - name: CONFIG_DIR
+                value: /Data/cpd-config
+              - name: STATUS_DIR
+                value: /Data/cpd-status
+              volumeMounts:
+              - name: config-volume
+                mountPath: /Data/cpd-config/config
+              - name: status-volume
+                mountPath: /Data/cpd-status
+              command: ["/bin/sh","-xc"]
+              args: 
+                - /cloud-pak-deployer/cp-deploy.sh env apply -v --skip-cp-install; /Data/cpd-status/${BR_SCRIPT} ${CPD_INSTANCE} ${CPD_INSTANCE_BACKUP} ${CPD_OPERATOR_BACKUP}
+            restartPolicy: Never
+            securityContext:
+              runAsUser: 0
+            serviceAccountName: cloud-pak-br-sa
+            volumes:
+            - name: config-volume
+              configMap:
+                name: cloud-pak-br-config
+            - name: status-volume
+              persistentVolumeClaim:
+                claimName: ${BR_JOB}-status
+    parameters:
+    - name: BR_JOB
+      description: "CPD Job name"
+    - name: BR_SCRIPT
+      description: "Operation specific script to run"
+    - name: CPD_INSTANCE
+      description: "CPD Instance namespace to backup"
+    - name: CPD_OPERATOR_BACKUP
+      description: "CPD Operator backup name"
+    - name: CPD_INSTANCE_BACKUP
+      description: "CPD Instance backup name"
