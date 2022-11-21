@@ -7,6 +7,7 @@ import os
 from decouple import config
 import json
 import cpdCLIUtils
+import apis
 
 CPD_USER_NAME =  config('WKCUSER')
 CPD_USER_PASSWORD =  config('PASSWORD')
@@ -28,4 +29,24 @@ usersTable = pandas.DataFrame(columns=['username','password','email','displayNam
 for user in usersJSON:
     usersTable.loc[len(usersTable.index)] = [user['username'],CPD_USER_PASSWORD if user['username']==CPD_USER_NAME else password,user['email'],user['displayName'],";".join(user['user_roles'])] 
 usersTable.to_csv(sys.argv[1],index=False)
+
+
+#data for group and role management
+
+groupsAPI = apis.endpoints.GroupsAPI()
+rolesAPI = apis.endpoints.RolesAPI()
+
+
+groupsJSON = groupsAPI.getAllGroups()
+rolesJSON = rolesAPI.getAllRoles()
+
+
+
+with open(path, "w") as sys.argv[2]:
+    json.dump(groupsJSON, sys.argv[2])
+
+with open(path, "w") as sys.argv[3]:
+    json.dump(rolesJSON, sys.argv[3])
+
 print("success")
+

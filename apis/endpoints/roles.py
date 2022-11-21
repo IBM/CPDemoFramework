@@ -9,7 +9,7 @@ class RolesAPI(subAPIs.SubAPI):
   # GET functions
   def getAllRoles(self):
     """Get all roles"""
-    return self.mainAPI._getJSON('/api/v1/usermgmt/v1/roles')
+    return self.mainAPI._getJSON('/usermgmt/v1/roles')
 
   # Get all user of a given role
   def getRoleByName(self, roleName):
