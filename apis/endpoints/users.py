@@ -11,6 +11,10 @@ class UsersAPI(subAPIs.SubAPI):
     """Get all users"""
     return self.mainAPI._getJSON('/icp4d-api/v1/users')
 
+  def getAllUsersUsermgmt(self):
+    """Get all users using usermgmt api"""
+    return self.mainAPI._getJSON('/usermgmt/v1/users')
+
   def getUser(self, user_name):
     """Get information about a given user"""
     return self.mainAPI._getJSON(f'/icp4d-api/v1/users/{user_name}')
