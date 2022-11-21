@@ -42,10 +42,10 @@ rolesJSON = rolesAPI.getAllRoles()
 
 
 
-with open(path, "w") as sys.argv[2]:
+with open(sys.argv[2], "w") as sys.argv[2]:
     json.dump(groupsJSON, sys.argv[2])
 
-with open(path, "w") as sys.argv[3]:
+with open(sys.argv[3], "w") as sys.argv[3]:
     json.dump(rolesJSON, sys.argv[3])
 
 print("success")
