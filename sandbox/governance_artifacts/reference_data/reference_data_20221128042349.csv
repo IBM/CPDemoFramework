@@ -1,3 +1,0 @@
-Name,Artifact Type,Category,Artifact ID,Description,Tags,Classifications,Stewards,Related Terms,Business Start,Business End,Data Set Type,Parent Reference Data Sets,Secondary Categories,Custom Columns
-Sovereign Locations,reference_data,eebd338d-dbd5-37e4-9e4a-1296de82963a,534561ac-1080-3714-b7aa-5a5809ff1f00,Sovereign Locations Reference Dataset (SLRDS) is defined as sovereign administration data.,,,,,,,TEXT,,,
-Physical Locations,reference_data,eebd338d-dbd5-37e4-9e4a-1296de82963a,c57cb90f-2126-3800-9c9f-9eab82021cdf,Physical Locations Reference Dataset (PLRDS) is defined as geographical position data.,,,,,,,TEXT,,,
