@@ -13,7 +13,7 @@ class GroupsAPI(subAPIs.SubAPI):
   def addGroup(self, payload):
     """Add a new group to the system"""
     print(payload)
-    return self.mainAPI._POST('/usermgmt/v2/group', payload, 201)
+    return self.mainAPI._POST('/usermgmt/v2/groups', payload, 'application/json', 201)
 
   def getGroupMembers(self, group_id):
     """get all memebrs of a group """
