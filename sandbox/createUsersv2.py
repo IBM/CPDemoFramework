@@ -7,11 +7,15 @@ import json
 from decouple import config
 import cpdCLIUtils
 import apis
+import createGroups
+import createRoles
 
 CPD_USER_NAME =  config("WKCUSER")
 CPD_USER_PASSWORD =  config("PASSWORD")
 CPD_URL = "https://"+config("TZHOSTNAME")
 cpdAPIKey = cpdCLIUtils.getAPIKey(CPD_URL, CPD_USER_NAME, CPD_USER_PASSWORD)
+rolesMapping = createRoles.createRoles()
+groupsMapping = createGroups.createGroups(rolesMapping)
 
 usersJSON = open(sys.argv[1], "r")
 usersJSON = json.load(usersJSON)
@@ -35,7 +39,10 @@ for user in usersJSON:
                 userGroupMapping[str(group["group_id"])].append(int(user["uid"]))
             except:
                 userGroupMapping[str(group["group_id"])] = [int(user["uid"])]
-    for key in keysToRemove:
+    for i in range(len(user['user_roles'])):
+        # replace existing role with new role
+        user['user_roles'][i] = rolesMapping[user['user_roles'][i]]
+for key in keysToRemove:
         try:
             del user[key]
         except:

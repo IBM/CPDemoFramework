@@ -24,7 +24,7 @@ class RolesAPI(subAPIs.SubAPI):
   # POST functions
   def addRole(self, payload):
     """Add a new role to the system"""
-    return self.mainAPI._POST('/api/v1/usermgmt/v1/roles', payload)
+    return self.mainAPI._POST('/usermgmt/v1/role', payload, 201)
 
   # Functions for mass user update
   def _getRolePayload(self, roleRow, permissions):
