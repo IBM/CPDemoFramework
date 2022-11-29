@@ -21,13 +21,12 @@ def createGroups(roleIdMapping):
                 newGroup["name"] = group["name"]
                 newGroup['description'] = group["description"]
                 newGroup['role_identifiers'] = []
-                # replace role identifiers with newly created roles
+                #replace role identifiers with newly created roles
                 for i in range(len(group['roles'])):
                     if(roleIdMapping.__contains__(group['roles'][i]["role_id"])):
                         newGroup['role_identifiers'].append(roleIdMapping[group['roles'][i]["role_id"]])
                     else:
                         newGroup['role_identifiers'].append(group['roles'][i]["role_id"])
-                print(newGroup)
                 addGroupResponse = groupsApi.addGroup(newGroup)
                 groupIdMapping[group["group_id"]] = addGroupResponse["group_id"]
             else:

@@ -16,10 +16,10 @@ def createRoles():
     for role in data["rows"]:   
             filteredRole = list(filter(lambda innerrole:innerrole["doc"]["role_name"] == role["doc"]["role_name"] , existingRoles["rows"]))
             if not filteredRole:
+                print("enterd new role")
                 newRole["role_name"] = role["doc"]["role_name"]
                 newRole['description'] = role["doc"]["description"]
                 newRole['permissions'] = role["doc"]["permissions"]
-                print(newRole)
                 addRoleResponse = rolesApi.addRole(newRole)
                 roleIdMapping[role["id"]] = addRoleResponse["id"]
             else:
