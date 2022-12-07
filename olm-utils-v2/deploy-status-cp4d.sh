@@ -2,7 +2,12 @@
 
 source ./functions.sh
 
-CP4D_PROJECT=cpd-instance
+# Check which project is used for CP4D (it used to be cpd-instance, changing to cpd)
+if oc get project cpd >/dev/null 2>&1;then 
+    CP4D_PROJECT=cpd
+else
+    CP4D_PROJECT=cpd-instance
+fi
 
 # Listing custom resources for Cloud Pak for Data
 API_RESOURCES=$(oc api-resources --namespaced=true --verbs=list -o name | grep ibm | awk '{printf "%s%s",sep,$0;sep=","}')
