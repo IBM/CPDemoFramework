@@ -48,8 +48,9 @@ echo "KUBEADMIN_USER=$KUBEADMIN_USER" >> .env
 echo "KUBEADMIN_PASS=$KUBEADMIN_PASS" >> .env
 echo "SERVER=$SERVER" >> .env
 
-echo "\naws_access_key_id=$ACCESS_ID" > credentials-velero.txt
-echo "aws_secret_access_key=$ACCESS_KEY" > credentials-velero.txt
+echo "[default]" > credentials-velero.txt
+echo "\naws_access_key_id=$ACCESS_ID" >> credentials-velero.txt
+echo "aws_secret_access_key=$ACCESS_KEY" >> credentials-velero.txt
 chmod +x .env
 
 echo "##### Configuring the cluster #####"
