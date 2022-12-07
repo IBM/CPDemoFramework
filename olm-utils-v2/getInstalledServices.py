@@ -40,7 +40,7 @@ if cpak == "cp4d":
         "dv": 'Data Virtualization',
         "factsheet": 'AI Factsheets',
         "hadoop": 'Execution Engine for Apache Hadoop',
-        "mdm": 'Match360',
+        "match360": 'Match360',
         "openpages": 'OpenPages',
         "planning-analytics": 'Planning Analytics',
         "replication": 'Data Replication',
