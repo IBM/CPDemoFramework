@@ -67,7 +67,7 @@ def modifyCTA(parentId, elementId, command, numSuccess):
      return sampleJson
 
 
-if not os.path.isfile("users.csv"):
+if not os.path.isfile("users.json"):
     renderData["componentsToRender"][0]["dataToRender"].append(enableDisableArtifactInTimeline("task1","disable"))
 
 if os.path.isfile("governance_artifacts.zip"):

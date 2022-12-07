@@ -9,7 +9,7 @@ class RolesAPI(subAPIs.SubAPI):
   # GET functions
   def getAllRoles(self):
     """Get all roles"""
-    return self.mainAPI._getJSON('/api/v1/usermgmt/v1/roles')
+    return self.mainAPI._getJSON('/usermgmt/v1/roles')
 
   # Get all user of a given role
   def getRoleByName(self, roleName):
@@ -24,7 +24,7 @@ class RolesAPI(subAPIs.SubAPI):
   # POST functions
   def addRole(self, payload):
     """Add a new role to the system"""
-    return self.mainAPI._POST('/api/v1/usermgmt/v1/roles', payload)
+    return self.mainAPI._POST('/usermgmt/v1/role', payload, 'application/json', 201)
 
   # Functions for mass user update
   def _getRolePayload(self, roleRow, permissions):

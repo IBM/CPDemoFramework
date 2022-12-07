@@ -48,6 +48,7 @@ echo "KUBEADMIN_USER=$KUBEADMIN_USER" >> .env
 echo "KUBEADMIN_PASS=$KUBEADMIN_PASS" >> .env
 echo "SERVER=$SERVER" >> .env
 
+echo "[default]" > credentials-velero.txt
 echo "\naws_access_key_id=$ACCESS_ID" >> credentials-velero.txt
 echo "aws_secret_access_key=$ACCESS_KEY" >> credentials-velero.txt
 chmod +x .env
@@ -65,15 +66,25 @@ fi
 echo "Creating oadp-operator namespace..."
 oc create namespace oadp-operator
 oc annotate namespace oadp-operator openshift.io/node-selector=""
-echo "Creating secret..."
-oc create secret generic cloud-credentials --namespace oadp-operator --from-file cloud=./credentials-velero.txt
+
+# Check if (secret)credentials-velero already exists
+# if it exists update the secret
+oc get secret cloud-credentials -n oadp-operator
+if [ $? != 0 ];then
+    echo "Secret already exists, updating it"
+    oc create secret generic cloud-credentials --namespace oadp-operator --from-file cloud=./credentials-velero.txt --dry-run=client -o yaml | oc apply -f -
+else
+    echo "Creating secret..."
+    oc create secret generic cloud-credentials --namespace oadp-operator --from-file cloud=./credentials-velero.txt
+fi
+
 echo "Installing OADP Operator..."
 oc apply -f oadp-operatorgroup.yaml
 oc apply -f oadp-sub.yaml
 sleep 30
 echo "Creating DPA..."
 oc project oadp-operator
-oc process -f oadp-dpa.yaml -p BUCKET=${BUCKET} -p REGION=${REGION} -p S3_URL=${S3_URL} | oc create -f -
+oc process -f oadp-dpa.yaml -p BUCKET=${BUCKET} -p REGION=${REGION} -p S3_URL=${S3_URL} | oc apply -f -
 
 
 echo "Setting up the backup execution pod..."
