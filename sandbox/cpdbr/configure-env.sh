@@ -37,7 +37,7 @@ fi
 echo "success"
 
 # Store variables in shell script
-echo "ICR=$ICR" >> .env
+echo "ICR=$ICR" > .env
 echo "S3_URL=$S3_URL" >> .env
 echo "BUCKET=$BUCKET" >> .env
 echo "REGION=$REGION" >> .env
