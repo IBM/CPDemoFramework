@@ -70,7 +70,7 @@ oc annotate namespace oadp-operator openshift.io/node-selector=""
 # Check if (secret)credentials-velero already exists
 # if it exists update the secret
 oc get secret cloud-credentials -n oadp-operator
-if [ $? != 0 ];then
+if [ $? -eq 0 ];then
     echo "Secret already exists, updating it"
     oc create secret generic cloud-credentials --namespace oadp-operator --from-file cloud=./credentials-velero.txt --dry-run=client -o yaml | oc apply -f -
 else
