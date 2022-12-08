@@ -33,6 +33,7 @@ if cpak == "cp4d":
         "datagate": 'Data Gate',
         "datastage-ent-plus": 'DataStage Enterprise Plus',
         "db2": 'Db2',
+        "db2u": 'IBM Db2u',
         "db2wh": 'Db2 Warehouse',
         "dmc": 'Data Management Console',
         "dods": 'Decision Optimization',
