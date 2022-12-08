@@ -37,7 +37,8 @@ fi
 echo "success"
 
 # Store variables in shell script
-echo "ICR=$ICR" >> .env
+# overwrite .env file and append subsequently
+echo "ICR=$ICR" > .env
 echo "S3_URL=$S3_URL" >> .env
 echo "BUCKET=$BUCKET" >> .env
 echo "REGION=$REGION" >> .env
@@ -48,6 +49,7 @@ echo "KUBEADMIN_USER=$KUBEADMIN_USER" >> .env
 echo "KUBEADMIN_PASS=$KUBEADMIN_PASS" >> .env
 echo "SERVER=$SERVER" >> .env
 
+# overwrite credentials-velero.txt file and append subsequently
 echo "[default]" > credentials-velero.txt
 echo "\naws_access_key_id=$ACCESS_ID" >> credentials-velero.txt
 echo "aws_secret_access_key=$ACCESS_KEY" >> credentials-velero.txt
@@ -70,7 +72,7 @@ oc annotate namespace oadp-operator openshift.io/node-selector=""
 # Check if (secret)credentials-velero already exists
 # if it exists update the secret
 oc get secret cloud-credentials -n oadp-operator
-if [ $? != 0 ];then
+if [ $? -eq 0 ];then
     echo "Secret already exists, updating it"
     oc create secret generic cloud-credentials --namespace oadp-operator --from-file cloud=./credentials-velero.txt --dry-run=client -o yaml | oc apply -f -
 else
