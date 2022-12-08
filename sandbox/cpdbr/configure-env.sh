@@ -37,7 +37,7 @@ fi
 echo "success"
 
 # Store variables in shell script
-# overwrite .env file and append consequently
+# overwrite .env file and append subsequently
 echo "ICR=$ICR" > .env
 echo "S3_URL=$S3_URL" >> .env
 echo "BUCKET=$BUCKET" >> .env
@@ -49,7 +49,7 @@ echo "KUBEADMIN_USER=$KUBEADMIN_USER" >> .env
 echo "KUBEADMIN_PASS=$KUBEADMIN_PASS" >> .env
 echo "SERVER=$SERVER" >> .env
 
-# overwrite credentials-velero.txt file and append consequently
+# overwrite credentials-velero.txt file and append subsequently
 echo "[default]" > credentials-velero.txt
 echo "\naws_access_key_id=$ACCESS_ID" >> credentials-velero.txt
 echo "aws_secret_access_key=$ACCESS_KEY" >> credentials-velero.txt
