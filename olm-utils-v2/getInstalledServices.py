@@ -33,16 +33,17 @@ if cpak == "cp4d":
         "datagate": 'Data Gate',
         "datastage-ent-plus": 'DataStage Enterprise Plus',
         "db2": 'Db2',
-        "db2u": 'IBM Db2u',
         "db2wh": 'Db2 Warehouse',
         "dmc": 'Data Management Console',
         "dods": 'Decision Optimization',
         "dp": 'Data Privacy',
         "dv": 'Data Virtualization',
+        "factsheet": 'AI Factsheets',
         "hadoop": 'Execution Engine for Apache Hadoop',
-        "mdm": 'IBM Master Data Management',
+        "match360": 'Match360',
         "openpages": 'OpenPages',
         "planning-analytics": 'Planning Analytics',
+        "replication": 'Data Replication',
         "rstudio": 'RStudio Server',
         "spss": 'SPSS Modeler',
         "voice-gateway": 'Voice Gateway',
@@ -54,6 +55,7 @@ if cpak == "cp4d":
         "wkc": 'Watson Knowledge Catalog',
         "wml": 'Watson Machine Learning',
         "wml-accelerator": 'Watson Machine Learning Accelerator',
+        "ws-pipelines": 'Watson Studio Pipelines',
         "wsl": 'Watson Studio'
     }
     # Open & load the config file into a list

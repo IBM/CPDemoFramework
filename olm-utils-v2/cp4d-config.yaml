@@ -1,9 +1,9 @@
 cp4d:
-- project: cpd-instance
+- project: cpd
   openshift_cluster_name: cpd-demo
-  cp4d_version: 4.5.0
-  olm_utils: False
+  cp4d_version: 4.6.0
   accept_licenses: true
+  sequential_install: False
   cartridges:
   - name: cp-foundation
     license_service:
@@ -36,8 +36,6 @@ cp4d:
       backup_size_gb: 20
       transactionlog_size_gb: 20
     state: removed
-  - name: db2u
-    state: removed
   - name: db2wh
     state: removed
   - name: dmc
@@ -48,15 +46,22 @@ cp4d:
   - name: dp
     size: small
     state: removed
+  # DPRA is not yet available, preparing for future version
+  # - name: dpra
+  #   size: small
+  #   state: removed
   - name: dv
     size: small
     instances:
     - name: data-virtualization
     state: removed
+  - name: factsheet
+    size: small
+    state: removed
   - name: hadoop
     size: small
     state: removed
-  - name: mdm
+  - name: match360
     size: small
     wkc_enabled: true
     state: removed
@@ -64,6 +69,10 @@ cp4d:
     state: removed
   - name: planning-analytics
     state: removed
+  - name: replication
+    size: small
+    license: IDRC
+    state: installed
   - name: rstudio
     size: small
     state: removed
@@ -98,4 +107,6 @@ cp4d:
     size: small
     state: removed
   - name: wsl
+    state: removed
+  - name: ws-pipelines
     state: removed
