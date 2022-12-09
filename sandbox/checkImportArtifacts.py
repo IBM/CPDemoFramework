@@ -12,6 +12,10 @@ disableImportGovernanceArtifacts = True
 numSuccessImportGovernanceArtifacts = 0
 availableArifacts = 3
 
+metaData = open("readme.json", "r")
+metaData = json.load(metaData)
+
+
 renderData = {
     "componentsToRender" : [
         {
@@ -75,7 +79,9 @@ def modifyContent(parentId,elements):
 if not os.path.isfile("users.json") and not os.path.isfile("users.csv"):
     renderData["componentsToRender"][0]["dataToRender"].append(enableDisableArtifactInTimeline("task1","disable"))
 
-if os.path.isfile("users.csv"):
+if "version" in metaData and metaData["version"] == 2.0:
+    renderData["componentsToRender"].append(modifyCTA("task1","create-users",";python3.8 createUsersv2.py users.json {IMPORT_USERS_PASSWORD}", 1))
+else:
     renderData["componentsToRender"].append(modifyCTA("task1","create-users",";python3.8 createUsers.py users.csv {IMPORT_USERS_PASSWORD}", 1))
     renderData["componentsToRender"].append(modifyContent("create-users-content", [
         {
@@ -96,8 +102,6 @@ if os.path.isfile("users.csv"):
         }
     ]))
 
-if os.path.isfile("users.json"):
-    renderData["componentsToRender"].append(modifyCTA("task1","create-users",";python3.8 createUsersv2.py users.json {IMPORT_USERS_PASSWORD}", 1))
 
 if os.path.isfile("governance_artifacts.zip"):
     numSuccessImportGovernanceArtifacts = numSuccessImportGovernanceArtifacts + 1
