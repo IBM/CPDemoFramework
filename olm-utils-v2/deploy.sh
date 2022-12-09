@@ -64,8 +64,15 @@ while true; do
         log "Retrieving deployer logs into ./log"
         mkdir -p log
         oc cp -n cloud-pak-deployer -c cloud-pak-deployer \
-            ${DEPLOYER_POD}:/Data/cpd-status/log ./log/
+            ${DEPLOYER_POD}:/Data/cpd-status/log ./log/ 2>/dev/null 1>&2
     else
+        failed_status=$(oc get job -n cloud-pak-deployer cloud-pak-deployer -o jsonpath='{.status.failed}' 2>/dev/null)
+        succeeded_status=$(oc get job -n cloud-pak-deployer cloud-pak-deployer -o jsonpath='{.status.succeeded}' 2>/dev/null)
+        if [[ ${failed_status} == "1" ]];then
+            log "Cloud Pak deployer FAILED, check the logs in the ${PWD}/log directory"
+        elif [[ ${succeeded_status} == "1" ]];then
+            log "Cloud Pak deployer completed SUCCESSFULLY"
+        fi
         break
     fi
 
@@ -123,9 +130,9 @@ oc process -f deployer-job.yaml \
     -p CP_ENTITLEMENT_KEY="$ICR_KEY" \
     -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" | oc apply -f -
 
+# Start a debug job (sleep infinity) so that we can easily get access to the deployer logs
 echo "Starting the deployer debug job..."
 oc apply -f deployer-debug-job.yaml
-
 
 # Wait a few seconds for the deployer container to start
 sleep 5
