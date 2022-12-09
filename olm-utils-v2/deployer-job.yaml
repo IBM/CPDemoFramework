@@ -57,5 +57,7 @@ objects:
 parameters:
 - name: CP_ENTITLEMENT_KEY
   description: Cloud Pak Entitlement key
+  required: true
 - name: OC_LOGIN_COMMAND
   description: OpenShift login command
+  required: true

@@ -119,57 +119,19 @@ oc process -f deployer-pvc.yaml -p DEPLOYER_SC=${DEPLOYER_SC} | oc apply -f -
 
 # Start deployer job
 echo "Starting the deployer job..."
-oc apply -f deployer-job.yaml
+oc process -f deployer-job.yaml \
+    -p CP_ENTITLEMENT_KEY="$ICR_KEY" \
+    -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" | oc apply -f -
 
-waittime=0
-pod_status=""
-echo "Waiting until Cloud Pak Deployer pod has Init:0/1 status..."
-while [ "$pod_status" != "Init:0/1" ] && [ $waittime -lt 300 ];do
-        sleep 5
-        pod_status=$(oc get po --no-headers -l app=cloud-pak-deployer | head -1 | awk '{print $3}')
-        echo "Cloud Pak Deployer status: $pod_status"
-        waittime=$((waittime+5))
-done
+echo "Starting the deployer debug job..."
+oc apply -f deployer-debug-job.yaml
 
-if [ $waittime -ge 300 ];then
-    echo "Timeout while waiting for Cloud Pak Deployer pod to start"
-    exit 1
-fi
-
-DEPLOYER_POD=$(oc get po -n cloud-pak-deployer --no-headers -l app=cloud-pak-deployer | head -1 | awk '{print $1}')
-
-command_exit=1
-waittime=0
-echo "Waiting until the pod accepts commands..."
-while [ "$command_exit" != "0" ] && [ $waittime -lt 300 ];do
-        sleep 5
-        oc rsh -c wait-config $DEPLOYER_POD touch /tmp/command-accepted 2> /dev/null
-        command_exit=$?
-        waittime=$((waittime+5))
-done
-
-if [ $waittime -ge 300 ];then
-    echo "Timeout while waiting for Cloud Pak Deployer pod to accept commmands"
-    exit 1
-fi
-
-oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault set \
-  -vs ibm_cp_entitlement_key -vsv "$ICR_KEY"
-
-oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault set \
-  -vs cpd-demo-oc-login -vsv "oc login --server=$SERVER --token=$API_TOKEN"
-
-oc rsh -c wait-config $DEPLOYER_POD /cloud-pak-deployer/cp-deploy.sh vault list
-
-# Start the deployer
-echo "Starting the deployer..."
-oc rsh -c wait-config $DEPLOYER_POD bash -c 'touch /tmp/cpd-config-ready; chmod 777 /tmp/cpd-config-ready'
 
 # Wait a few seconds for the deployer container to start
 sleep 5
 
 # Show deployer status
 show_deployer_output
-echo "success"
+# echo "success"
 echo "all done"
 exit 0
