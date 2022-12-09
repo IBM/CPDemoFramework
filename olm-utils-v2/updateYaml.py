@@ -13,28 +13,9 @@ cpak=sys.argv[4]
 with open('openshift-config.yaml') as f:
     list_os = yaml.safe_load(f)
 
-if storage_vendor.lower()=='nfs':
-    list_os["openshift"][0]["openshift_storage"][0]["storage_name"]= "nfs-storage"
-    list_os["openshift"][0]["openshift_storage"][0]["storage_type"]= "nfs"
-
-elif storage_vendor.lower()=='ocs':
-    list_os["openshift"][0]["openshift_storage"][0]["storage_name"]= "ocs-storage"
-    list_os["openshift"][0]["openshift_storage"][0]["storage_type"]= "ocs"
-
-elif storage_vendor.lower()=='portworx':
-    list_os["openshift"][0]["openshift_storage"][0]["storage_name"]= "portworx-storage"
-    list_os["openshift"][0]["openshift_storage"][0]["storage_type"]= "portworx"
-
-elif storage_vendor.lower()=='managed-nfs-storage':
-    list_os["openshift"][0]["openshift_storage"][0]["storage_name"]= "nfs-storage"
-    list_os["openshift"][0]["openshift_storage"][0]["storage_type"]= "nfs"
-
-elif storage_vendor.lower()=='roks-classic':
-    list_os["openshift"][0]["openshift_storage"][0]["storage_name"] = "nfs-storage"
-    list_os["openshift"][0]["openshift_storage"][0]["storage_type"] = "nfs"
-
-    list_os["openshift"][0]["openshift_storage"][0]["ocp_storage_class_block"]= "ibmc-block-gold"
-    list_os["openshift"][0]["openshift_storage"][0]["ocp_storage_class_file"] = "ibmc-file-gold-gid"
+# Let the deployer find out the correct storage type
+list_os["openshift"][0]["openshift_storage"][0]["storage_name"]= "auto-storage"
+list_os["openshift"][0]["openshift_storage"][0]["storage_type"]= "auto"
 
 with open("openshift-config.yaml", "w") as f:
     yaml.dump(list_os, f, sort_keys=False)
