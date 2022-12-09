@@ -72,7 +72,7 @@ cp4d:
   - name: replication
     size: small
     license: IDRC
-    state: installed
+    state: removed
   - name: rstudio
     size: small
     state: removed
