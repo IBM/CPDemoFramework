@@ -10,5 +10,5 @@ openshift:
   cluster_name: cpd-demo
   domain_name: example.com
   openshift_storage:
-  - storage_name: nfs-storage
-    storage_type: nfs
+  - storage_name: auto-storage
+    storage_type: auto
