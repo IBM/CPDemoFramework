@@ -139,6 +139,6 @@ sleep 5
 
 # Show deployer status
 show_deployer_output
-# echo "success"
+echo "success"
 echo "all done"
 exit 0
