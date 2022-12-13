@@ -11,3 +11,5 @@ from apis.endpoints.rules import RulesAPI
 from apis.endpoints.referenceData import RefDataAPI
 from apis.endpoints.users import UsersAPI
 from apis.endpoints.workflows import WorkflowsAPI
+from apis.endpoints.groups import GroupsAPI
+from apis.endpoints.roles import RolesAPI
