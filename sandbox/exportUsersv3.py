@@ -19,16 +19,17 @@ os.system('cpd-cli config profiles set sandbox-profile --user '+ CPD_USER_NAME +
 usersJSON = json.loads(os.popen("cpd-cli user-mgmt list-users --profile sandbox-profile --output json  ").read())
 
 
+password = ""
 for user in usersJSON:
     if "email" not in user:
         user["email"] = '--'
+    if user['username']==CPD_USER_NAME:
+        user['password']=CPD_USER_PASSWORD
+    else:
+        user["password"]=password
 
-password = ""
-usersTable = pandas.DataFrame(columns=['username','password','email','displayName','user_roles'])
-
-for user in usersJSON:
-    usersTable.loc[len(usersTable.index)] = [user['username'],CPD_USER_PASSWORD if user['username']==CPD_USER_NAME else password,user['email'],user['displayName'],";".join(user['user_roles'])] 
-usersTable.to_csv(sys.argv[1],index=False)
+with open(sys.argv[1], "w") as sys.argv[1]:
+    json.dump(usersJSON, sys.argv[1])
 
 
 #data for group and role management
