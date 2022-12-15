@@ -42,7 +42,7 @@ objects:
             mountPath: /Data/cpd-status
           command: ["/bin/sh","-xc"]
           args: 
-            - /cloud-pak-deployer/cp-deploy.sh env apply -v -vs=cpd-demo-oc-login="${OC_LOGIN_COMMAND}" --skip-cp-install; /Data/cpd-status/${BR_SCRIPT} ${CPD_INSTANCE} ${CPD_INSTANCE_BACKUP} ${CPD_OPERATOR_BACKUP}
+            - /cloud-pak-deployer/cp-deploy.sh env apply -v -vs=cpd-demo-oc-login="${OC_LOGIN_COMMAND}" --skip-cp-install; /cloud-pak-deployer/${BR_SCRIPT} ${CPD_INSTANCE} ${CPD_INSTANCE_BACKUP} ${CPD_OPERATOR_BACKUP}
         restartPolicy: Never
         securityContext:
           runAsUser: 0
