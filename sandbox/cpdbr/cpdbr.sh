@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# # source ./functions.sh
 source ./.env
+source ../../olm-utils-v2/functions.sh
+
 #cloud pak(s)
 cpak=$1
 #backup or restore operation
@@ -124,13 +125,12 @@ if [[ "${operation}" == *"backup"* ]];then
     oc process -f cpdbr-pvc.yaml -p BR_SC=${BR_SC} -p BR_JOB=${BR_JOB} | oc apply -f -
     # Start br job
     echo "Starting the ${operation} job..."
-    oc process -f cpdbr-job.yaml \
-    -p CP_ENTITLEMENT_KEY="$ICR_KEY" \
-    -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" 
-    -p BR_SCRIPT=${BR_SCRIPT} 
-    -p BR_JOB=${BR_JOB} 
-    -p CPD_INSTANCE=${CPD_INSTANCE} 
-    -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} 
+    oc process -f cpdbr-job.yaml -p CP_ENTITLEMENT_KEY="$ICR" \
+    -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" \
+    -p BR_SCRIPT=${BR_SCRIPT} \
+    -p BR_JOB=${BR_JOB} \
+    -p CPD_INSTANCE=${CPD_INSTANCE} \
+    -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} \
     -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP}| oc apply -f -
     # oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
 fi
@@ -142,12 +142,12 @@ if [[ "${operation}" == *"restore"* ]];then
     # Start br job
     echo "Starting the ${operation} job..."
     oc process -f cpdbr-job.yaml \
-    -p CP_ENTITLEMENT_KEY="$ICR_KEY" \
-    -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" 
-    -p BR_SCRIPT=${BR_SCRIPT} 
-    -p BR_JOB=${BR_JOB} 
-    -p CPD_INSTANCE=${CPD_INSTANCE} 
-    -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} 
+    -p CP_ENTITLEMENT_KEY="$ICR" \
+    -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" \
+    -p BR_SCRIPT=${BR_SCRIPT} \
+    -p BR_JOB=${BR_JOB} \
+    -p CPD_INSTANCE=${CPD_INSTANCE} \
+    -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} \
     -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP}| oc apply -f -
     # oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
 
@@ -163,6 +163,7 @@ sleep 5
 
 # Show br status
 show_br_output
+
 # Condition to display deployment credentials incase of restore 
 if [[ "${operation}" == *"restore"* ]];then
     deployment_host=$(oc get route -n ${CPD_INSTANCE} cpd -o jsonpath='{.spec.host}' 2> /dev/null)
