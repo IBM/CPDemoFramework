@@ -24,7 +24,7 @@ objects:
       spec:
         containers:
         - name: ${BR_JOB}
-          image: quay.io/devplayground/cloud-pak-deployer:latest
+          image: quay.io/devplayground/cloud-pak-deployer:test
           imagePullPolicy: Always
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File

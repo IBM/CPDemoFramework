@@ -17,11 +17,18 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Check which project is used for CP4D (it used to be cpd-instance, changing to cpd)
+# Namespace where cpd is installed
+if oc get project cpd >/dev/null 2>&1;then 
+    CPD_INSTANCE=cpd
+else
+    CPD_INSTANCE=cpd-instance
+fi
+
 # Conditionally set the backup configuration
 if [[ "${operation}" == *"backup"* ]];then
     BR_SCRIPT=pod-backup.sh                     #script to run in pod
     BR_JOB=cloud-pak-backup                     #Job name to be used
-    CPD_INSTANCE=cpd-instance                   #Namespace where cpd is installed
     CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
     CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
@@ -29,7 +36,6 @@ fi
 if [[ "${operation}" == *"restore"* ]];then
     BR_SCRIPT=pod-restore.sh                  #script to run in pod
     BR_JOB=cloud-pak-restore                  #Job name to be used
-    CPD_INSTANCE=cpd-instance                   #Namespace where cpd is installed
     CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
     CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
@@ -147,20 +153,10 @@ if [[ "${operation}" == *"restore"* ]];then
 
 fi
 
-oc process -f deployer-job.yaml \
-    -p CP_ENTITLEMENT_KEY="$ICR_KEY" \
-    -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" | oc apply -f -
+# Start a debug job (sleep infinity) so that we can easily get access to the br logs
+echo "Starting the cpdbr debug job..."
+oc apply -f cpdbr-debug-job.yaml
 
-#Copy br script
-echo "Coping ${operation} script and configuration yamls to ${operation} pod..."
-chmod +x ${BR_SCRIPT}
-oc cp ${BR_SCRIPT} ${BR_POD}:/Data/cpd-status/ -c wait-config
-oc cp cp4d-config.yaml ${BR_POD}:/Data/cpd-config/ -c wait-config
-oc cp openshift-config.yaml ${BR_POD}:/Data/cpd-config/ -c wait-config
-
-# Start the br
-echo "Starting the ${operation}..."
-oc rsh -c wait-config $BR_POD bash -c 'touch /tmp/cpd-config-ready; chmod 777 /tmp/cpd-config-ready'
 
 # Wait a few seconds for the br container to start
 sleep 5
@@ -169,8 +165,8 @@ sleep 5
 show_br_output
 # Condition to display deployment credentials incase of restore 
 if [[ "${operation}" == *"restore"* ]];then
-    deployment_host=$(oc get route -n cpd-instance cpd -o jsonpath='{.spec.host}' 2> /dev/null)
-    deployment_admin_password=$(oc extract -n cpd-instance secret/admin-user-details --to=- 2>/dev/null)
+    deployment_host=$(oc get route -n ${CPD_INSTANCE} cpd -o jsonpath='{.spec.host}' 2> /dev/null)
+    deployment_admin_password=$(oc extract -n ${CPD_INSTANCE} secret/admin-user-details --to=- 2>/dev/null)
     if [ "${deployment_host}" != "" ];then
         log "Cloud Pak URL: https://${deployment_host}"
         log "Cloud Pak admin password: ${deployment_admin_password}"
