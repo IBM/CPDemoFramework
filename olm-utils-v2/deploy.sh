@@ -6,11 +6,6 @@ source ./functions.sh
 
 #cloud pak(s)
 cpak=$1
-CPAK_ADMIN_PASSWORD=$2
-CPAK_ENV_NAME=$3
-
-echo "CPAK_ADMIN_PASSWORD=$CPAK_ADMIN_PASSWORD" >> ./env-vars.sh
-echo "CPAK_ENV_NAME=$CPAK_ENV_NAME" >> ./env-vars.sh
 
 # Check if we can access the cluster
 oc cluster-info

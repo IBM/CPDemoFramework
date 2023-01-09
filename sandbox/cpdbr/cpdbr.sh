@@ -1,8 +1,7 @@
 #!/bin/bash
 
+# # source ./functions.sh
 source ./.env
-source ../../olm-utils-v2/functions.sh
-
 #cloud pak(s)
 cpak=$1
 #backup or restore operation
@@ -18,18 +17,11 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Check which project is used for CP4D (it used to be cpd-instance, changing to cpd)
-# Namespace where cpd is installed
-if oc get project cpd >/dev/null 2>&1;then 
-    CPD_INSTANCE=cpd
-else
-    CPD_INSTANCE=cpd-instance
-fi
-
 # Conditionally set the backup configuration
 if [[ "${operation}" == *"backup"* ]];then
     BR_SCRIPT=pod-backup.sh                     #script to run in pod
     BR_JOB=cloud-pak-backup                     #Job name to be used
+    CPD_INSTANCE=cpd-instance                   #Namespace where cpd is installed
     CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
     CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
@@ -37,6 +29,7 @@ fi
 if [[ "${operation}" == *"restore"* ]];then
     BR_SCRIPT=pod-restore.sh                  #script to run in pod
     BR_JOB=cloud-pak-restore                  #Job name to be used
+    CPD_INSTANCE=cpd-instance                   #Namespace where cpd is installed
     CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
     CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
@@ -58,18 +51,8 @@ while true; do
     br_status=$(oc get job ${BR_JOB} -n cloud-pak-br -o jsonpath='{.status.active}' 2>/dev/null)
     if [ "${br_status}" == "1" ];then
         BR_POD=$(oc get po -n cloud-pak-br --no-headers -l app=cloud-pak-br | head -1 | awk '{print $1}')
-        log "Retrieving ${operation} logs into ./log"
-        mkdir -p log
-        oc cp -n cloud-pak-br -c cloud-pak-br \
-            ${BR_POD}:/Data/cpd-status/log ./log/ 2>/dev/null 1>&2
+        oc logs ${BR_POD} --tail=100
     else
-        failed_status=$(oc get job -n cloud-pak-br cloud-pak-br -o jsonpath='{.status.failed}' 2>/dev/null)
-        succeeded_status=$(oc get job -n cloud-pak-br cloud-pak-br -o jsonpath='{.status.succeeded}' 2>/dev/null)
-        if [[ ${failed_status} == "1" ]];then
-            log "Cloud Pak ${operation} FAILED, check the logs in the ${PWD}/log directory"
-        elif [[ ${succeeded_status} == "1" ]];then
-            log "Cloud Pak ${operation} completed SUCCESSFULLY"
-        fi
         break
     fi
 
@@ -125,14 +108,7 @@ if [[ "${operation}" == *"backup"* ]];then
     oc process -f cpdbr-pvc.yaml -p BR_SC=${BR_SC} -p BR_JOB=${BR_JOB} | oc apply -f -
     # Start br job
     echo "Starting the ${operation} job..."
-    oc process -f cpdbr-job.yaml -p CP_ENTITLEMENT_KEY="$ICR" \
-    -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" \
-    -p BR_SCRIPT=${BR_SCRIPT} \
-    -p BR_JOB=${BR_JOB} \
-    -p CPD_INSTANCE=${CPD_INSTANCE} \
-    -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} \
-    -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP}| oc apply -f -
-    # oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
+    oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
 fi
 # Conditionally set the restore configuration
 if [[ "${operation}" == *"restore"* ]];then
@@ -141,33 +117,68 @@ if [[ "${operation}" == *"restore"* ]];then
     oc process -f cpdbr-pvc.yaml -p BR_SC=${BR_SC} -p BR_JOB=${BR_JOB} | oc apply -f -
     # Start br job
     echo "Starting the ${operation} job..."
-    oc process -f cpdbr-job.yaml \
-    -p CP_ENTITLEMENT_KEY="$ICR" \
-    -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" \
-    -p BR_SCRIPT=${BR_SCRIPT} \
-    -p BR_JOB=${BR_JOB} \
-    -p CPD_INSTANCE=${CPD_INSTANCE} \
-    -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} \
-    -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP}| oc apply -f -
-    # oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
+    oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
 
 fi
 
-# Start a debug job (sleep infinity) so that we can easily get access to the br logs
-echo "Starting the cpdbr debug job..."
-oc apply -f cpdbr-debug-job.yaml
+waittime=0
+pod_status=""
+echo "Waiting until Cloud Pak ${operation} pod has Init:0/1 status..."
+while [ "$pod_status" != "Init:0/1" ] && [ $waittime -lt 300 ];do
+        sleep 5
+        pod_status=$(oc get po --no-headers -l app=cloud-pak-br | head -1 | awk '{print $3}')
+        echo "Cloud Pak ${operation} status: $pod_status"
+        waittime=$((waittime+5))
+done
 
+if [ $waittime -ge 300 ];then
+    echo "Timeout while waiting for Cloud Pak ${operation} pod to start"
+    exit 1
+fi
+
+BR_POD=$(oc get po -n cloud-pak-br --no-headers -l app=cloud-pak-br | head -1 | awk '{print $1}')
+
+command_exit=1
+waittime=0
+echo "Waiting until the pod accepts commands..."
+while [ "$command_exit" != "0" ] && [ $waittime -lt 300 ];do
+        sleep 5
+        oc rsh -c wait-config $BR_POD touch /tmp/command-accepted 2> /dev/null
+        command_exit=$?
+        waittime=$((waittime+5))
+done
+
+if [ $waittime -ge 300 ];then
+    echo "Timeout while waiting for Cloud Pak ${operation} pod to accept commmands"
+    exit 1
+fi
+
+oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault set \
+ -vs ibm_cp_entitlement_key -vsv "$ICR"
+oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault set \
+ -vs cpd-demo-oc-login -vsv "oc login --server=$SERVER --token=$API_TOKEN"
+oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault list
+
+#Copy br script
+echo "Coping ${operation} script and configuration yamls to ${operation} pod..."
+chmod +x ${BR_SCRIPT}
+oc cp ${BR_SCRIPT} ${BR_POD}:/Data/cpd-status/ -c wait-config
+oc cp cp4d-config.yaml ${BR_POD}:/Data/cpd-config/ -c wait-config
+oc cp openshift-config.yaml ${BR_POD}:/Data/cpd-config/ -c wait-config
+
+# Start the br
+echo "Starting the ${operation}..."
+oc rsh -c wait-config $BR_POD bash -c 'touch /tmp/cpd-config-ready; chmod 777 /tmp/cpd-config-ready'
 
 # Wait a few seconds for the br container to start
 sleep 5
 
 # Show br status
 show_br_output
-
 # Condition to display deployment credentials incase of restore 
 if [[ "${operation}" == *"restore"* ]];then
-    deployment_host=$(oc get route -n ${CPD_INSTANCE} cpd -o jsonpath='{.spec.host}' 2> /dev/null)
-    deployment_admin_password=$(oc extract -n ${CPD_INSTANCE} secret/admin-user-details --to=- 2>/dev/null)
+    deployment_host=$(oc get route -n cpd-instance cpd -o jsonpath='{.spec.host}' 2> /dev/null)
+    deployment_admin_password=$(oc extract -n cpd-instance secret/admin-user-details --to=- 2>/dev/null)
     if [ "${deployment_host}" != "" ];then
         log "Cloud Pak URL: https://${deployment_host}"
         log "Cloud Pak admin password: ${deployment_admin_password}"
