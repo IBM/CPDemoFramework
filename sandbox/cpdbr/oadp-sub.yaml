@@ -8,3 +8,4 @@ spec:
   name: oadp-operator
   source: community-operators
   sourceNamespace: openshift-marketplace
+  
