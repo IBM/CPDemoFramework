@@ -18,11 +18,18 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Check which project is used for CP4D (it used to be cpd-instance, changing to cpd)
+# Namespace where cpd is installed
+if oc get project cpd >/dev/null 2>&1;then 
+    CPD_INSTANCE=cpd
+else
+    CPD_INSTANCE=cpd-instance
+fi
+
 # Conditionally set the backup configuration
 if [[ "${operation}" == *"backup"* ]];then
     BR_SCRIPT=pod-backup.sh                     #script to run in pod
     BR_JOB=cloud-pak-backup                     #Job name to be used
-    CPD_INSTANCE=cpd                            #Namespace where cpd is installed
     CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
     CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
@@ -30,7 +37,6 @@ fi
 if [[ "${operation}" == *"restore"* ]];then
     BR_SCRIPT=pod-restore.sh                  #script to run in pod
     BR_JOB=cloud-pak-restore                  #Job name to be used
-    CPD_INSTANCE=cpd                          #Namespace where cpd is installed
     CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
     CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
