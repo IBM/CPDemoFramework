@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# # source ./functions.sh
 source ./.env
+source ../../olm-utils-v2/functions.sh
+
 #cloud pak(s)
 cpak=$1
 #backup or restore operation
@@ -21,7 +22,7 @@ fi
 if [[ "${operation}" == *"backup"* ]];then
     BR_SCRIPT=pod-backup.sh                     #script to run in pod
     BR_JOB=cloud-pak-backup                     #Job name to be used
-    CPD_INSTANCE=cpd-instance                   #Namespace where cpd is installed
+    CPD_INSTANCE=cpd                            #Namespace where cpd is installed
     CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
     CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
@@ -29,7 +30,7 @@ fi
 if [[ "${operation}" == *"restore"* ]];then
     BR_SCRIPT=pod-restore.sh                  #script to run in pod
     BR_JOB=cloud-pak-restore                  #Job name to be used
-    CPD_INSTANCE=cpd-instance                   #Namespace where cpd is installed
+    CPD_INSTANCE=cpd                          #Namespace where cpd is installed
     CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
     CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
@@ -159,8 +160,13 @@ oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault set \
  -vs cpd-demo-oc-login -vsv "oc login --server=$SERVER --token=$API_TOKEN"
 oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault list
 
+
+# Start a debug job (sleep infinity) so that we can easily get access to the br logs
+echo "Starting the cpdbr debug job..."
+oc apply -f cpdbr-debug-job.yaml
+
 #Copy br script
-echo "Coping ${operation} script and configuration yamls to ${operation} pod..."
+echo "Copying ${operation} script and configuration yamls to ${operation} pod..."
 chmod +x ${BR_SCRIPT}
 oc cp ${BR_SCRIPT} ${BR_POD}:/Data/cpd-status/ -c wait-config
 oc cp cp4d-config.yaml ${BR_POD}:/Data/cpd-config/ -c wait-config
@@ -177,8 +183,8 @@ sleep 5
 show_br_output
 # Condition to display deployment credentials incase of restore 
 if [[ "${operation}" == *"restore"* ]];then
-    deployment_host=$(oc get route -n cpd-instance cpd -o jsonpath='{.spec.host}' 2> /dev/null)
-    deployment_admin_password=$(oc extract -n cpd-instance secret/admin-user-details --to=- 2>/dev/null)
+    deployment_host=$(oc get route -n ${CPD_INSTANCE} cpd -o jsonpath='{.spec.host}' 2> /dev/null)
+    deployment_admin_password=$(oc extract -n ${CPD_INSTANCE} secret/admin-user-details --to=- 2>/dev/null)
     if [ "${deployment_host}" != "" ];then
         log "Cloud Pak URL: https://${deployment_host}"
         log "Cloud Pak admin password: ${deployment_admin_password}"
