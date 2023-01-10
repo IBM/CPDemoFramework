@@ -37,6 +37,7 @@ fi
 if [[ "${operation}" == *"restore"* ]];then
     BR_SCRIPT=pod-restore.sh                  #script to run in pod
     BR_JOB=cloud-pak-restore                  #Job name to be used
+    CPD_INSTANCE=cpd                          # Namespace where cpd is installed
     CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
     CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
@@ -58,8 +59,18 @@ while true; do
     br_status=$(oc get job ${BR_JOB} -n cloud-pak-br -o jsonpath='{.status.active}' 2>/dev/null)
     if [ "${br_status}" == "1" ];then
         BR_POD=$(oc get po -n cloud-pak-br --no-headers -l app=cloud-pak-br | head -1 | awk '{print $1}')
-        oc logs ${BR_POD} --tail=100
+        log "Retrieving ${operation} logs into ./log"
+        mkdir -p log
+        oc cp -n cloud-pak-br -c cloud-pak-br \
+            ${BR_POD}:/Data/cpd-status/log ./log/ 2>/dev/null 1>&2
     else
+        failed_status=$(oc get job -n cloud-pak-br cloud-pak-br -o jsonpath='{.status.failed}' 2>/dev/null)
+        succeeded_status=$(oc get job -n cloud-pak-br cloud-pak-br -o jsonpath='{.status.succeeded}' 2>/dev/null)
+        if [[ ${failed_status} == "1" ]];then
+            log "Cloud Pak ${operation} FAILED, check the logs in the ${PWD}/log directory"
+        elif [[ ${succeeded_status} == "1" ]];then
+            log "Cloud Pak ${operation} completed SUCCESSFULLY"
+        fi
         break
     fi
 
