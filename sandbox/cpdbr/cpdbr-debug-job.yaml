@@ -45,4 +45,7 @@ spec:
           name: cloud-pak-br-config
       - name: status-volume
         persistentVolumeClaim:
-          claimName: cloud-pak-br-status
+          claimName: ${BR_JOB}-status
+parameters:
+- name: BR_JOB
+  description: "CPD Job name"
