@@ -180,7 +180,7 @@ oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault list
 
 # Start a debug job (sleep infinity) so that we can easily get access to the br logs
 echo "Starting the cpdbr debug job..."
-oc apply -f cpdbr-debug-job.yaml
+oc process -f cpdbr-debug-job.yaml -p BR_JOB=${BR_JOB} | oc apply -f -
 
 #Copy br script
 echo "Copying ${operation} script and configuration yamls to ${operation} pod..."
