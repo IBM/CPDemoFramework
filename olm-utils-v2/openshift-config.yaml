@@ -10,7 +10,7 @@ openshift:
   ocp_version: '4.10'
   cluster_name: cpd-demo
   domain_name: example.com
-  console_banner: "Environment: {{ env_id }}"
+  console_banner: "Environment {{ env_id }}"
   openshift_storage:
   - storage_name: auto-storage
     storage_type: auto
