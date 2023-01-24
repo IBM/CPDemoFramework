@@ -124,7 +124,7 @@ fi
 
 # Always set the global and OpenShift configuration
 if [[ "${CPAK_ENV_NAME}" != "" ]];then
-    sed -i "s/\"{{ env_id }}\"/${CPAK_ENV_NAME}/g" ./openshift-config.yaml
+    sed -i "s/{{ env_id }}/${CPAK_ENV_NAME}/g" ./openshift-config.yaml
 fi
 oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./openshift-config.yaml
 
