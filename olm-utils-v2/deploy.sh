@@ -124,7 +124,7 @@ fi
 
 # Always set the global and OpenShift configuration
 if [[ "${CPAK_ENV_NAME}" != "" ]];then
-    sed -i "s/\"{{ env_id }}\"/${CPAK_ENV_NAME}/g"
+    sed -i "s/\"{{ env_id }}\"/${CPAK_ENV_NAME}/g" ./openshift-config.yaml
 fi
 oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./openshift-config.yaml
 
@@ -134,7 +134,7 @@ oc process -f deployer-pvc.yaml -p DEPLOYER_SC=${DEPLOYER_SC} | oc apply -f -
 
 # Start deployer job
 echo "Starting the deployer job..."
-if [[ ${CPAK_ADMIN_PASSWORD}" == "" ]];then
+if [[ "${CPAK_ADMIN_PASSWORD}" == "" ]];then
     oc process -f deployer-job.yaml \
         -p CP_ENTITLEMENT_KEY="$ICR_KEY" \
         -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" | oc apply -f -
