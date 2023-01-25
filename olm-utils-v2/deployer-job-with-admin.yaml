@@ -42,7 +42,7 @@ objects:
             mountPath: /Data/cpd-status
           command: ["/bin/sh","-xc"]
           args: 
-            - /cloud-pak-deployer/cp-deploy.sh env apply -v -vs=cpd-demo-oc-login="${OC_LOGIN_COMMAND}" -vs=cp4d_admin_cpd_demo="${CPAK_ADMIN_PASSWORD}"
+            - /cloud-pak-deployer/cp-deploy.sh env apply -v -vs=cpd-demo-oc-login="${OC_LOGIN_COMMAND}" -vs=cp4d_admin_cpd_cpd_demo="${CPAK_ADMIN_PASSWORD}"
         restartPolicy: Never
         securityContext:
           runAsUser: 0
