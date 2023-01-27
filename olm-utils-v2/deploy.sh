@@ -123,6 +123,9 @@ if [[ "${cpak}" == *"cp4i"* ]];then
 fi
 
 # Always set the global and OpenShift configuration
+if [[ "${CPAK_ENV_NAME}" != "" ]];then
+    sed -i "s/{{ env_id }}/${CPAK_ENV_NAME}/g" ./openshift-config.yaml
+fi
 oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./openshift-config.yaml
 
 # Create PVC for deployer job
@@ -131,9 +134,16 @@ oc process -f deployer-pvc.yaml -p DEPLOYER_SC=${DEPLOYER_SC} | oc apply -f -
 
 # Start deployer job
 echo "Starting the deployer job..."
-oc process -f deployer-job.yaml \
-    -p CP_ENTITLEMENT_KEY="$ICR_KEY" \
-    -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" | oc apply -f -
+if [[ "${CPAK_ADMIN_PASSWORD}" == "" ]];then
+    oc process -f deployer-job.yaml \
+        -p CP_ENTITLEMENT_KEY="$ICR_KEY" \
+        -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" | oc apply -f -
+else
+    oc process -f deployer-job-with-admin.yaml \
+        -p CP_ENTITLEMENT_KEY="$ICR_KEY" \
+        -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" \
+        -p CPAK_ADMIN_PASSWORD="${CPAK_ADMIN_PASSWORD}" | oc apply -f -
+fi
 
 # Start a debug job (sleep infinity) so that we can easily get access to the deployer logs
 echo "Starting the deployer debug job..."
