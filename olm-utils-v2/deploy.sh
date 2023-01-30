@@ -144,10 +144,6 @@ if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ]
         fi
 fi
 
-oc process -f deployer-job.yaml \
-    -p CP_ENTITLEMENT_KEY="$ICR_KEY" \
-    -p OC_LOGIN_COMMAND="$OC_LOGIN_COMMAND" | oc apply -f -
-
 # Start deployer job
 echo "Starting the deployer job..."
 if [[ "${CPAK_ADMIN_PASSWORD}" == "" ]];then
