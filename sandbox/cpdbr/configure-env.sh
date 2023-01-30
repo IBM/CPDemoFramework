@@ -17,13 +17,15 @@ ACCESS_ID=$10
 if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ]
     then
         alias oclogin_auto="run_utils login-to-ocp -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server=${SERVER}";
-        alias pod_login="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER}";
+        oc_login_command="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER}";
+        alias pod_login=$oc_login_command;
     else
         if  [ -z "$API_TOKEN" ]
             then
                     echo "Invalid api token, please check env.sh file";
             else
-                alias pod_login="oc login --token=${API_TOKEN} --server=${SERVER}";
+                oc_login_command="oc login --token=${API_TOKEN} --server=${SERVER}";
+                alias pod_login=$oc_login_command;
                 alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";
         fi
 fi
@@ -38,7 +40,7 @@ echo "success"
 
 # Store variables in shell script
 # overwrite .env file and append subsequently
-echo "OC_LOGIN_COMMAND=$pod_login" > .env
+echo "OC_LOGIN_COMMAND=$oc_login_command" > .env
 echo "ICR=$ICR" >> .env
 echo "S3_URL=$S3_URL" >> .env
 echo "BUCKET=$BUCKET" >> .env
