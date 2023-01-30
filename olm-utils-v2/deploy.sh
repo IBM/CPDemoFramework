@@ -137,11 +137,11 @@ echo "Starting the deployer job..."
 if [[ "${CPAK_ADMIN_PASSWORD}" == "" ]];then
     oc process -f deployer-job.yaml \
         -p CP_ENTITLEMENT_KEY="$ICR_KEY" \
-        -p OC_LOGIN_COMMAND="$OC_LOGIN_COMMAND" | oc apply -f -
+        -p OC_LOGIN_COMMAND="$OC_LOGIN_COMMAND --insecure-skip-tls-verify" | oc apply -f -
 else
     oc process -f deployer-job-with-admin.yaml \
         -p CP_ENTITLEMENT_KEY="$ICR_KEY" \
-        -p OC_LOGIN_COMMAND="$OC_LOGIN_COMMAND" \
+        -p OC_LOGIN_COMMAND="$OC_LOGIN_COMMAND --insecure-skip-tls-verify" \
         -p CPAK_ADMIN_PASSWORD="${CPAK_ADMIN_PASSWORD}" | oc apply -f -
 fi
 
