@@ -40,7 +40,8 @@ else
 fi
 
 # Store variables in shell script
-echo "ICR_KEY=$ICR_KEY" > ./env-vars.sh
+echo "OC_LOGIN_COMMAND=$pod_login" > ./env-vars.sh
+echo "ICR_KEY=$ICR_KEY" >> ./env-vars.sh
 echo "API_TOKEN=$API_TOKEN" >> ./env-vars.sh
 echo "KUBEADMIN_USER=$KUBEADMIN_USER" >> ./env-vars.sh
 echo "KUBEADMIN_PASS=$KUBEADMIN_PASS" >> ./env-vars.sh

@@ -132,18 +132,6 @@ oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./ope
 echo "Creating the PVC if not already present..."
 oc process -f deployer-pvc.yaml -p DEPLOYER_SC=${DEPLOYER_SC} | oc apply -f -
 
-if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ]
-    then
-        OC_LOGIN_COMMAND="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER} --insecure-skip-tls-verify"
-    else
-        if  [ -z "$API_TOKEN" ]
-            then
-                    echo "Invalid api token, please check env.sh file";
-            else
-                OC_LOGIN_COMMAND="oc login --token=${API_TOKEN} --server=${SERVER} --insecure-skip-tls-verify"
-        fi
-fi
-
 # Start deployer job
 echo "Starting the deployer job..."
 if [[ "${CPAK_ADMIN_PASSWORD}" == "" ]];then

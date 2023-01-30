@@ -38,7 +38,8 @@ echo "success"
 
 # Store variables in shell script
 # overwrite .env file and append subsequently
-echo "ICR=$ICR" > .env
+echo "OC_LOGIN_COMMAND=$pod_login" > .env
+echo "ICR=$ICR" >> .env
 echo "S3_URL=$S3_URL" >> .env
 echo "BUCKET=$BUCKET" >> .env
 echo "REGION=$REGION" >> .env

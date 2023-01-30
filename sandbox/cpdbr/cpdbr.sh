@@ -174,18 +174,6 @@ fi
 oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault set \
  -vs ibm_cp_entitlement_key -vsv "$ICR"
 
-if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ]
-    then
-        OC_LOGIN_COMMAND="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER} --insecure-skip-tls-verify"
-    else
-        if  [ -z "$API_TOKEN" ]
-            then
-                    echo "Invalid api token, please check env.sh file";
-            else
-                OC_LOGIN_COMMAND="oc login --token=${API_TOKEN} --server=${SERVER} --insecure-skip-tls-verify"
-        fi
-fi
-
 oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault set \
  -vs cpd-demo-oc-login -vsv $OC_LOGIN_COMMAND
 
