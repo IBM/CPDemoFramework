@@ -37,7 +37,6 @@ fi
 if [[ "${operation}" == *"restore"* ]];then
     BR_SCRIPT=pod-restore.sh                  #script to run in pod
     BR_JOB=cloud-pak-restore                  #Job name to be used
-    CPD_INSTANCE=cpd                          # Namespace where cpd is installed
     CPD_INSTANCE_BACKUP=${backupName}-instance  #cpd instance backup will be saved with this name
     CPD_OPERATOR_BACKUP=${backupName}-operator  #cpd operator backup will be saved with this name
 fi
@@ -119,85 +118,73 @@ fi
 # Always set the global and OpenShift configuration
 oc set data -n cloud-pak-br cm/cloud-pak-br-config --from-file=./openshift-config.yaml
 
+if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ]
+    then
+        OC_LOGIN_COMMAND="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER} --insecure-skip-tls-verify"
+    else
+        if  [ -z "$API_TOKEN" ]
+            then
+                    echo "Invalid api token, please check env.sh file";
+            else
+                OC_LOGIN_COMMAND="oc login --token=${API_TOKEN} --server=${SERVER} --insecure-skip-tls-verify"
+        fi
+fi
+
+# Start deployer job
+echo "Starting the deployer job..."
+
 # Conditionally set the backup configuration
 if [[ "${operation}" == *"backup"* ]];then
     # Create PVC for br job
     echo "Creating the PVC if not already present..."
     oc process -f cpdbr-pvc.yaml -p BR_SC=${BR_SC} -p BR_JOB=${BR_JOB} | oc apply -f -
+
     # Start br job
     echo "Starting the ${operation} job..."
-    oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
+
+    # Start deployer job
+    oc process -f cpdbr-job.yaml -p CP_ENTITLEMENT_KEY="$ICR" \
+    -p OC_LOGIN_COMMAND="$OC_LOGIN_COMMAND" \
+    -p BR_SCRIPT=${BR_SCRIPT} \
+    -p BR_JOB=${BR_JOB} \
+    -p CPD_INSTANCE=${CPD_INSTANCE} \
+    -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} \
+    -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP}| oc apply -f -
+
+    # oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
 fi
 # Conditionally set the restore configuration
 if [[ "${operation}" == *"restore"* ]];then
     # Create PVC for br job
     echo "Creating the PVC if not already present..."
     oc process -f cpdbr-pvc.yaml -p BR_SC=${BR_SC} -p BR_JOB=${BR_JOB} | oc apply -f -
+
     # Start br job
     echo "Starting the ${operation} job..."
-    oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
+    oc process -f cpdbr-job.yaml \
+    -p CP_ENTITLEMENT_KEY="$ICR" \
+    -p OC_LOGIN_COMMAND="$OC_LOGIN_COMMAND" \
+    -p BR_SCRIPT=${BR_SCRIPT} \
+    -p BR_JOB=${BR_JOB} \
+    -p CPD_INSTANCE=${CPD_INSTANCE} \
+    -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} \
+    -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP}| oc apply -f -
+
+    # oc process -f cpdbr-job.yaml -p BR_SCRIPT=${BR_SCRIPT} -p BR_JOB=${BR_JOB} -p CPD_INSTANCE=${CPD_INSTANCE} -p CPD_OPERATOR_BACKUP=${CPD_OPERATOR_BACKUP} -p CPD_INSTANCE_BACKUP=${CPD_INSTANCE_BACKUP} | oc apply -f -
 
 fi
-
-waittime=0
-pod_status=""
-echo "Waiting until Cloud Pak ${operation} pod has Init:0/1 status..."
-while [ "$pod_status" != "Init:0/1" ] && [ $waittime -lt 300 ];do
-        sleep 5
-        pod_status=$(oc get po --no-headers -l app=cloud-pak-br | head -1 | awk '{print $3}')
-        echo "Cloud Pak ${operation} status: $pod_status"
-        waittime=$((waittime+5))
-done
-
-if [ $waittime -ge 300 ];then
-    echo "Timeout while waiting for Cloud Pak ${operation} pod to start"
-    exit 1
-fi
-
-BR_POD=$(oc get po -n cloud-pak-br --no-headers -l app=cloud-pak-br | head -1 | awk '{print $1}')
-
-command_exit=1
-waittime=0
-echo "Waiting until the pod accepts commands..."
-while [ "$command_exit" != "0" ] && [ $waittime -lt 300 ];do
-        sleep 5
-        oc rsh -c wait-config $BR_POD touch /tmp/command-accepted 2> /dev/null
-        command_exit=$?
-        waittime=$((waittime+5))
-done
-
-if [ $waittime -ge 300 ];then
-    echo "Timeout while waiting for Cloud Pak ${operation} pod to accept commmands"
-    exit 1
-fi
-
-oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault set \
- -vs ibm_cp_entitlement_key -vsv "$ICR"
-oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault set \
- -vs cpd-demo-oc-login -vsv "oc login --server=$SERVER --token=$API_TOKEN"
-oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault list
-
 
 # Start a debug job (sleep infinity) so that we can easily get access to the br logs
 echo "Starting the cpdbr debug job..."
-oc process -f cpdbr-debug-job.yaml -p BR_JOB=${BR_JOB} | oc apply -f -
+oc apply -f cpdbr-debug-job.yaml
 
-#Copy br script
-echo "Copying ${operation} script and configuration yamls to ${operation} pod..."
-chmod +x ${BR_SCRIPT}
-oc cp ${BR_SCRIPT} ${BR_POD}:/Data/cpd-status/ -c wait-config
-oc cp cp4d-config.yaml ${BR_POD}:/Data/cpd-config/ -c wait-config
-oc cp openshift-config.yaml ${BR_POD}:/Data/cpd-config/ -c wait-config
-
-# Start the br
-echo "Starting the ${operation}..."
-oc rsh -c wait-config $BR_POD bash -c 'touch /tmp/cpd-config-ready; chmod 777 /tmp/cpd-config-ready'
 
 # Wait a few seconds for the br container to start
 sleep 5
 
 # Show br status
 show_br_output
+
 # Condition to display deployment credentials incase of restore 
 if [[ "${operation}" == *"restore"* ]];then
     deployment_host=$(oc get route -n ${CPD_INSTANCE} cpd -o jsonpath='{.spec.host}' 2> /dev/null)
