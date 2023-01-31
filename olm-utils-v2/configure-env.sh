@@ -6,21 +6,31 @@ API_TOKEN=$2
 KUBEADMIN_USER=$3
 KUBEADMIN_PASS=$4
 ICR_KEY=$5
+OC_LOGIN=$6
 
 # SCRIPT
+
 #Pod login and auto login to oc cluster from runutils
-if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ]
+#Authentication method Kube Admin
+if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ] # not null string 
     then
         alias oclogin_auto="run_utils login-to-ocp -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server=${SERVER}";
-        oc_login_command="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER}";
-        alias pod_login=$oc_login_command;
+        OC_LOGIN="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER}";
+        alias pod_login=$OC_LOGIN
+else
+    if  [ -z "$API_TOKEN" ]  #string has zero length
+        then
+            echo "Invalid api token, please check env.sh file";
     else
-        if  [ -z "$API_TOKEN" ]
+        #Authentication method OC Login
+        if [-n "$OC_LOGIN"]
             then
-                    echo "Invalid api token, please check env.sh file";
-            else
-                oc_login_command="oc login --token=${API_TOKEN} --server=${SERVER}";
-                alias pod_login=$oc_login_command;
+                alias pod_login=$OC_LOGIN;
+                alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";   
+        else
+        #Authentication method API Key
+                OC_LOGIN="oc login --token=${API_TOKEN} --server=${SERVER}";
+                alias pod_login=$OC_LOGIN
                 alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";
         fi
 fi
@@ -42,12 +52,12 @@ else
 fi
 
 # Store variables in shell script
-echo "OC_LOGIN_COMMAND=$oc_login_command" > ./env-vars.sh
-echo "ICR_KEY=$ICR_KEY" >> ./env-vars.sh
+echo "ICR_KEY=$ICR_KEY" > ./env-vars.sh
 echo "API_TOKEN=$API_TOKEN" >> ./env-vars.sh
 echo "KUBEADMIN_USER=$KUBEADMIN_USER" >> ./env-vars.sh
 echo "KUBEADMIN_PASS=$KUBEADMIN_PASS" >> ./env-vars.sh
 echo "SERVER=$SERVER" >> ./env-vars.sh
+echo "OC_LOGIN=$OC_LOGIN" >> ./env-vars.sh
 chmod +x ./env-vars.sh
 
 # Prepare cloud-pak-deployer project and start building the image
