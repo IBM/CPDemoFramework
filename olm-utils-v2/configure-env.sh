@@ -6,21 +6,34 @@ API_TOKEN=$2
 KUBEADMIN_USER=$3
 KUBEADMIN_PASS=$4
 ICR_KEY=$5
+OC_LOGIN_COMMAND=$6
 
 # SCRIPT
+
 #Pod login and auto login to oc cluster from runutils
-if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ]
+#Authentication method Kube Admin
+if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ] # not null string 
     then
         alias oclogin_auto="run_utils login-to-ocp -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server=${SERVER}";
-        alias pod_login="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER}";
+        OC_LOGIN_COMMAND="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER}";
+        alias pod_login=$OC_LOGIN
+else
+    if  [ -z "$API_TOKEN" ]  #string has zero length
+        then
+            echo "Invalid api token, please check env.sh file";
     else
-        if  [ -z "$API_TOKEN" ]
+        #Authentication method OC Login
+        if [-n "$OC_LOGIN_COMMAND"]
             then
-                    echo "Invalid api token, please check env.sh file";
-            else
-                alias pod_login="oc login --token=${API_TOKEN} --server=${SERVER}";
-                alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";
+                alias pod_login=$OC_LOGIN_COMMAND;
+                alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";   
+        else
+        #Authentication method API Key
+            OC_LOGIN_COMMAND="oc login --token=${API_TOKEN} --server=${SERVER}";
+            alias pod_login=$OC_LOGIN_COMMAND
+            alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";
         fi
+    fi
 fi
 
 # Pod login
@@ -45,6 +58,7 @@ echo "API_TOKEN=$API_TOKEN" >> ./env-vars.sh
 echo "KUBEADMIN_USER=$KUBEADMIN_USER" >> ./env-vars.sh
 echo "KUBEADMIN_PASS=$KUBEADMIN_PASS" >> ./env-vars.sh
 echo "SERVER=$SERVER" >> ./env-vars.sh
+echo "OC_LOGIN_COMMAND=$OC_LOGIN_COMMAND" >> ./env-vars.sh
 chmod +x ./env-vars.sh
 
 # Prepare cloud-pak-deployer project and start building the image
