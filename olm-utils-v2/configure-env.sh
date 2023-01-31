@@ -29,10 +29,11 @@ else
                 alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";   
         else
         #Authentication method API Key
-                OC_LOGIN_COMMAND="oc login --token=${API_TOKEN} --server=${SERVER}";
-                alias pod_login=$OC_LOGIN_COMMAND
-                alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";
+            OC_LOGIN_COMMAND="oc login --token=${API_TOKEN} --server=${SERVER}";
+            alias pod_login=$OC_LOGIN_COMMAND
+            alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";
         fi
+    fi
 fi
 
 # Pod login
