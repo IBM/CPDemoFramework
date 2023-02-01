@@ -20,28 +20,29 @@ if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ] # not null string
     then
         alias oclogin_auto="run_utils login-to-ocp -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server=${SERVER}";
         OC_LOGIN_COMMAND="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER}";
-        alias pod_login=$OC_LOGIN
+        # alias pod_login=$OC_LOGIN_COMMAND
 else
     if  [ -z "$API_TOKEN" ]  #string has zero length
         then
             echo "Invalid api token, please check env.sh file";
     else
         #Authentication method OC Login
-        if [-n "$OC_LOGIN_COMMAND"]
+        if [ -n "$OC_LOGIN_COMMAND" ]
             then
-                alias pod_login=$OC_LOGIN_COMMAND;
+                # alias pod_login=$OC_LOGIN_COMMAND;
                 alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";   
         else
         #Authentication method API Key
             OC_LOGIN_COMMAND="oc login --token=${API_TOKEN} --server=${SERVER}";
-            alias pod_login=$OC_LOGIN_COMMAND
+            # alias pod_login=$OC_LOGIN_COMMAND
             alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";
         fi
     fi
 fi
 
 # Pod login
-pod_login
+# pod_login
+$OC_LOGIN_COMMAND
 if [ $? != 0 ];then
     echo "Error logging in to OpenShift, please check your credentials"
     exit 1
@@ -60,7 +61,7 @@ echo "API_TOKEN=$API_TOKEN" >> .env
 echo "KUBEADMIN_USER=$KUBEADMIN_USER" >> .env
 echo "KUBEADMIN_PASS=$KUBEADMIN_PASS" >> .env
 echo "SERVER=$SERVER" >> .env
-echo "OC_LOGIN_COMMAND=$OC_LOGIN_COMMAND" >> .env
+echo "OC_LOGIN_COMMAND='$OC_LOGIN_COMMAND'" >> .env
 
 # overwrite credentials-velero.txt file and append subsequently
 echo "[default]" > credentials-velero.txt

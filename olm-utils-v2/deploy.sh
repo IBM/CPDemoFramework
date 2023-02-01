@@ -9,6 +9,10 @@ cpak=$1
 CPAK_ADMIN_PASSWORD=$2
 CPAK_ENV_NAME=$3
 
+#remove the cp4d pswd and env name incase it's an empty string in env file 
+sed -i 's/CPAK_ADMIN_PASSWORD=//' ./env-vars.sh
+sed -i 's/CPAK_ENV_NAME=//' ./env-vars.sh
+
 echo "CPAK_ADMIN_PASSWORD=$CPAK_ADMIN_PASSWORD" >> ./env-vars.sh
 echo "CPAK_ENV_NAME=$CPAK_ENV_NAME" >> ./env-vars.sh
 
