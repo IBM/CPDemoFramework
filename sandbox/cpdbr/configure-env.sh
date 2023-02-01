@@ -27,7 +27,7 @@ else
             echo "Invalid api token, please check env.sh file";
     else
         #Authentication method OC Login
-        if [-n "$OC_LOGIN_COMMAND"]
+        if [ -n "$OC_LOGIN_COMMAND" ]
             then
                 # alias pod_login=$OC_LOGIN_COMMAND;
                 alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";   
