@@ -59,7 +59,7 @@ echo "API_TOKEN=$API_TOKEN" >> ./env-vars.sh
 echo "KUBEADMIN_USER=$KUBEADMIN_USER" >> ./env-vars.sh
 echo "KUBEADMIN_PASS=$KUBEADMIN_PASS" >> ./env-vars.sh
 echo "SERVER=$SERVER" >> ./env-vars.sh
-echo "OC_LOGIN_COMMAND=$OC_LOGIN_COMMAND" >> ./env-vars.sh
+echo "OC_LOGIN_COMMAND='$OC_LOGIN_COMMAND'" >> ./env-vars.sh
 chmod +x ./env-vars.sh
 
 # Prepare cloud-pak-deployer project and start building the image

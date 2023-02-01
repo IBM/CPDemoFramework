@@ -61,7 +61,7 @@ echo "API_TOKEN=$API_TOKEN" >> .env
 echo "KUBEADMIN_USER=$KUBEADMIN_USER" >> .env
 echo "KUBEADMIN_PASS=$KUBEADMIN_PASS" >> .env
 echo "SERVER=$SERVER" >> .env
-echo "OC_LOGIN_COMMAND=$OC_LOGIN_COMMAND" >> .env
+echo "OC_LOGIN_COMMAND='$OC_LOGIN_COMMAND'" >> .env
 
 # overwrite credentials-velero.txt file and append subsequently
 echo "[default]" > credentials-velero.txt
