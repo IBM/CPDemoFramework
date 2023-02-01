@@ -175,7 +175,7 @@ oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault set \
  -vs ibm_cp_entitlement_key -vsv "$ICR"
 
 oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault set \
- -vs cpd-demo-oc-login -vsv $OC_LOGIN_COMMAND
+ -vs cpd-demo-oc-login -vsv "$OC_LOGIN_COMMAND"
 
 
 oc rsh -c wait-config $BR_POD /cloud-pak-deployer/cp-deploy.sh vault list
