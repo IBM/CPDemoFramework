@@ -55,4 +55,23 @@ elif cpak.lower()=='cp4d':
                     x=0
     with open("cp4d-config.yaml", "w") as f:
         yaml.dump(list_cp4d, f, sort_keys=False)
+
+
+# update cp4waiops configuration yaml
+elif cpak.lower()=='cp4waiops':
+    with open('cp4waiops-config.yaml') as f:
+        list_cp4waiops = yaml.safe_load(f)
+        
+    for project in range(0,len(list_cp4waiops['cp4waiops'])):
+        for all_services in range(0,len(list_cp4waiops["cp4waiops"][project]["instances"])):
+            if "install" in list_cp4waiops["cp4waiops"][project]["instances"][all_services]:
+                list_cp4waiops["cp4waiops"][project]["instances"][all_services]["install"] = bool('')
+                #print(list_cp4waiops["cp4waiops"][project]["instances"][all_services])
+            for selected_service in range(0,len(component_list)):
+                if list_cp4waiops["cp4waiops"][project]["instances"][all_services]["kind"] == component_list[selected_service]:
+                    list_cp4waiops["cp4waiops"][project]["instances"][all_services]["install"] = bool('true')
+                    print(list_cp4waiops["cp4waiops"][project]["instances"][all_services])
+
+    with open("cp4waiops-config.yaml", "w") as f:
+        yaml.dump(list_cp4waiops, f, sort_keys=False)
 print("success")
