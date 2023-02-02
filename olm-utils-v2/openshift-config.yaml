@@ -14,7 +14,7 @@ global_config:
   # Use this Password for all Instances
   global_password: P4ssw0rd!
   # Set this value to True to accept all licenses
-  accept_all_licenses: False
+  accept_all_licenses: True
   # --------------------------------------------------------------------------------------------------------------------------------------
 vault:
   vault_type: file-vault
