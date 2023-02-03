@@ -128,7 +128,7 @@ oc process -f deployer-pvc.yaml -p DEPLOYER_SC=${DEPLOYER_SC} | oc apply -f -
 echo "Starting the deployer job..."
 oc process -f deployer-job.yaml \
     -p CP_ENTITLEMENT_KEY="$ICR_KEY" \
-    -p OC_LOGIN_COMMAND="oc login --server=$SERVER --token=$API_TOKEN --insecure-skip-tls-verify" | oc apply -f -
+    -p OC_LOGIN_COMMAND="$OC_LOGIN_COMMAND --insecure-skip-tls-verify" | oc apply -f -
 
 # Start a debug job (sleep infinity) so that we can easily get access to the deployer logs
 echo "Starting the deployer debug job..."
