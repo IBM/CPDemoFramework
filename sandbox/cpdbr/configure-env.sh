@@ -11,25 +11,39 @@ BUCKET=$7
 REGION=$8
 ACCESS_KEY=$9
 ACCESS_ID=$10
+OC_LOGIN_COMMAND=$11
 
 # SCRIPT
 #Pod login and auto login to oc cluster from runutils
-if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ]
+#Authentication method Kube Admin
+if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ] # not null string 
     then
         alias oclogin_auto="run_utils login-to-ocp -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server=${SERVER}";
-        alias pod_login="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER}";
+        OC_LOGIN_COMMAND="oc login -u ${KUBEADMIN_USER} -p ${KUBEADMIN_PASS} --server ${SERVER}";
+        # alias pod_login=$OC_LOGIN_COMMAND
+else
+    if  [ -z "$API_TOKEN" ]  #string has zero length
+        then
+            echo "Invalid api token, please check env.sh file";
     else
-        if  [ -z "$API_TOKEN" ]
+        #Authentication method OC Login
+        if [ -n "$OC_LOGIN_COMMAND" ]
             then
-                    echo "Invalid api token, please check env.sh file";
-            else
-                alias pod_login="oc login --token=${API_TOKEN} --server=${SERVER}";
-                alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";
+                # alias pod_login=$OC_LOGIN_COMMAND;
+                alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";   
+        else
+        #Authentication method API Key
+            OC_LOGIN_COMMAND="oc login --token=${API_TOKEN} --server=${SERVER}";
+            # alias pod_login=$OC_LOGIN_COMMAND
+            alias oclogin_auto="run_utils login-to-ocp --token=${API_TOKEN} --server=${SERVER}";
         fi
+    fi
 fi
 
 # Pod login
-pod_login
+# pod_login
+$OC_LOGIN_COMMAND
+
 if [ $? != 0 ];then
     echo "Error logging in to OpenShift, please check your credentials"
     exit 1
@@ -48,6 +62,7 @@ echo "API_TOKEN=$API_TOKEN" >> .env
 echo "KUBEADMIN_USER=$KUBEADMIN_USER" >> .env
 echo "KUBEADMIN_PASS=$KUBEADMIN_PASS" >> .env
 echo "SERVER=$SERVER" >> .env
+echo "OC_LOGIN_COMMAND='$OC_LOGIN_COMMAND'" >> .env
 
 # overwrite credentials-velero.txt file and append subsequently
 echo "[default]" > credentials-velero.txt
