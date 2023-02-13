@@ -269,14 +269,21 @@ if cpak == "cp4waiops":
                             }
                         ]
                     }
+
+
+            # versions updation
+            servicename = list_doc["cp4waiops"][project]["instances"][all_services]["kind"]
+            if(serviceversionscp4waiops[servicename]): 
+                ver = " ("+str(list_doc["cp4waiops"][project]["instances"][all_services][serviceversionscp4waiops[servicename]])+")"
+            else: ver = ""
+            servicescp4waiops[servicename]+=ver
+
             if "install" in list_doc["cp4waiops"][project]["instances"][all_services]:
                 servicename = list_doc["cp4waiops"][project]["instances"][all_services]["kind"]
-                if servicescp4waiops[servicename]: ver = " ("+str(list_doc["cp4waiops"][project]["instances"][all_services][servicescp4waiops[servicename]])+")"
-                else: ver = ""
                 temp["attributes"]["id"] = "li_option"+servicename
                 temp["children"][0]["attributes"]["id"] = "input_option"+servicename
                 temp["children"][0]["attributes"]["value"] = servicename
-                temp["children"][1]["attributes"]["value"] = servicescp4waiops[servicename]+ver
+                temp["children"][1]["attributes"]["value"] = servicescp4waiops[servicename]
                 if list_doc["cp4waiops"][project]["instances"][all_services]["install"] == bool('true'):
                     temp["children"][0]["attributes"]["checked"] = True
                 elif list_doc["cp4waiops"][project]["instances"][all_services]["install"] == bool(''):
