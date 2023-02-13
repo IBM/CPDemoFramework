@@ -8,6 +8,9 @@ component_list = component.split(',')
 storage_vendor=sys.argv[2]
 version=sys.argv[3]
 cpak=sys.argv[4]
+instana_saleskey=sys.argv[5]
+instana_agentkey=sys.argv[6]
+turbo_lic=sys.argv[7]
 
 #update openshift configuration yaml
 with open('openshift-config.yaml') as f:
@@ -71,6 +74,15 @@ elif cpak.lower()=='cp4waiops':
                 if list_cp4waiops["cp4waiops"][project]["instances"][all_services]["kind"] == component_list[selected_service]:
                     list_cp4waiops["cp4waiops"][project]["instances"][all_services]["install"] = bool('true')
                     print(list_cp4waiops["cp4waiops"][project]["instances"][all_services])
+                    ## Update Licenses for cp4waiops services (Instana, Turbonomic) ##
+                    if list_cp4waiops["cp4waiops"][project]["instances"][all_services]['name'] == "cp4waiops-instana":
+                        if((instana_agentkey != 'NONE') and (instana_saleskey != 'NONE')):
+                            list_cp4waiops["cp4waiops"][project]["instances"][all_services]["sales_key"]= instana_saleskey
+                            list_cp4waiops["cp4waiops"][project]["instances"][all_services]["agent_key"]= instana_agentkey
+                            
+                    if list_cp4waiops["cp4waiops"][project]["instances"][all_services]['name'] == "cp4waiops-turbonomic":
+                        if(turbo_lic != 'NONE'):
+                            list_cp4waiops["cp4waiops"][project]["instances"][all_services]["turbo_license"]= turbo_lic
 
     with open("cp4waiops-config.yaml", "w") as f:
         yaml.dump(list_cp4waiops, f, sort_keys=False)
