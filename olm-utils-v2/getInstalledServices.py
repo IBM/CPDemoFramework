@@ -214,17 +214,29 @@ if cpak == "cp4waiops":
     ############ Hard coded service list ############
     servicescp4waiops = {
     "AIManager": 'AI Manager',
-    "AIManagerDemoContent": 'AIManager Demo Content',
+    "AIManagerDemoContent": 'AI Manager Demo Content',
     "EventManager": 'Event Manager',
     "ELK": 'ELK',
     "Instana": 'Instana',
     "Turbonomic": 'Turbonomic',
     "TurbonomicDemoContent": 'Turbonomic Demo Content'
     }
+    serviceversionscp4waiops = {
+    "AIManager": 'subscription_channel',
+    "AIManagerDemoContent": '',
+    "EventManager": 'noi_version',
+    "ELK": '',
+    "Instana": '',
+    "Turbonomic": 'turbo_version',
+    "TurbonomicDemoContent": ''
+    }
+
     # Open & load the config file into a list
     with open('cp4waiops-config.yaml') as f:
         list_doc = yaml.safe_load(f)
     #iterate the state of each instance in the config yaml to get installed services
+    servicename=''
+    ver=''
     for project in range(0,len(list_doc["cp4waiops"])):
         for all_services in range(0,len(list_doc["cp4waiops"][project]["instances"])):
             #iterate config yaml to get details of the services
@@ -257,11 +269,21 @@ if cpak == "cp4waiops":
                             }
                         ]
                     }
+
+
+            # versions updation
+            servicename = list_doc["cp4waiops"][project]["instances"][all_services]["kind"]
+            if(serviceversionscp4waiops[servicename]): 
+                ver = " ("+str(list_doc["cp4waiops"][project]["instances"][all_services][serviceversionscp4waiops[servicename]])+")"
+            else: ver = ""
+            servicescp4waiops[servicename]+=ver
+
             if "install" in list_doc["cp4waiops"][project]["instances"][all_services]:
-                temp["attributes"]["id"] = "li_option"+list_doc["cp4waiops"][project]["instances"][all_services]["kind"]
-                temp["children"][0]["attributes"]["id"] = "input_option"+list_doc["cp4waiops"][project]["instances"][all_services]["kind"]
-                temp["children"][0]["attributes"]["value"] = list_doc["cp4waiops"][project]["instances"][all_services]["kind"]
-                temp["children"][1]["attributes"]["value"] = servicescp4waiops[list_doc["cp4waiops"][project]["instances"][all_services]["kind"]]
+                servicename = list_doc["cp4waiops"][project]["instances"][all_services]["kind"]
+                temp["attributes"]["id"] = "li_option"+servicename
+                temp["children"][0]["attributes"]["id"] = "input_option"+servicename
+                temp["children"][0]["attributes"]["value"] = servicename
+                temp["children"][1]["attributes"]["value"] = servicescp4waiops[servicename]
                 if list_doc["cp4waiops"][project]["instances"][all_services]["install"] == bool('true'):
                     temp["children"][0]["attributes"]["checked"] = True
                 elif list_doc["cp4waiops"][project]["instances"][all_services]["install"] == bool(''):
