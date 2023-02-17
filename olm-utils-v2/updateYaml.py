@@ -9,12 +9,6 @@ component_list = component.split(',')
 storage_vendor=sys.argv[2]
 version=sys.argv[3]
 cpak=sys.argv[4]
-instana_saleskey=sys.argv[5]
-instana_agentkey=sys.argv[6]
-turbo_lic=sys.argv[7]
-
-# cp4waiops licences handling
-turbo_lic = base64.b64decode(turbo_lic.encode('ascii')).decode('ascii')
 
 #update openshift configuration yaml
 with open('openshift-config.yaml') as f:
@@ -66,6 +60,14 @@ elif cpak.lower()=='cp4d':
 
 # update cp4waiops configuration yaml
 elif cpak.lower()=='cp4waiops':
+    
+    # cp4waiops licences handling
+    if (len(sys.argv) > 4):
+        instana_saleskey=sys.argv[5]
+        instana_agentkey=sys.argv[6]
+        turbo_lic=sys.argv[7]
+        turbo_lic = base64.b64decode(turbo_lic.encode('ascii')).decode('ascii')
+
     with open('cp4waiops-config.yaml') as f:
         list_cp4waiops = yaml.safe_load(f)
         
