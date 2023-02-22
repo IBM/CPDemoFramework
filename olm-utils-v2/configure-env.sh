@@ -9,6 +9,7 @@ ICR_KEY=$5
 OC_LOGIN_COMMAND=$6
 
 # SCRIPT
+
 #Pod login and auto login to oc cluster from runutils
 #Authentication method Kube Admin
 if  [ -n "$KUBEADMIN_USER" ] && [ -n "$KUBEADMIN_PASS" ] # not null string 
@@ -38,7 +39,6 @@ fi
 # Pod login
 # pod_login
 $OC_LOGIN_COMMAND
-
 if [ $? != 0 ];then
     echo "Error logging in to OpenShift, please check your credentials"
     exit 1
