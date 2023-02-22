@@ -207,6 +207,93 @@ if cpak == "cp4i":
     })
 #########################################################################
 
+
+#####################For cp4waiops get the installed services#####################
+i=0
+if cpak == "cp4waiops":
+    ############ Hard coded service list ############
+    servicescp4waiops = {
+    "AIManager": 'AI Manager',
+    "AIManagerDemoContent": 'AI Manager Demo Content',
+    "EventManager": 'Event Manager',
+    "ELK": 'ELK',
+    "Instana": 'Instana',
+    "Turbonomic": 'Turbonomic',
+    "TurbonomicDemoContent": 'Turbonomic Demo Content'
+    }
+    serviceversionscp4waiops = {
+    "AIManager": 'subscription_channel',
+    "AIManagerDemoContent": '',
+    "EventManager": 'noi_version',
+    "ELK": '',
+    "Instana": '',
+    "Turbonomic": 'turbo_version',
+    "TurbonomicDemoContent": ''
+    }
+
+    # Open & load the config file into a list
+    with open('cp4waiops-config.yaml') as f:
+        list_doc = yaml.safe_load(f)
+    #iterate the state of each instance in the config yaml to get installed services
+    servicename=''
+    ver=''
+    for project in range(0,len(list_doc["cp4waiops"])):
+        for all_services in range(0,len(list_doc["cp4waiops"][project]["instances"])):
+            #iterate config yaml to get details of the services
+            temp = {
+                        "elementToRender": "li",
+                        "attributes": {
+                            "id": ""   #index of li tag
+                        },
+                        "children": [
+                            {
+                                "elementToRender": "input",
+                                "attributes": {
+                                    "id": "",   #index of children id tag
+                                    "value": "",  #value of the service
+                                    "class" : "store-data",
+                                    "name": "services",   #name of the service
+                                    "type": "checkbox",
+                                    "checked": True,       #installed/removed
+                                    "addEventListener" : ["change","updateSelectedServices"],
+                                    "dispatchEvent" : "change"
+                                },
+                                "children": []
+                            },
+                            {
+                                "elementToRender": "TEXT_NODE",
+                                "attributes": {
+                                    "value": ""     #name of the service
+                                },
+                                "children": []
+                            }
+                        ]
+                    }
+
+
+            # versions updation
+            servicename = list_doc["cp4waiops"][project]["instances"][all_services]["kind"]
+            if(serviceversionscp4waiops[servicename]): 
+                ver = " ("+str(list_doc["cp4waiops"][project]["instances"][all_services][serviceversionscp4waiops[servicename]])+")"
+            else: ver = ""
+            servicescp4waiops[servicename]+=ver
+
+            if "install" in list_doc["cp4waiops"][project]["instances"][all_services]:
+                servicename = list_doc["cp4waiops"][project]["instances"][all_services]["kind"]
+                temp["attributes"]["id"] = "li_option"+servicename
+                temp["children"][0]["attributes"]["id"] = "input_option"+servicename
+                temp["children"][0]["attributes"]["value"] = servicename
+                temp["children"][1]["attributes"]["value"] = servicescp4waiops[servicename]
+                if list_doc["cp4waiops"][project]["instances"][all_services]["install"] == bool('true'):
+                    temp["children"][0]["attributes"]["checked"] = True
+                elif list_doc["cp4waiops"][project]["instances"][all_services]["install"] == bool(''):
+                    temp["children"][0]["attributes"]["checked"] = False
+                serviceInstalled["componentsToRender"][0]["dataToRender"].append(temp)
+                i=i+1
+
+#########################################################################
+
+
 # Serializing json
 json_object = json.dumps(serviceInstalled, indent=4)
  

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import sys
+import base64
 import yaml
 from yaml.loader import SafeLoader
 
@@ -55,4 +56,40 @@ elif cpak.lower()=='cp4d':
                     x=0
     with open("cp4d-config.yaml", "w") as f:
         yaml.dump(list_cp4d, f, sort_keys=False)
+
+
+# update cp4waiops configuration yaml
+elif cpak.lower()=='cp4waiops':
+    
+    # cp4waiops licences handling
+    if (len(sys.argv) > 4):
+        instana_saleskey=sys.argv[5]
+        instana_agentkey=sys.argv[6]
+        turbo_lic=sys.argv[7]
+        turbo_lic = base64.b64decode(turbo_lic.encode('ascii')).decode('ascii')
+
+    with open('cp4waiops-config.yaml') as f:
+        list_cp4waiops = yaml.safe_load(f)
+        
+    for project in range(0,len(list_cp4waiops['cp4waiops'])):
+        for all_services in range(0,len(list_cp4waiops["cp4waiops"][project]["instances"])):
+            if "install" in list_cp4waiops["cp4waiops"][project]["instances"][all_services]:
+                list_cp4waiops["cp4waiops"][project]["instances"][all_services]["install"] = bool('')
+                #print(list_cp4waiops["cp4waiops"][project]["instances"][all_services])
+            for selected_service in range(0,len(component_list)):
+                if list_cp4waiops["cp4waiops"][project]["instances"][all_services]["kind"] == component_list[selected_service]:
+                    list_cp4waiops["cp4waiops"][project]["instances"][all_services]["install"] = bool('true')
+                    print(list_cp4waiops["cp4waiops"][project]["instances"][all_services])
+                    ## Update Licenses for cp4waiops services (Instana, Turbonomic) ##
+                    if list_cp4waiops["cp4waiops"][project]["instances"][all_services]['name'] == "cp4waiops-instana":
+                        if((instana_agentkey) and (instana_saleskey)):
+                            list_cp4waiops["cp4waiops"][project]["instances"][all_services]["sales_key"]= instana_saleskey
+                            list_cp4waiops["cp4waiops"][project]["instances"][all_services]["agent_key"]= instana_agentkey
+                            
+                    if list_cp4waiops["cp4waiops"][project]["instances"][all_services]['name'] == "cp4waiops-turbonomic":
+                        if(turbo_lic):
+                            list_cp4waiops["cp4waiops"][project]["instances"][all_services]["turbo_license"]= turbo_lic
+
+    with open("cp4waiops-config.yaml", "w") as f:
+        yaml.dump(list_cp4waiops, f, sort_keys=False)
 print("success")
