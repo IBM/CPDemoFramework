@@ -1,7 +1,7 @@
 cp4i:
 - project: cp4i
   openshift_cluster_name: cpd-demo
-  cp4i_version: 2022.2.1-0
+  cp4i_version: 2022.4.1-0
   accept_licenses: True
   use_case_files: False
   instances:
