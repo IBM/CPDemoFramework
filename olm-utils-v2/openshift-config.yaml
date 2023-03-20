@@ -2,6 +2,7 @@ global_config:
   environment_name: demo
   cloud_platform: existing-ocp
   env_id: "{{ env_id }}"
+  # universal_password: Univ3rs4lP4ssw0rd
   # --------------------------------------------------------------------------------------------------------------------------------------
   # CP4WAIOPS (Pull registries)
   entitled_registry: cp.icr.io
