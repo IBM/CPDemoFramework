@@ -145,7 +145,7 @@ fi
 oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./openshift-config.yaml
 
 echo "Setting the entitlement key..."
-oc delete cm -n cloud-pak-deployer cloud-pak-deployer-config --ignore-not-found
+oc delete secret -n cloud-pak-deployer cloud-pak-entitlement-key --ignore-not-found
 oc create secret generic -n cloud-pak-deployer cloud-pak-entitlement-key 2>/dev/null
 oc set data -n cloud-pak-deployer secret/cloud-pak-entitlement-key --from-literal=cp-entitlement-key="${ICR_KEY}"
 
