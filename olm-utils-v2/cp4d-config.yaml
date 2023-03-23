@@ -1,7 +1,7 @@
 cp4d:
 - project: cpd
   openshift_cluster_name: cpd-demo
-  cp4d_version: 4.6.0
+  cp4d_version: 4.6.3
   accept_licenses: true
   sequential_install: False
   cartridges:
@@ -46,10 +46,6 @@ cp4d:
   - name: dp
     size: small
     state: removed
-  # DPRA is not yet available, preparing for future version
-  # - name: dpra
-  #   size: small
-  #   state: removed
   - name: dv
     size: small
     instances:
@@ -67,6 +63,9 @@ cp4d:
     state: removed
   - name: openpages
     state: removed
+    instances:
+      name: openpages-instance
+      size: xsmall
   - name: planning-analytics
     state: removed
   - name: replication
@@ -99,6 +98,11 @@ cp4d:
   - name: wkc
     size: small
     state: removed
+    installation_options:
+      install_wkc_core_only: True
+      enableKnowledgeGraph: False
+      enableDataQuality: False
+      enableMANTA: False
   - name: wml
     size: small
     state: removed
