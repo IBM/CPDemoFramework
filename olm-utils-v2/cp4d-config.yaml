@@ -99,10 +99,10 @@ cp4d:
     size: small
     state: removed
     installation_options:
-        install_wkc_core_only: True
-        enableKnowledgeGraph: False
-        enableDataQuality: False
-        enableMANTA: False
+      install_wkc_core_only: True
+      enableKnowledgeGraph: False
+      enableDataQuality: False
+      enableMANTA: False
   - name: wml
     size: small
     state: removed
