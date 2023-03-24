@@ -140,7 +140,7 @@ else
     sed -i "s/{{ env_id }}/demo/g" ./openshift-config.yaml
 fi
 if [[ "${CPAK_ADMIN_PASSWORD}" != "" ]];then
-    sed -i "s/# universal_password.*/universal_password: ${CPAK_ADMIN_PASSWORD}/g" ./openshift-config.yaml
+    sed -i "s/universal_password.*/universal_password: ${CPAK_ADMIN_PASSWORD}/g" ./openshift-config.yaml
 fi
 oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./openshift-config.yaml
 
