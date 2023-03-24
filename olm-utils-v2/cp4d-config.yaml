@@ -64,7 +64,7 @@ cp4d:
   - name: openpages
     state: removed
     instances:
-      name: openpages-instance
+    - name: openpages-instance
       size: xsmall
   - name: planning-analytics
     state: removed
