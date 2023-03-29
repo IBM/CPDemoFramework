@@ -13,6 +13,9 @@ ACCESS_KEY=$9
 ACCESS_ID=$10
 OC_LOGIN_COMMAND=$11
 
+CPD_NS='cpd'
+CPD_OPERATOR_NS='ibm-common-services'
+
 # SCRIPT
 #Pod login and auto login to oc cluster from runutils
 #Authentication method Kube Admin
@@ -48,6 +51,27 @@ if [ $? != 0 ];then
     echo "Error logging in to OpenShift, please check your credentials"
     exit 1
 fi
+
+# Cluster Check - Ensure pods are healthy in cluster before backup
+echo "Checking pods' health in the cluster....."
+
+CLUSTERCHECK1="oc get po -n ${CPD_NS} --field-selector status.phase!=Running,status.phase!=Succeeded -o yaml | grep items"
+CLUSTERCHECK2="oc get po -n ${CPD_OPERATOR_NS} --field-selector status.phase!=Running,status.phase!=Succeeded -o yaml | grep items"
+
+output=$CLUSTERCHECK1
+if [ output != "items: []" ];then
+    echo "The following pods in the CP4D namespace are not healthy. Cannot proceed with Backup/Restore"
+    oc get po -n ${CPD_NS} --field-selector status.phase!=Running,status.phase!=Succeeded
+    exit 1
+fi
+
+output=$CLUSTERCHECK2
+if [ output != "items: []" ];then
+    echo "The following pods in the CP4D operator namespace are not healthy. Cannot proceed with Backup/Restore"
+    oc get po -n ${CPD_OPERATOR_NS} --field-selector status.phase!=Running,status.phase!=Succeeded
+    exit 1
+fi
+
 echo "success"
 
 # Store variables in shell script
