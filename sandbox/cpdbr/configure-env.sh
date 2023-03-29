@@ -52,7 +52,7 @@ if [ $? != 0 ];then
     exit 1
 fi
 
-# Cluster Check - Ensure pods are healthy in cluster before backup
+# Cluster Check - Ensure pods are healthy in cluster before backup/restore
 echo "Checking pods' health in the cluster....."
 
 CLUSTERCHECK1="oc get po -n ${CPD_NS} --field-selector status.phase!=Running,status.phase!=Succeeded -o yaml | grep items"
