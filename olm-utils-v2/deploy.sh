@@ -5,8 +5,9 @@ source ./env-vars.sh
 source ./functions.sh
 
 #cloud pak(s)
+cpak=$1
 
-#read the json file
+#read the json data
 json=$2
  
 readJsonConfig() {
