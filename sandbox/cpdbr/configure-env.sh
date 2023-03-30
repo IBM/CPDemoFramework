@@ -55,18 +55,18 @@ fi
 # Cluster Check - Ensure pods are healthy in cluster before backup/restore
 echo "Checking pods' health in the cluster....."
 
-CLUSTERCHECK1="oc get po -n ${CPD_NS} --field-selector status.phase!=Running,status.phase!=Succeeded -o yaml | grep items"
-CLUSTERCHECK2="oc get po -n ${CPD_OPERATOR_NS} --field-selector status.phase!=Running,status.phase!=Succeeded -o yaml | grep items"
+CLUSTERCHECK1=`oc get po -n ${CPD_NS} --field-selector status.phase!=Running,status.phase!=Succeeded -o yaml | grep items`
+CLUSTERCHECK2=`oc get po -n ${CPD_OPERATOR_NS} --field-selector status.phase!=Running,status.phase!=Succeeded -o yaml | grep items`
 
 output=$CLUSTERCHECK1
-if [ output != "items: []" ];then
+if [ "$output" != "items: []" ];then
     echo "The following pods in the CP4D namespace are not healthy. Cannot proceed with Backup/Restore"
     oc get po -n ${CPD_NS} --field-selector status.phase!=Running,status.phase!=Succeeded
     exit 1
 fi
 
 output=$CLUSTERCHECK2
-if [ output != "items: []" ];then
+if [ "$output" != "items: []" ];then
     echo "The following pods in the CP4D operator namespace are not healthy. Cannot proceed with Backup/Restore"
     oc get po -n ${CPD_OPERATOR_NS} --field-selector status.phase!=Running,status.phase!=Succeeded
     exit 1
