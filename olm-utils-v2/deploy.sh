@@ -7,7 +7,7 @@ source ./functions.sh
 #cloud pak(s)
 
 #read the json file
-json=$(cat $2)
+json=$2
  
 readJsonConfig() {
         echo $json | jq -r $1
