@@ -5,9 +5,18 @@ source ./env-vars.sh
 source ./functions.sh
 
 #cloud pak(s)
+
+#read the json file
+json=$(cat $2)
+ 
+readJsonConfig() {
+        echo $json | jq -r $1
+}
+ 
+
 cpak=$1
-CPAK_ADMIN_PASSWORD=$2
-CPAK_ENV_NAME=$3
+CPAK_ADMIN_PASSWORD=$(readJsonConfig ".cp4dAdminPassword")
+CPAK_ENV_NAME=$(readJsonConfig ".cp4dEnvName")
 
 #remove the cp4d pswd and env name incase it's an empty string in env file 
 sed -i 's/CPAK_ADMIN_PASSWORD=//' ./env-vars.sh
