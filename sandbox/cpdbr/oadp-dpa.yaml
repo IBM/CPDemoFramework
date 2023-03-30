@@ -3,7 +3,6 @@
     apiVersion: template.openshift.io/v1
     metadata:
       name: cloud-pak-br-job-template
-      namespace: cloud-pak-br
     objects:
     - apiVersion: oadp.openshift.io/v1alpha1
       kind: DataProtectionApplication
