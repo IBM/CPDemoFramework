@@ -39,6 +39,7 @@ if cpak == "cp4d":
         "dods": 'Decision Optimization',
         "dp": 'Data Privacy',
         "dv": 'Data Virtualization',
+        "datastage-ent": "DataStage Enterprise",
         "factsheet": 'AI Factsheets',
         "hadoop": 'Execution Engine for Apache Hadoop',
         "match360": 'Match360',
