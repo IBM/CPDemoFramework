@@ -5,6 +5,6 @@ metadata:
   namespace: oadp-operator
 spec:
   channel: stable
-  name: redhat-oadp-operator
-  source: redhat-operators
+  name: oadp-operator
+  source: community-operators
   sourceNamespace: openshift-marketplace
