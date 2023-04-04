@@ -31,6 +31,7 @@ if cpak == "cp4d":
         "ca": 'Cognos Analytics',
         "cde": 'Cognos Dashboards',
         "datagate": 'Data Gate',
+        "datastage-ent": "DataStage Enterprise",
         "datastage-ent-plus": 'DataStage Enterprise Plus',
         "db2": 'Db2',
         "db2u": 'IBM Db2u',

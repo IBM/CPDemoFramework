@@ -25,6 +25,8 @@ cp4d:
     state: removed
   - name: datagate
     state: removed
+  - name: datastage-ent
+    state: removed
   - name: datastage-ent-plus
     state: removed
   - name: db2

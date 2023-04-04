@@ -15,7 +15,6 @@ readJsonConfig() {
 }
  
 
-cpak=$1
 CPAK_ADMIN_PASSWORD=$(readJsonConfig ".cp4dAdminPassword")
 CPAK_ENV_NAME=$(readJsonConfig ".cp4dEnvName")
 
