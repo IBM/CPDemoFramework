@@ -99,7 +99,10 @@ if cpak == "cp4d":
             temp["attributes"]["id"] = "li_option"+list_doc["cp4d"][0]["cartridges"][x]["name"]
             temp["children"][0]["attributes"]["id"] = "input_option"+list_doc["cp4d"][0]["cartridges"][x]["name"]
             temp["children"][0]["attributes"]["value"] = list_doc["cp4d"][0]["cartridges"][x]["name"]
-            temp["children"][1]["attributes"]["value"] = servicescp4d[list_doc["cp4d"][0]["cartridges"][x]["name"]]
+            try:
+                temp["children"][1]["attributes"]["value"] = servicescp4d[list_doc["cp4d"][0]["cartridges"][x]["name"]]
+            except:
+                temp["children"][1]["attributes"]["value"] = list_doc["cp4d"][0]["cartridges"][x]["name"]
             if list_doc["cp4d"][0]["cartridges"][x]["state"] == "installed":
                 temp["children"][0]["attributes"]["checked"] = True
             elif list_doc["cp4d"][0]["cartridges"][x]["state"] == "removed":
@@ -182,7 +185,10 @@ if cpak == "cp4i":
             temp["attributes"]["id"] = "li_option"+list_doc["cp4i"][0]["instances"][x]["type"]
             temp["children"][0]["attributes"]["id"] = "input_option"+list_doc["cp4i"][0]["instances"][x]["type"]
             temp["children"][0]["attributes"]["value"] = list_doc["cp4i"][0]["instances"][x]["type"]
-            temp["children"][1]["attributes"]["value"] = servicescp4i[list_doc["cp4i"][0]["instances"][x]["type"]]
+            try:
+                temp["children"][1]["attributes"]["value"] = servicescp4i[list_doc["cp4i"][0]["instances"][x]["type"]]
+            except:
+                temp["children"][1]["attributes"]["value"] = list_doc["cp4i"][0]["instances"][x]["type"]
             if list_doc["cp4i"][0]["instances"][x]["state"] == "installed":
                 temp["children"][0]["attributes"]["checked"] = True
             elif list_doc["cp4i"][0]["instances"][x]["state"] == "removed":
