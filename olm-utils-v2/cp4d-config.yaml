@@ -48,6 +48,8 @@ cp4d:
   - name: dp
     size: small
     state: removed
+  - name: dpra
+    state: removed
   - name: dv
     size: small
     instances:
