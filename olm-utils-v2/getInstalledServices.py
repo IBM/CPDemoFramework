@@ -39,6 +39,7 @@ if cpak == "cp4d":
         "dmc": 'Data Management Console',
         "dods": 'Decision Optimization',
         "dp": 'Data Privacy',
+        "dpra" 'Data Privacy Risk Assessment',
         "dv": 'Data Virtualization',
         "factsheet": 'AI Factsheets',
         "hadoop": 'Execution Engine for Apache Hadoop',
