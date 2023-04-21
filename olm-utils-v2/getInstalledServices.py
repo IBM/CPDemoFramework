@@ -25,42 +25,9 @@ serviceInstalled = {
 i=0
 if cpak == "cp4d":
     ############ Hard coded service list ############
-    servicescp4d = {
-        "analyticsengine": 'Analytics Engine Powered by Apache Spark',
-        "bigsql": 'Db2 Big SQL',
-        "ca": 'Cognos Analytics',
-        "cde": 'Cognos Dashboards',
-        "datagate": 'Data Gate',
-        "datastage-ent": "DataStage Enterprise",
-        "datastage-ent-plus": 'DataStage Enterprise Plus',
-        "db2": 'Db2',
-        "db2u": 'IBM Db2u',
-        "db2wh": 'Db2 Warehouse',
-        "dmc": 'Data Management Console',
-        "dods": 'Decision Optimization',
-        "dp": 'Data Privacy',
-        "dpra": 'Data Privacy Risk Assessment',
-        "dv": 'Data Virtualization',
-        "factsheet": 'AI Factsheets',
-        "hadoop": 'Execution Engine for Apache Hadoop',
-        "match360": 'Match360',
-        "openpages": 'OpenPages',
-        "planning-analytics": 'Planning Analytics',
-        "replication": 'Data Replication',
-        "rstudio": 'RStudio Server',
-        "spss": 'SPSS Modeler',
-        "voice-gateway": 'Voice Gateway',
-        "watson-assistant": 'Watson Assistant',
-        "watson-discovery": 'Watson Discovery',
-        "watson-ks": 'Watson Knowledge Studio',
-        "watson-openscale": 'IBM Watson OpenScale',
-        "watson-speech": 'Watson Speech to Text',
-        "wkc": 'Watson Knowledge Catalog',
-        "wml": 'Watson Machine Learning',
-        "wml-accelerator": 'Watson Machine Learning Accelerator',
-        "ws-pipelines": 'Watson Studio Pipelines',
-        "wsl": 'Watson Studio'
-    }
+    with open('cp4d-services.json') as f:
+        servicescp4d = json.load(f)
+    
     # Open & load the config file into a list
     with open('cp4d-config.yaml') as f:
         list_doc = yaml.safe_load(f)

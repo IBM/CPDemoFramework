@@ -51,9 +51,9 @@ if [ $? != 0 ];then
     echo "cloud-pak-deployer-config does not exist! it will be created in the next step!."
 else
     echo "cloud-pak-deployer-config already exists in the cluster! The script will make use of the same file!"
-    python3 compareYaml.py
 fi
 
+python3 compareYaml.py
 # Store variables in shell script
 echo "ICR_KEY=$ICR_KEY" > ./env-vars.sh
 echo "API_TOKEN=$API_TOKEN" >> ./env-vars.sh
