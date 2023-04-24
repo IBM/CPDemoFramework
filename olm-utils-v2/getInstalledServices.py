@@ -25,8 +25,16 @@ serviceInstalled = {
 i=0
 if cpak == "cp4d":
     ############ Hard coded service list ############
-    with open('cp4d-services.json') as f:
-        servicescp4d = json.load(f)
+    with open('default-cp4d-config.yaml') as f:
+        default_cp4d_yaml = yaml.safe_load(f)
+
+    servicescp4d = {}
+    for service in default_cp4d_yaml["cp4d"][0]["cartridges"]:
+        try:
+            servicescp4d[service["name"]] = service["description"]
+        except:
+            pass
+    
     
     # Open & load the config file into a list
     with open('cp4d-config.yaml') as f:

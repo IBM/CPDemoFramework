@@ -7,6 +7,7 @@ KUBEADMIN_USER=$3
 KUBEADMIN_PASS=$4
 ICR_KEY=$5
 OC_LOGIN_COMMAND=$6
+ClOUD_PAK=$7
 
 # SCRIPT
 
@@ -46,14 +47,15 @@ fi
 echo "success"
 
 # Get the updated config file from cloud-pak-deployer-config
-oc extract -n cloud-pak-deployer  cm/cloud-pak-deployer-config --to=./cpd-config --confirm 2>/dev/null
+oc extract -n cloud-pak-deployer  cm/cloud-pak-deployer-config --to=. --confirm 2>/dev/null
 if [ $? != 0 ];then
     echo "cloud-pak-deployer-config does not exist! it will be created in the next step!."
 else
     echo "cloud-pak-deployer-config already exists in the cluster! The script will make use of the same file!"
 fi
+CLOUD_PAK=$7
 
-python3 compareYaml.py
+python3 compareAndMergeYaml.py "$CLOUD_PAK"
 # Store variables in shell script
 echo "ICR_KEY=$ICR_KEY" > ./env-vars.sh
 echo "API_TOKEN=$API_TOKEN" >> ./env-vars.sh
