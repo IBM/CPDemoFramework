@@ -1,5 +1,4 @@
 import yaml
-import json
 import sys
 import os
 
@@ -33,7 +32,7 @@ def services_dict_without_description(cpak, default_config_yaml):
 
     return services
 
-def compareAndMergeYaml(cpak, config_map_yaml):
+def compareAndMergeYaml(cpak,services_dict,config_map_yaml):
     if(cpak == "cp4d"):
         for service in services_dict:
             if not any(existing_service["name"] == service for existing_service in config_map_yaml["cp4d"][0]["cartridges"]):
@@ -59,7 +58,7 @@ try:
 
     if(config_map_exists):
         config_map_yaml = load_yaml_file(cpak + "-config.yaml")
-        config_data = compareAndMergeYaml(cpak, config_map_yaml)
+        config_data = compareAndMergeYaml(cpak,services_dict, config_map_yaml)
     else:
         config_data = default_config_yaml
 
