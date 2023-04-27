@@ -37,16 +37,18 @@ def compareAndMergeYaml(cpak, default_config_yaml, config_map_yaml):
         pass
     return config_map_yaml
 
+try:
+    cpak = sys.argv[1]
+    config_map_exists = os.path.isfile(cpak + "-config.yaml")
+    default_config_yaml = load_yaml_file("default-" + cpak + "-config.yaml")
+    services_dict = services_dict_without_description(cpak, default_config_yaml)
 
-cpak = sys.argv[1]
-config_map_exists = os.path.isfile(cpak + "-config.yaml")
-default_config_yaml = load_yaml_file("default-" + cpak + "-config.yaml")
-services_dict = services_dict_without_description(cpak, default_config_yaml)
+    if(config_map_exists):
+        config_map_yaml = load_yaml_file(cpak + "-config.yaml")
+        config_data = compareAndMergeYaml(cpak, default_config_yaml, config_map_yaml)
+    else:
+        config_data = default_config_yaml
 
-if(config_map_exists):
-    config_map_yaml = load_yaml_file(cpak + "-config.yaml")
-    config_data = compareAndMergeYaml(cpak, default_config_yaml, config_map_yaml)
-else:
-    config_data = default_config_yaml
-
-generate_config_yaml(config_data, cpak + "-config.yaml")
+    generate_config_yaml(config_data, cpak + "-config.yaml")
+except:
+    pass
