@@ -23,10 +23,17 @@ def services_dict_without_description(cpak, default_config_yaml):
     elif(cpak == "cp4i"):
         pass
     elif(cpak == "cp4waiops"):
-        pass
+        for project in range(0,len(default_config_yaml["cp4waiops"])):
+            for service in range(0,len(default_config_yaml["cp4waiops"][project]["instances"])):        
+                try:
+                    del default_config_yaml["cp4waiops"][project]["instances"][service]['description']
+                    services[default_config_yaml["cp4waiops"][project]["instances"][service]['kind']] = default_config_yaml["cp4waiops"][project]["instances"][service]
+                except:
+                    pass
+
     return services
 
-def compareAndMergeYaml(cpak, default_config_yaml, config_map_yaml):
+def compareAndMergeYaml(cpak, config_map_yaml):
     if(cpak == "cp4d"):
         for service in services_dict:
             if not any(existing_service["name"] == service for existing_service in config_map_yaml["cp4d"][0]["cartridges"]):
@@ -34,7 +41,14 @@ def compareAndMergeYaml(cpak, default_config_yaml, config_map_yaml):
     elif(cpak == "cp4i"):
         pass
     elif(cpak == "cp4waiops"):
-        pass
+        ## Note: CP4WAIOPS has a unique yaml structure (unlike CP4D,CP4I) with multiple sub projects and instances. 
+        # Thus appending services for CP4WAIOPS is not possible. 
+        # Currently this function will just append (any extra/unregistered services) to the first project instance
+
+        for service in services_dict:
+            if not any ( service == config_map_yaml["cp4waiops"][project]["instances"][service_idx]['kind'] for project in range(0,len(config_map_yaml["cp4waiops"])) for service_idx in range(0,len(config_map_yaml["cp4waiops"][project]["instances"]))):
+                config_map_yaml["cp4waiops"][0]["instances"].append(services_dict[service])
+
     return config_map_yaml
 
 try:
@@ -45,7 +59,7 @@ try:
 
     if(config_map_exists):
         config_map_yaml = load_yaml_file(cpak + "-config.yaml")
-        config_data = compareAndMergeYaml(cpak, default_config_yaml, config_map_yaml)
+        config_data = compareAndMergeYaml(cpak, config_map_yaml)
     else:
         config_data = default_config_yaml
 

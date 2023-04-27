@@ -194,16 +194,19 @@ if cpak == "cp4i":
 #####################For cp4waiops get the installed services#####################
 i=0
 if cpak == "cp4waiops":
-    ############ Hard coded service list ############
-    servicescp4waiops = {
-    "AIManager": 'AI Manager',
-    "AIManagerDemoContent": 'AI Manager Demo Content',
-    "EventManager": 'Event Manager',
-    "ELK": 'ELK',
-    "Instana": 'Instana',
-    "Turbonomic": 'Turbonomic',
-    "TurbonomicDemoContent": 'Turbonomic Demo Content'
-    }
+
+    # service list generation
+    with open('default-cp4waiops-config.yaml') as f:
+        default_cp4waiops_yaml = yaml.safe_load(f)
+
+    servicescp4waiops = {}
+    for project in range(0,len(default_cp4waiops_yaml["cp4waiops"])):
+        for service in range(0,len(default_cp4waiops_yaml["cp4waiops"][project]["instances"])):        
+            try:
+                servicescp4waiops[default_cp4waiops_yaml["cp4waiops"][project]["instances"][service]['kind']] = default_cp4waiops_yaml["cp4waiops"][project]["instances"][service]['description']
+            except:
+                pass
+
     serviceversionscp4waiops = {
     "AIManager": 'subscription_channel',
     "AIManagerDemoContent": '',
