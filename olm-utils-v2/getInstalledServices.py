@@ -109,19 +109,16 @@ if cpak == "cp4d":
 i=0
 if cpak == "cp4i":
     ############ Hard coded service list ############
-    servicescp4i = {
-        "platform-navigator": "Platform Navigator",
-        "api-management": "API Management",
-        "automation-assets": "Automation Assets",
-        "enterprise-gateway": "Enterprise Gateway",
-        "event-endpoint-management": "Event Endpoint Management",
-        "event-streams": "Event Steam",
-        "high-speed-transfer-server": "High Speed Transfer Server",
-        "integration-dashboard": "Integration Dashboard",
-        "integration-design": "Integration Design",
-        "integration-tracing": "Integration tracing",
-        "messaging": "Messaging"
-    }
+    with open('default-cp4i-config.yaml') as f:
+        default_cp4d_yaml = yaml.safe_load(f)
+
+    servicescp4i = {}
+    for service in default_cp4d_yaml["cp4i"][0]["instances"]:
+        try:
+            servicescp4i[service["name"]] = service["description"]
+        except:
+            pass
+            
     # Open & load the config file into a list
     with open('cp4i-config.yaml') as f:
         list_doc = yaml.safe_load(f)
