@@ -115,7 +115,7 @@ if cpak == "cp4i":
     servicescp4i = {}
     for service in default_cp4d_yaml["cp4i"][0]["instances"]:
         try:
-            servicescp4i[service["name"]] = service["description"]
+            servicescp4i[service["type"]] = service["description"]
         except:
             pass
             

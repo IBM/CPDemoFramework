@@ -2,7 +2,7 @@ import yaml
 import json
 import sys
 import os
-
+print("I am in compareAndMerge python")
 def load_yaml_file(file_path):
     with open(file_path) as file_content:
         return yaml.safe_load(file_content)
@@ -21,12 +21,13 @@ def services_dict_without_description(cpak, default_config_yaml):
                 except:
                     pass
     elif(cpak == "cp4i"):
+        print("in cp4i condition 1")
         for service in default_config_yaml["cp4i"][0]["instances"]:
                 try:
                     del service["description"]
-                    services[service["name"]] = service
+                    services[service["type"]] = service
                 except:
-        pass
+                    pass
     elif(cpak == "cp4waiops"):
         pass
     return services
@@ -37,8 +38,9 @@ def compareAndMergeYaml(cpak, default_config_yaml, config_map_yaml):
             if not any(existing_service["name"] == service for existing_service in config_map_yaml["cp4d"][0]["cartridges"]):
                 config_map_yaml["cp4d"][0]["cartridges"].append(services_dict[service])
     elif(cpak == "cp4i"):
+        print("i cp4i condition 2")
         for service in services_dict:
-            if not any(existing_service["name"] == service for existing_service in config_map_yaml["cp4i"][0]["instances"]):
+            if not any(existing_service["type"] == service for existing_service in config_map_yaml["cp4i"][0]["instances"]):
                 config_map_yaml["cp4i"][0]["instances"].append(services_dict[service])
         pass
     elif(cpak == "cp4waiops"):
