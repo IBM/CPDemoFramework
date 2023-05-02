@@ -32,7 +32,24 @@ def services_dict_without_description(cpak, default_config_yaml):
 
     return services
 
-def compareAndMergeYaml(cpak,services_dict,config_map_yaml):
+def services_project_association(cpak, default_config_yaml):
+    service_project_map = {}
+    
+    cpak_config = {"cp4d":['cp4d','cartridges','name'],
+                   "cp4i":['cp4i','instances','type'],
+                   "cp4waiops":['cp4waiops','instances','kind']}
+
+    for projectidx,project in enumerate(default_config_yaml[cpak_config[cpak][0]]):
+        servicelist = []
+        for _,sv in enumerate(project[cpak_config[cpak][1]]):
+            servicelist.append(sv[cpak_config[cpak][2]])
+
+        servicelist.append(projectidx)
+        service_project_map[project['project']] = servicelist
+
+    return service_project_map
+
+def compareAndMergeYaml(cpak,services_dict,config_map_yaml,service_project_map):
     if(cpak == "cp4d"):
         for service in services_dict:
             if not any(existing_service["name"] == service for existing_service in config_map_yaml["cp4d"][0]["cartridges"]):
@@ -40,13 +57,11 @@ def compareAndMergeYaml(cpak,services_dict,config_map_yaml):
     elif(cpak == "cp4i"):
         pass
     elif(cpak == "cp4waiops"):
-        ## Note: CP4WAIOPS has a unique yaml structure (unlike CP4D,CP4I) with multiple sub projects and instances. 
-        # Thus appending services for CP4WAIOPS is not possible. 
-        # Currently this function will just append (any extra/unregistered services) to the first project instance
-
         for service in services_dict:
-            if not any ( service == config_map_yaml["cp4waiops"][project]["instances"][service_idx]['kind'] for project in range(0,len(config_map_yaml["cp4waiops"])) for service_idx in range(0,len(config_map_yaml["cp4waiops"][project]["instances"]))):
-                config_map_yaml["cp4waiops"][0]["instances"].append(services_dict[service])
+            if not any (service == config['kind'] for _,project in enumerate(config_map_yaml["cp4waiops"]) for _,config in enumerate(project['instances'])):
+                for projectitem in service_project_map:
+                    if service in service_project_map[projectitem]:
+                        config_map_yaml["cp4waiops"][service_project_map[projectitem][-1]]["instances"].append(services_dict[service])
 
     return config_map_yaml
 
@@ -58,7 +73,8 @@ try:
 
     if(config_map_exists):
         config_map_yaml = load_yaml_file(cpak + "-config.yaml")
-        config_data = compareAndMergeYaml(cpak,services_dict, config_map_yaml)
+        service_map = services_project_association(cpak, default_config_yaml)
+        config_data = compareAndMergeYaml(cpak,services_dict, config_map_yaml,service_map)
     else:
         config_data = default_config_yaml
 
