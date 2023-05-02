@@ -55,7 +55,7 @@ else
 fi
 CLOUD_PAK=$7
 
-python3 compareAndMergeYaml.py "$CLOUD_PAK"
+python compareAndMergeYaml.py "$CLOUD_PAK"
 # Store variables in shell script
 echo "ICR_KEY=$ICR_KEY" > ./env-vars.sh
 echo "API_TOKEN=$API_TOKEN" >> ./env-vars.sh
