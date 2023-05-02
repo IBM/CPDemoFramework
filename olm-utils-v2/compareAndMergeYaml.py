@@ -20,7 +20,12 @@ def services_dict_without_description(cpak, default_config_yaml):
                 except:
                     pass
     elif(cpak == "cp4i"):
-        pass
+        for service in default_config_yaml["cp4i"][0]["instances"]:
+                try:
+                    del service["description"]
+                    services[service["type"]] = service
+                except:
+                    pass
     elif(cpak == "cp4waiops"):
         for project in range(0,len(default_config_yaml["cp4waiops"])):
             for service in range(0,len(default_config_yaml["cp4waiops"][project]["instances"])):        
@@ -55,7 +60,9 @@ def compareAndMergeYaml(cpak,services_dict,config_map_yaml,service_project_map):
             if not any(existing_service["name"] == service for existing_service in config_map_yaml["cp4d"][0]["cartridges"]):
                 config_map_yaml["cp4d"][0]["cartridges"].append(services_dict[service])
     elif(cpak == "cp4i"):
-        pass
+        for service in services_dict:
+            if not any(existing_service["type"] == service for existing_service in config_map_yaml["cp4i"][0]["instances"]):
+                config_map_yaml["cp4i"][0]["instances"].append(services_dict[service])
     elif(cpak == "cp4waiops"):
         for service in services_dict:
             if not any (service == config['kind'] for _,project in enumerate(config_map_yaml["cp4waiops"]) for _,config in enumerate(project['instances'])):
