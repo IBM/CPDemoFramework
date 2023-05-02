@@ -40,7 +40,6 @@ def compareAndMergeYaml(cpak, default_config_yaml, config_map_yaml):
         for service in services_dict:
             if not any(existing_service["type"] == service for existing_service in config_map_yaml["cp4i"][0]["instances"]):
                 config_map_yaml["cp4i"][0]["instances"].append(services_dict[service])
-        pass
     elif(cpak == "cp4waiops"):
         pass
     return config_map_yaml
