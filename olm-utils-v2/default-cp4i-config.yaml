@@ -7,23 +7,34 @@ cp4i:
   instances:
   - type: platform-navigator
     state: removed
+    description: Platform Navigator
   - type: api-management
     state: removed
+    description: API Management
   - type: automation-assets
     state: removed
+    description: Automation Assets
   - type: enterprise-gateway
     state: removed
+    description: Enterprise Gateway
   - type: event-endpoint-management
     state: removed
+    description: Event Endpoint Management
   - type: event-streams
     state: removed
+    description: Event Steam
   - type: high-speed-transfer-server
     state: removed
+    description: High Speed Transfer Server
   - type: integration-dashboard
     state: removed
+    description: Integration Dashboard
   - type: integration-design
     state: removed
+    description: Integration Design
   - type: integration-tracing
     state: removed
+    description: Integration tracing
   - type: messaging
     state: removed
+    description: Messaging

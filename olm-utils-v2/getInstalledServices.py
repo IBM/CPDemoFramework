@@ -109,19 +109,16 @@ if cpak == "cp4d":
 i=0
 if cpak == "cp4i":
     ############ Hard coded service list ############
-    servicescp4i = {
-        "platform-navigator": "Platform Navigator",
-        "api-management": "API Management",
-        "automation-assets": "Automation Assets",
-        "enterprise-gateway": "Enterprise Gateway",
-        "event-endpoint-management": "Event Endpoint Management",
-        "event-streams": "Event Steam",
-        "high-speed-transfer-server": "High Speed Transfer Server",
-        "integration-dashboard": "Integration Dashboard",
-        "integration-design": "Integration Design",
-        "integration-tracing": "Integration tracing",
-        "messaging": "Messaging"
-    }
+    with open('default-cp4i-config.yaml') as f:
+        default_cp4d_yaml = yaml.safe_load(f)
+
+    servicescp4i = {}
+    for service in default_cp4d_yaml["cp4i"][0]["instances"]:
+        try:
+            servicescp4i[service["type"]] = service["description"]
+        except:
+            pass
+            
     # Open & load the config file into a list
     with open('cp4i-config.yaml') as f:
         list_doc = yaml.safe_load(f)
@@ -194,16 +191,19 @@ if cpak == "cp4i":
 #####################For cp4waiops get the installed services#####################
 i=0
 if cpak == "cp4waiops":
-    ############ Hard coded service list ############
-    servicescp4waiops = {
-    "AIManager": 'AI Manager',
-    "AIManagerDemoContent": 'AI Manager Demo Content',
-    "EventManager": 'Event Manager',
-    "ELK": 'ELK',
-    "Instana": 'Instana',
-    "Turbonomic": 'Turbonomic',
-    "TurbonomicDemoContent": 'Turbonomic Demo Content'
-    }
+
+    # service list generation
+    with open('default-cp4waiops-config.yaml') as f:
+        default_cp4waiops_yaml = yaml.safe_load(f)
+
+    servicescp4waiops = {}
+    for project in range(0,len(default_cp4waiops_yaml["cp4waiops"])):
+        for service in range(0,len(default_cp4waiops_yaml["cp4waiops"][project]["instances"])):        
+            try:
+                servicescp4waiops[default_cp4waiops_yaml["cp4waiops"][project]["instances"][service]['kind']] = default_cp4waiops_yaml["cp4waiops"][project]["instances"][service]['description']
+            except:
+                pass
+
     serviceversionscp4waiops = {
     "AIManager": 'subscription_channel',
     "AIManagerDemoContent": '',
