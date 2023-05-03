@@ -1,0 +1,53 @@
+{
+    "rowData": [
+        {
+            "id": 1,
+            "scriptType": "python",
+            "sciptName": "Check Status of Openshift",
+            "description": "This is to check status of CP4d",
+            "code": ""
+        },
+        {
+            "id": 2,
+            "scriptType": "bash",
+            "sciptName": "Check Status of CP4D",
+            "description": "This is to check status of CP4d",
+            "code": ""
+        },
+        {
+            "id": 3,
+            "scriptType": "python",
+            "sciptName": "Restart CP4D POD",
+            "description": "This is to restart CP4D POD",
+            "code": ""
+        },
+        {
+            "id": 4,
+            "scriptType": "bash",
+            "sciptName": "Fix CP4D",
+            "description": "This is to fix issues in CP4D instance",
+            "code": ""
+        },
+        {
+            "id": 5,
+            "scriptType": "bash",
+            "sciptName": "Fix CP4I",
+            "description": "This is to fix issues in CP4I instance",
+            "code": ""
+        }
+    ],
+    "headerData": [
+        {
+            "key": "sciptName",
+            "header": "sciptName"
+        },
+        {
+            "key": "scriptType",
+            "header": "scriptType"
+        },
+        {
+            "key": "description",
+            "header": "description"
+        }
+    ]
+}
