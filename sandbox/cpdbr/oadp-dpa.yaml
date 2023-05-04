@@ -28,7 +28,7 @@
                   memory: 256Mi
           restic:
             enable: true
-            timeout: 2h
+            timeout: 6h
             podConfig:
               resourceAllocations:
                 limits:
