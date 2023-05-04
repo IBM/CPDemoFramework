@@ -1,0 +1,52 @@
+{
+    "header": {
+        "title": "Test Title",
+        "description": "This is a  test description"
+    },
+    "preRequisites": {
+        "fields": [
+            {
+                "type": "text",
+                "label": "ICR Key"
+            },
+            {
+                "type": "text",
+                "label": "OC Login"
+            },
+            {
+                "type": "text",
+                "label": "Server"
+            },
+            {
+                "type": "text",
+                "label": "API Key"
+            },
+            {
+                "type": "text",
+                "label": "Kube Admin User"
+            },
+            {
+                "type": "password",
+                "label": "Kube Admin Password"
+            }
+        ],
+        "validCombinations": [
+            [
+                "icr-key",
+                "oc-login"
+            ],
+            [
+                "icr-key",
+                "server",
+                "api-key"
+            ],
+            [
+                "icr-key",
+                "server",
+                "kube-admin-user",
+                "kube-admin-password"
+            ]
+        ]
+    },
+    "command": "echo 'hello world!'"
+}
