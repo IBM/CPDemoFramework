@@ -21,18 +21,18 @@
             podConfig:
               resourceAllocations:
                 limits:
-                  cpu: "1"
-                  memory: 1Gi
+                  cpu: "2"
+                  memory: 4Gi
                 requests:
                   cpu: 500m
                   memory: 256Mi
           restic:
             enable: true
-            timeout: 2h
+            timeout: 6h
             podConfig:
               resourceAllocations:
                 limits:
-                  cpu: "1"
+                  cpu: "2"
                   memory: 4Gi
                 requests:
                   cpu: 500m
