@@ -1,25 +1,25 @@
 {
     "header": {
-        "title": "Test Title 1",
+        "title": "Test Title 3",
         "description": "This is a  test description"
     },
     "preRequisites": {
         "fields": [
             {
                 "type": "text",
-                "label": "ICR Key"
+                "label": "Server"
             },
             {
                 "type": "text",
-                "label": "OC Login"
+                "label": "API Key"
             }
         ],
         "validCombinations": [
             [
-                "icr-key",
-                "oc-login"
+                "server",
+                "api-key"
             ]
         ]
     },
-    "command": "echo 'hello world! 1'"
+    "command": "echo 'hello world! 3'"
 }
