@@ -2,52 +2,52 @@
     "rowData": [
         {
             "id": 1,
-            "scriptType": "python",
-            "sciptName": "Check Status of Openshift",
-            "description": "This is to check status of CP4d",
+            "Script Type": "python",
+            "Script Name": "Check Status of Openshift",
+            "Description": "This is to check status of CP4d",
             "code": ""
         },
         {
             "id": 2,
-            "scriptType": "bash",
-            "sciptName": "Check Status of CP4D",
-            "description": "This is to check status of CP4d",
+            "Script Type": "bash",
+            "Script Name": "Check Status of CP4D",
+            "Description": "This is to check status of CP4d",
             "code": ""
         },
         {
             "id": 3,
-            "scriptType": "python",
-            "sciptName": "Restart CP4D POD",
-            "description": "This is to restart CP4D POD",
+            "Script Type": "python",
+            "Script Name": "Restart CP4D POD",
+            "Description": "This is to restart CP4D POD",
             "code": ""
         },
         {
             "id": 4,
-            "scriptType": "bash",
-            "sciptName": "Fix CP4D",
-            "description": "This is to fix issues in CP4D instance",
+            "Script Type": "bash",
+            "Script Name": "Fix CP4D",
+            "Description": "This is to fix issues in CP4D instance",
             "code": ""
         },
         {
             "id": 5,
-            "scriptType": "bash",
-            "sciptName": "Fix CP4I",
-            "description": "This is to fix issues in CP4I instance",
+            "Script Type": "bash",
+            "Script Name": "Fix CP4I",
+            "Description": "This is to fix issues in CP4I instance",
             "code": ""
         }
     ],
     "headerData": [
         {
-            "key": "sciptName",
-            "header": "sciptName"
+            "key": "Script Name",
+            "header": "Script Name"
         },
         {
-            "key": "scriptType",
-            "header": "scriptType"
+            "key": "Script Type",
+            "header": "Script Type"
         },
         {
-            "key": "description",
-            "header": "description"
+            "key": "Description",
+            "header": "Description"
         }
     ]
 }
