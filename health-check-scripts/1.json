@@ -1,14 +1,10 @@
 {
     "header": {
-        "title": "Test Title 1",
-        "description": "This is a  test description"
+        "title": "Get OpenShift Pods",
+        "description": "List all pods from openshift cluster"
     },
     "preRequisites": {
         "fields": [
-            {
-                "type": "text",
-                "label": "ICR Key"
-            },
             {
                 "type": "text",
                 "label": "OC Login"
@@ -16,10 +12,9 @@
         ],
         "validCombinations": [
             [
-                "icr-key",
                 "oc-login"
             ]
         ]
     },
-    "command": "echo 'hello world! 1'"
+    "command": "cd ${CHE_PROJECTS_ROOT}/techzone-demo/health-check-scripts;bash get-pods.sh"
 }

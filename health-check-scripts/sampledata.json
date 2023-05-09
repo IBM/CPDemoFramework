@@ -2,9 +2,9 @@
     "rowData": [
         {
             "id": 1,
-            "Script Type": "python",
-            "Script Name": "Check Status of Openshift",
-            "Description": "This is to check status of CP4d",
+            "Script Type": "bash",
+            "Script Name": "List Pods",
+            "Description": "List Pods from OpenShift Cluster.",
             "code": ""
         },
         {
