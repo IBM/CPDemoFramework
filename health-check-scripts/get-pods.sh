@@ -4,6 +4,6 @@ readJsonConfig() {
         echo $json | jq -r $1
 }
 
-oc_login = $(readJsonConfig ".oc_login")
-
-$oc_login
+$(readJsonConfig ".oc_login")
+oc project $(readJsonConfig ".project_name")
+oc get pods

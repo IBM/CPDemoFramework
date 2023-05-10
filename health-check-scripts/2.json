@@ -1,14 +1,10 @@
 {
     "header": {
-        "title": "Test Title 2",
-        "description": "This is a  test description"
+        "title": "Check Status of CP4D",
+        "description": "This is to check status of CP4"
     },
     "preRequisites": {
         "fields": [
-            {
-                "type": "text",
-                "label": "ICR Key"
-            },
             {
                 "type": "text",
                 "label": "OC Login"
@@ -16,10 +12,9 @@
         ],
         "validCombinations": [
             [
-                "icr-key",
-                "oc-login"
+                "oc_login"
             ]
         ]
     },
-    "command": "echo 'hello world! 2'"
+    "command": "cd ${CHE_PROJECTS_ROOT}/techzone-demo/health-check-scripts;bash check-cpd.sh"
 }
