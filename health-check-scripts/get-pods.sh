@@ -5,5 +5,6 @@ readJsonConfig() {
 }
 
 $(readJsonConfig ".oc_login")
-oc project $(readJsonConfig ".project_name")
+project_name=$(readJsonConfig ".project_name")
+oc project $project_name
 oc get pods
