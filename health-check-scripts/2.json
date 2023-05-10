@@ -1,18 +1,24 @@
 {
     "header": {
-        "title": "Check Status of CP4D",
-        "description": "This is to check status of CP4"
+        "title": "List Installed Services",
+        "description": "List Installed Services of CP4d"
     },
     "preRequisites": {
         "fields": [
             {
                 "type": "text",
                 "label": "OC Login"
+            },
+            {
+                "type": "text",
+                "label": "CP4D Project Name",
+                "defaultValue": "cpd"
             }
         ],
         "validCombinations": [
             [
-                "oc_login"
+                "oc_login",
+                "cp4d_project_name"
             ]
         ]
     },

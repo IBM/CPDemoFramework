@@ -10,8 +10,8 @@
         {
             "id": 2,
             "Script Type": "bash",
-            "Script Name": "Check Status of CP4D",
-            "Description": "This is to check status of CP4d",
+            "Script Name": "List Installed Services",
+            "Description": "List Installed Services of CP4d",
             "code": ""
         },
         {
