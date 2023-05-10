@@ -16,8 +16,8 @@
         ],
         "validCombinations": [
             [
-                "icr-key",
-                "oc-login"
+                "icr_key",
+                "oc_login"
             ]
         ]
     },

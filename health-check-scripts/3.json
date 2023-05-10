@@ -17,7 +17,7 @@
         "validCombinations": [
             [
                 "server",
-                "api-key"
+                "api_key"
             ]
         ]
     },

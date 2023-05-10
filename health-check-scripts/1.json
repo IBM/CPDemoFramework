@@ -8,11 +8,16 @@
             {
                 "type": "text",
                 "label": "OC Login"
+            },
+            {
+                "type": "text",
+                "label": "Project Name"
             }
         ],
         "validCombinations": [
             [
-                "oc-login"
+                "oc_login",
+                "project_name"
             ]
         ]
     },
