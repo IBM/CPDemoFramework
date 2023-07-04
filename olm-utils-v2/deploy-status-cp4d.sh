@@ -17,7 +17,7 @@ if [ ! -z ${API_RESOURCES} ];then
     while read -r line;do
         read -r CR CR_NAME <<< "${line}"
         case $CR in
-            Ibmcpd|CommonService|OperandConfig|OperandRequest|OperandRegistry|OperandBindInfo|ResourcePlan|ZenExtension)
+            Ibmcpd|CommonService|OperandConfig|OperandRequest|OperandRegistry|OperandBindInfo|ResourcePlan|ZenExtension|IBMLicensingMetadata)
             ;;
             *)
             cr_status=$(oc get -n $CP4D_PROJECT $CR $CR_NAME -o jsonpath='{.status}' 2>/dev/null | jq -r '. | to_entries | map(select(.key | match("Status"))) | map(.value) | first')
