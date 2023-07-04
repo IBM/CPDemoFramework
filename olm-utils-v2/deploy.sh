@@ -47,11 +47,11 @@ while true; do
     echo
 
     # Get current stage of the deployer
-    current_stage=$(oc logs -n cloud-pak-deployer job/cloud-pak-deployer | grep -E 'PLAY \[' | tail -1)
+    current_stage=$(oc logs -n cloud-pak-deployer job/cloud-pak-deployer 2>/dev/null | grep -E 'PLAY \[' | tail -1)
     log "Current stage: ${current_stage}"
     echo
     # Get current task of the deployer
-    current_task=$(oc logs -n cloud-pak-deployer job/cloud-pak-deployer | grep -E 'TASK \[' | tail -1)
+    current_task=$(oc logs -n cloud-pak-deployer job/cloud-pak-deployer 2>/dev/null| grep -E 'TASK \[' | tail -1)
     log "Current task: ${current_task}"
     echo
     # Get catalog sources
