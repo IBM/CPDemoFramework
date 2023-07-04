@@ -56,15 +56,15 @@ while true; do
     echo
     # Get catalog sources
     log "Listing catalog sources"
-    oc get catsrc -n openshift-marketplace --no-headers -o custom-columns=':.metadata.name'
+    oc get catsrc -A --no-headers -o custom-columns=':.metadata.name' | grep -E 'ibm|cpd'
     echo
     # Listing subscriptions
     log "Listing IBM subscriptions"
-    oc get sub -n ibm-common-services --no-headers -o custom-columns=':.metadata.name'
+    oc get sub -A --no-headers -o custom-columns=':.metadata.name' | grep -E 'ibm|cpd'
     echo
     # Listing CSVs
     log "Listing CSVs"
-    oc get csv -n ibm-common-services --no-headers -o custom-columns=':.metadata.name'
+    oc get csv -A --no-headers -o custom-columns=':.metadata.name' | grep -E 'ibm|cpd' | sort -u
     echo
 
     # Now do Cloud Pak specific checks
