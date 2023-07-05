@@ -7,7 +7,7 @@ import json
 
 cpak = sys.argv[1]
 path = sys.argv[2]
-cp4d_version = "4.5.1"
+cp4d_version = "4.7.0"
 cp4i_version = "2022.4.1-0"
 
 # Dict of list of services already installed
