@@ -151,3 +151,6 @@ cp4d:
   - name: ws-pipelines
     state: removed
     description: Watson Studio Pipelines
+  - name: ws-runtimes
+    state: removed
+    description: Watson Studio Runtimes
