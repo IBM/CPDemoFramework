@@ -1,7 +1,7 @@
 cp4d:
 - project: cpd
   openshift_cluster_name: cpd-demo
-  cp4d_version: 4.6.3
+  cp4d_version: 4.7.0
   accept_licenses: true
   sequential_install: false
   cartridges:
@@ -151,3 +151,15 @@ cp4d:
   - name: ws-pipelines
     state: removed
     description: Watson Studio Pipelines
+  - name: ws-runtimes
+    description: Watson Studio Runtimes
+    runtimes:
+    # - ibm-cpd-ws-runtime-py39
+    - ibm-cpd-ws-runtime-222-py
+    # - ibm-cpd-ws-runtime-py39gpu
+    # - ibm-cpd-ws-runtime-222-pygpu
+    # - ibm-cpd-ws-runtime-231-pygpu
+    # - ibm-cpd-ws-runtime-r36
+    # - ibm-cpd-ws-runtime-222-r
+    - ibm-cpd-ws-runtime-231-r
+    state: removed 

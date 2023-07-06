@@ -47,24 +47,24 @@ while true; do
     echo
 
     # Get current stage of the deployer
-    current_stage=$(oc logs -n cloud-pak-deployer job/cloud-pak-deployer | grep -E 'PLAY \[' | tail -1)
+    current_stage=$(oc logs -n cloud-pak-deployer job/cloud-pak-deployer 2>/dev/null | grep -E 'PLAY \[' | tail -1)
     log "Current stage: ${current_stage}"
     echo
     # Get current task of the deployer
-    current_task=$(oc logs -n cloud-pak-deployer job/cloud-pak-deployer | grep -E 'TASK \[' | tail -1)
+    current_task=$(oc logs -n cloud-pak-deployer job/cloud-pak-deployer 2>/dev/null| grep -E 'TASK \[' | tail -1)
     log "Current task: ${current_task}"
     echo
     # Get catalog sources
     log "Listing catalog sources"
-    oc get catsrc -n openshift-marketplace --no-headers -o custom-columns=':.metadata.name'
+    oc get catsrc -A --no-headers -o custom-columns=':.metadata.name' | grep -E 'ibm|cpd'
     echo
     # Listing subscriptions
     log "Listing IBM subscriptions"
-    oc get sub -n ibm-common-services --no-headers -o custom-columns=':.metadata.name'
+    oc get sub -A --no-headers -o custom-columns=':.metadata.name' | grep -E 'ibm|cpd'
     echo
     # Listing CSVs
     log "Listing CSVs"
-    oc get csv -n ibm-common-services --no-headers -o custom-columns=':.metadata.name'
+    oc get csv -A --no-headers -o custom-columns=':.metadata.name' | grep -E 'ibm|cpd' | sort -u
     echo
 
     # Now do Cloud Pak specific checks
