@@ -9,7 +9,7 @@ metadata:
 spec:
   parallelism: 1
   completions: 1
-  backoffLimit: 0
+  backoffLimit: 2
   template:
     metadata:
       name: cloud-pak-deployer
