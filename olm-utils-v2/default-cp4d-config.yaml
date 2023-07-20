@@ -3,7 +3,7 @@ cp4d:
   openshift_cluster_name: cpd-demo
   cp4d_version: 4.6.3
   accept_licenses: true
-  sequential_install: False
+  sequential_install: false
   cartridges:
   - name: cp-foundation
     license_service:
@@ -13,20 +13,29 @@ cp4d:
   - name: analyticsengine
     size: small
     state: removed
+    description: Analytics Engine Powered by Apache Spark
   - name: bigsql
     state: removed
+    description: Db2 Big SQL
   - name: ca
     size: small
     instances:
     - name: ca-instance
       metastore_ref: ca-metastore
     state: removed
+    description: Cognos Analytics
   - name: cde
     state: removed
+    description: Cognos Dashboards
   - name: datagate
     state: removed
+    description: Data Gate
+  - name: datastage-ent
+    state: removed
+    description: DataStage Enterprise
   - name: datastage-ent-plus
     state: removed
+    description: DataStage Enterprise Plus
   - name: db2
     size: small
     instances:
@@ -36,81 +45,112 @@ cp4d:
       backup_size_gb: 20
       transactionlog_size_gb: 20
     state: removed
+    description: Db2
   - name: db2wh
     state: removed
+    description: Db2 Warehouse
   - name: dmc
     state: removed
+    description: Data Management Console
   - name: dods
     size: small
     state: removed
+    description: Decision Optimization
   - name: dp
     size: small
     state: removed
+    description: Data Privacy
+  - name: dpra
+    state: removed
+    description: Data Privacy Risk Assessment
   - name: dv
     size: small
     instances:
     - name: data-virtualization
     state: removed
+    description: Data Virtualization
   - name: factsheet
     size: small
     state: removed
+    description: AI Factsheets
   - name: hadoop
     size: small
     state: removed
+    description: Execution Engine for Apache Hadoop
   - name: match360
     size: small
     wkc_enabled: true
     state: removed
+    description: Match360
   - name: openpages
     state: removed
     instances:
     - name: openpages-instance
       size: xsmall
+    description: OpenPages
   - name: planning-analytics
     state: removed
+    description: Planning Analytics
   - name: replication
     size: small
     license: IDRC
     state: removed
+    description: Data Replication
   - name: rstudio
     size: small
     state: removed
+    description: RStudio Server
   - name: spss
     state: removed
+    description: SPSS Modeler
   - name: voice-gateway
     replicas: 1
     state: removed
+    description: Voice Gateway
   - name: watson-assistant
     size: small
     state: removed
+    description: Watson Assistant
   - name: watson-discovery
     state: removed
+    description: Watson Discovery
   - name: watson-ks
     size: small
     state: removed
+    description: Watson Knowledge Studio
   - name: watson-openscale
     size: small
     state: removed
+    description: IBM Watson OpenScale
   - name: watson-speech
     stt_size: xsmall
     tts_size: xsmall
     state: removed
+    description: Watson Speech to Text
   - name: wkc
     size: small
     state: removed
     installation_options:
-      install_wkc_core_only: True
-      enableKnowledgeGraph: False
-      enableDataQuality: False
-      enableMANTA: False
+      install_wkc_core_only: true
+      enableKnowledgeGraph: false
+      enableDataQuality: false
+      enableMANTA: false
+    description: Watson Knowledge Catalog
   - name: wml
     size: small
     state: removed
+    description: Watson Machine Learning
   - name: wml-accelerator
     replicas: 1
     size: small
     state: removed
+    description: Watson Machine Learning Accelerator
   - name: wsl
     state: removed
+    description: Watson Studio
   - name: ws-pipelines
     state: removed
+    description: Watson Studio Pipelines
+  - name: ws-runtimes
+    state: removed
+    description: Watson Studio Runtimes

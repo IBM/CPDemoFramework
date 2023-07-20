@@ -24,7 +24,7 @@
           spec:
             containers:
             - name: cloud-pak-br-debug
-              image: quay.io/devplayground/cloud-pak-deployer:latest
+              image: quay.io/cloud-pak-deployer/cloud-pak-deployer:latest
               imagePullPolicy: Always
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
