@@ -10,14 +10,14 @@ else
 fi
 
 # Listing custom resources for Cloud Pak for Data
-API_RESOURCES=$(oc api-resources --namespaced=true --verbs=list -o name | grep ibm | awk '{printf "%s%s",sep,$0;sep=","}')
+API_RESOURCES=$(oc api-resources --namespaced=true --verbs=list -o name 2>/dev/null | grep ibm | awk '{printf "%s%s",sep,$0;sep=","}')
 if [ ! -z ${API_RESOURCES} ];then
     log "Getting Custom Resources in OpenShift project ${CP4D_PROJECT}..."
     oc get --no-headers -n $CP4D_PROJECT ${API_RESOURCES}  --ignore-not-found -o=custom-columns=KIND:.kind,NAME:.metadata.name --sort-by='kind' > ${temp_dir}/cp4d-resources.out
     while read -r line;do
         read -r CR CR_NAME <<< "${line}"
         case $CR in
-            Ibmcpd|CommonService|OperandRequest)
+            Ibmcpd|CommonService|OperandConfig|OperandRequest|OperandRegistry|OperandBindInfo|ResourcePlan|ZenExtension)
             ;;
             *)
             cr_status=$(oc get -n $CP4D_PROJECT $CR $CR_NAME -o jsonpath='{.status}' 2>/dev/null | jq -r '. | to_entries | map(select(.key | match("Status"))) | map(.value) | first')
