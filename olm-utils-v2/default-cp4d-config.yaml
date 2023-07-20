@@ -26,6 +26,9 @@ cp4d:
     description: Cognos Analytics
   - name: cde
     state: removed
+    description: Old Cognos Dashboards
+  - name: dashboard
+    state: removed
     description: Cognos Dashboards
   - name: datagate
     state: removed
