@@ -26,6 +26,9 @@ cp4d:
     description: Cognos Analytics
   - name: cde
     state: removed
+    description: Cognos Dashboards pre v4.7
+  - name: dashboard
+    state: removed
     description: Cognos Dashboards
   - name: datagate
     state: removed
@@ -162,4 +165,4 @@ cp4d:
     # - ibm-cpd-ws-runtime-r36
     # - ibm-cpd-ws-runtime-222-r
     - ibm-cpd-ws-runtime-231-r
-    state: removed 
+    state: removed
