@@ -34,12 +34,17 @@ def services_dict_without_description(cpak, default_config_yaml):
                     services[default_config_yaml["cp4waiops"][project]["instances"][service]['kind']] = default_config_yaml["cp4waiops"][project]["instances"][service]
                 except:
                     pass
+    elif(cpak == "cp4ba"):
+        return {}
 
     return services
 
 def services_project_association(cpak, default_config_yaml):
     service_project_map = {}
-    
+
+    if(cpak == "cp4ba"):
+        return {}
+
     cpak_config = {"cp4d":['cp4d','cartridges','name'],
                    "cp4i":['cp4i','instances','type'],
                    "cp4waiops":['cp4waiops','instances','kind']}
@@ -69,6 +74,8 @@ def compareAndMergeYaml(cpak,services_dict,config_map_yaml,service_project_map):
                 for projectitem in service_project_map:
                     if service in service_project_map[projectitem]:
                         config_map_yaml["cp4waiops"][service_project_map[projectitem][-1]]["instances"].append(services_dict[service])
+    elif(cpak == "cp4ba"):
+        pass
 
     return config_map_yaml
 

@@ -77,6 +77,9 @@ while true; do
     if [[ "${cpak}" == *"cp4waiops"* ]];then
         ./deploy-status-cp4waiops.sh
     fi
+    if [[ "${cpak}" == *"cp4ba"* ]];then
+        ./deploy-status-cp4ba.sh
+    fi
 
     # Now retrieve logs if the deployer is still active
     deployer_status=$(oc get job cloud-pak-deployer -n cloud-pak-deployer -o jsonpath='{.status.active}' 2>/dev/null)
@@ -140,6 +143,10 @@ fi
 # Conditionally set the CP4WAIOps configuration
 if [[ "${cpak}" == *"cp4waiops"* ]];then
     oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./cp4waiops-config.yaml
+fi
+# Conditionally set the CP4BA configuration
+if [[ "${cpak}" == *"cp4ba"* ]];then
+    oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./cp4ba-config.yaml
 fi
 
 # Always set the global and OpenShift configuration

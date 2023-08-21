@@ -92,4 +92,43 @@ elif cpak.lower()=='cp4waiops':
 
     with open("cp4waiops-config.yaml", "w") as f:
         yaml.dump(list_cp4waiops, f, sort_keys=False)
+
+# update cp4ba configuration yaml
+elif cpak.lower()=='cp4ba':
+
+    with open('cp4ba-config.yaml') as f:
+        list_cp4ba = yaml.safe_load(f)
+
+    cp4ba_main = {'decisions','decisions_ads','content','application','document_processing','workflow','pm','rpa'}
+    cp4ba_additionals = ['cloudbeaver_enabled','roundcube_enabled','cerebro_enabled','akhq_enabled','mongo_express_enabled']
+    cp4ba_optional_components = {('bas','bai','ae'):'foundation',('decision_center','decision_runner','decision_server_runtime'):'decisions',('ads_designer','ads_runtime'):'decisions_ads',('cmis','css','es','tm','ier'):'content',('app_designer','ae_data_persistence'):'application',('document_processing_designer','gpu_enabled'):'document_processing',('baw_authoring'):'workflow'}
+
+    ## main
+    for component in component_list:
+        if component in cp4ba_main:
+            if component == "pm":
+                list_cp4ba['cp4ba'][0]['pm']['enabled'] = bool('true')
+            elif component == "rpa":
+                list_cp4ba['cp4ba'][0]['rpa']['enabled'] = bool('true')
+            else:
+                list_cp4ba['cp4ba'][0]['cp4ba']['patterns'][component]['enabled'] = bool('true')
+
+    ## additionals
+    for component in component_list:
+        if component in cp4ba_additionals:
+            list_cp4ba['cp4ba'][0][component] = bool('true')
+
+
+    ## optional components (only for cp4ba patterns)
+    for optional_comp in cp4ba_optional_components:
+        for component in component_list:
+            if component in optional_comp:
+                #print(cp4ba_optional_components[optional_comp])
+                list_cp4ba['cp4ba'][0]['cp4ba']['patterns'][cp4ba_optional_components[optional_comp]]['optional_components'][component] = bool('true')
+            
+
+    with open('cp4ba-config.yaml',"w") as f:
+        yaml.dump(list_cp4ba, f, sort_keys=False)
+
+
 print("success")
