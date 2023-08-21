@@ -130,6 +130,9 @@ cp4d:
     tts_size: xsmall
     state: removed
     description: Watson Speech to Text
+  - name: watsonx-data
+    description: watsonx.data
+    state: removed
   - name: wkc
     size: small
     state: removed
