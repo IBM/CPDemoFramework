@@ -1,7 +1,7 @@
 ---
 cp4ba:
 - project: cp4ba
-  openshift_cluster_name: "{{ env_id }}"
+  openshift_cluster_name: cpd-demo
   openshift_storage_name: auto-storage
   accept_licenses: true 
   state: installed
