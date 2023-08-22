@@ -3,7 +3,7 @@ cp4ba:
 - project: cp4ba
   openshift_cluster_name: "{{ env_id }}"
   openshift_storage_name: auto-storage
-  accept_licenses: false
+  accept_licenses: true 
   state: installed
   cpfs_profile_size: small # Profile size which affect replicas and resources of Pods of CPFS as per https://www.ibm.com/docs/en/cpfs?topic=operator-hardware-requirements-recommendations-foundational-services
 
