@@ -15,8 +15,8 @@ readJsonConfig() {
 }
  
 
-CPAK_ADMIN_PASSWORD=$(readJsonConfig ".cp4dAdminPassword")
-CPAK_ENV_NAME=$(readJsonConfig ".cp4dEnvName")
+CPAK_ADMIN_PASSWORD=$(readJsonConfig ".cpakAdminPassword")
+CPAK_ENV_NAME=$(readJsonConfig ".cpakEnvName")
 
 #remove the cp4d pswd and env name incase it's an empty string in env file 
 sed -i 's/CPAK_ADMIN_PASSWORD=//' ./env-vars.sh
