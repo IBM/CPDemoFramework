@@ -22,7 +22,7 @@ vault:
   vault_authentication_type: none
 openshift:
 - name: cpd-demo
-  ocp_version: '4.10'
+  ocp_version: '4.12'
   cluster_name: cpd-demo
   domain_name: example.com
   console_banner: "Environment {{ env_id }}"
