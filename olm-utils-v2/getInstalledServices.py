@@ -277,10 +277,66 @@ if cpak == "cp4waiops":
 #########################################################################
 
 
-# Serializing json
-json_object = json.dumps(serviceInstalled, indent=4)
- 
-# Writing to the json
-with open(path, "w") as outfile:
-    outfile.write(json_object)
-print("success")
+#####################For cp4ba get the installed services#####################
+i=0
+if cpak == "cp4ba":
+    
+    with open('cp4ba-config.yaml') as f:
+        cp4ba_yaml = yaml.safe_load(f)
+
+    cp4ba_main = {'decisions','decisions_ads','content','application','document_processing','workflow','pm','rpa'}
+    cp4ba_additionals = ['cloudbeaver_enabled','roundcube_enabled','cerebro_enabled','akhq_enabled','mongo_express_enabled']
+    cp4ba_optional_components = {'foundation':['bas','bai','ae'],'decisions':['decision_center','decision_runner','decision_server_runtime'],'decisions_ads':['ads_designer','ads_runtime'],'content':['cmis','css','es','tm','ier'],'application':['app_designer','ae_data_persistence'],'document_processing':['document_processing_designer'],'workflow':['baw_authoring']}
+
+
+    installed_services_list = []
+
+    ## main
+    for component in cp4ba_main:
+        if component == "pm":
+            if cp4ba_yaml['cp4ba'][0]['pm']['enabled']:
+                installed_services_list.append('pm')
+        elif component == "rpa":
+            if cp4ba_yaml['cp4ba'][0]['rpa']['enabled']:
+                installed_services_list.append('rpa')
+        else:
+            if cp4ba_yaml['cp4ba'][0]['cp4ba']['patterns'][component]['enabled']:
+                installed_services_list.append(component)
+
+
+    ## additionals
+    for component in cp4ba_additionals:
+        if cp4ba_yaml['cp4ba'][0][component]:
+            installed_services_list.append(component)
+
+
+    ## optional components (only for cp4ba patterns)
+    for optional_comp in cp4ba_optional_components:
+        for each_optional_comp in cp4ba_optional_components[optional_comp]:
+            if cp4ba_yaml['cp4ba'][0]['cp4ba']['patterns'][optional_comp]['optional_components'][each_optional_comp]:
+                installed_services_list.append(each_optional_comp)
+
+
+    serviceInstalled = [] # unused
+    
+    # print(installed_services_list)
+
+    # Serializing json
+    json_object = json.dumps(installed_services_list)
+
+    # Writing to the json file
+    with open("./installed_cp4ba_services.json", "w+") as service_list_file:
+        service_list_file.write(json_object)
+    
+
+
+#########################################################################
+
+if path:
+    # Serializing json
+    json_object = json.dumps(serviceInstalled, indent=4)
+
+    # Writing to the json
+    with open(path, "w") as outfile:
+        outfile.write(json_object)
+    print("success")

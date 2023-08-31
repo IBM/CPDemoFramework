@@ -15,8 +15,8 @@ readJsonConfig() {
 }
  
 
-CPAK_ADMIN_PASSWORD=$(readJsonConfig ".cp4dAdminPassword")
-CPAK_ENV_NAME=$(readJsonConfig ".cp4dEnvName")
+CPAK_ADMIN_PASSWORD=$(readJsonConfig ".cpakAdminPassword")
+CPAK_ENV_NAME=$(readJsonConfig ".cpakEnvName")
 
 #remove the cp4d pswd and env name incase it's an empty string in env file 
 sed -i 's/CPAK_ADMIN_PASSWORD=//' ./env-vars.sh
@@ -76,6 +76,9 @@ while true; do
     fi
     if [[ "${cpak}" == *"cp4waiops"* ]];then
         ./deploy-status-cp4waiops.sh
+    fi
+    if [[ "${cpak}" == *"cp4ba"* ]];then
+        ./deploy-status-cp4ba.sh
     fi
 
     # Now retrieve logs if the deployer is still active
@@ -140,6 +143,10 @@ fi
 # Conditionally set the CP4WAIOps configuration
 if [[ "${cpak}" == *"cp4waiops"* ]];then
     oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./cp4waiops-config.yaml
+fi
+# Conditionally set the CP4BA configuration
+if [[ "${cpak}" == *"cp4ba"* ]];then
+    oc set data -n cloud-pak-deployer cm/cloud-pak-deployer-config --from-file=./cp4ba-config.yaml
 fi
 
 # Always set the global and OpenShift configuration

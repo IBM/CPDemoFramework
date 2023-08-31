@@ -1,0 +1,119 @@
+---
+cp4ba:
+- project: cp4ba
+  openshift_cluster_name: cpd-demo
+  openshift_storage_name: auto-storage
+  accept_licenses: true 
+  state: installed
+  cpfs_profile_size: small # Profile size which affect replicas and resources of Pods of CPFS as per https://www.ibm.com/docs/en/cpfs?topic=operator-hardware-requirements-recommendations-foundational-services
+
+  # Section for Cloud Pak for Business Automation itself
+  cp4ba:
+    # Set to false if you don't want to install (or remove) CP4BA
+    enabled: true # Currently always true
+    profile_size: small # Profile size which affect replicas and resources of Pods as per https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/latest?topic=pcmppd-system-requirements
+    patterns:
+      foundation: # Foundation pattern, always true - https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/latest?topic=deployment-capabilities-production-deployments#concept_c2l_1ks_fnb__foundation
+        optional_components:
+          bas: false # Business Automation Studio (BAS) 
+          bai: false # Business Automation Insights (BAI)
+          ae: false # Application Engine (AE)
+      decisions: # Operational Decision Manager (ODM) - https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/latest?topic=deployment-capabilities-production-deployments#concept_c2l_1ks_fnb__odm
+        enabled: false
+        optional_components:
+          decision_center: false # Decision Center (ODM)
+          decision_runner: false # Decision Runner (ODM)
+          decision_server_runtime: false # Decision Server (ODM)
+        # Additional customization for Operational Decision Management
+        # Contents of the following will be merged into ODM part of CP4BA CR yaml file. Arrays are overwritten.
+        cr_custom:
+          spec:
+            odm_configuration:
+              decisionCenter:
+                # Enable support for decision models
+                disabledDecisionModel: false
+      decisions_ads: # Automation Decision Services (ADS) - https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/latest?topic=deployment-capabilities-production-deployments#concept_c2l_1ks_fnb__ads
+        enabled: false
+        optional_components:
+          ads_designer: false # Designer (ADS)
+          ads_runtime: false # Runtime (ADS)
+      content: # FileNet Content Manager (FNCM) - https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/latest?topic=deployment-capabilities-production-deployments#concept_c2l_1ks_fnb__ecm
+        enabled: false
+        optional_components:
+          cmis: false # Content Management Interoperability Services (FNCM - CMIS)
+          css: false # Content Search Services (FNCM - CSS)
+          es: false # External Share (FNCM - ES)
+          tm: false # Task Manager (FNCM - TM)
+          ier: false # IBM Enterprise Records (FNCM - IER)
+      application: # Business Automation Application (BAA) - https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/latest?topic=deployment-capabilities-production-deployments#concept_c2l_1ks_fnb__baa
+        enabled: false
+        optional_components:
+          app_designer: false # App Designer (BAA)
+          ae_data_persistence: false # App Engine data persistence (BAA)
+      document_processing: # Automation Document Processing (ADP) - https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/latest?topic=deployment-capabilities-production-deployments#concept_c2l_1ks_fnb__adp
+        enabled: false
+        optional_components: 
+          document_processing_designer: false # Designer (ADP)
+        # Additional customization for Automation Document Processing
+        # Contents of the following will be merged into ADP part of CP4BA CR yaml file. Arrays are overwritten.
+        cr_custom:
+          spec:
+            ca_configuration:
+              # GPU config as described on https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/latest?topic=resource-configuring-document-processing
+              deeplearning:
+                gpu_enabled: false
+                nodelabel_key: nvidia.com/gpu.present
+                nodelabel_value: "true"
+      workflow: # Business Automation Workflow (BAW) - https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/latest?topic=deployment-capabilities-production-deployments#concept_c2l_1ks_fnb__baw
+        enabled: false
+        optional_components:
+          baw_authoring: false # Workflow Authoring (BAW) - always keep true if workflow pattern is chosen. BAW Runtime is not implemented.
+          kafka: false # Will install a kafka cluster and enable kafka service for workflow authoring.
+      workstreams: # Automation Workstream Services (IAWS)
+        enabled: false # Always false in this tool - this feature is not implemented
+  
+  # Section for IBM Process mining
+  pm:
+    # Set to false if you don't want to install (or remove) Process Mining
+    enabled: false
+    # Additional customization for Process Mining
+    # Contents of the following will be merged into PM CR yaml file. Arrays are overwritten.
+    cr_custom:
+      spec:
+        processmining:
+          storage:
+            # Disables redis to spare resources as per https://www.ibm.com/docs/en/process-mining/latest?topic=configurations-custom-resource-definition
+            redis:
+              install: false  
+
+  # Section for IBM Robotic Process Automation
+  rpa:
+    # Set to false if you don't want to install (or remove) RPA
+    enabled: false
+    # Additional customization for Robotic Process Automation
+    # Contents of the following will be merged into RPA CR yaml file. Arrays are overwritten.
+    cr_custom:
+      spec:
+        # Configures the NLP provider component of IBM RPA. You can disable it by specifying 0. https://www.ibm.com/docs/en/rpa/latest?topic=platform-configuring-rpa-custom-resources#basic-setup
+        nlp:
+          replicas: 1
+
+  # Section for Asset Repository
+  asset_repo:
+    # Set to false if you don't want to install (or remove) Asset Repo
+    enabled: false # Currently not implemented
+
+  # Set to false if you don't want to install (or remove) CloudBeaver (PostgreSQL, DB2, MSSQL UI)
+  cloudbeaver_enabled: false
+
+  # Set to false if you don't want to install (or remove) Roundcube
+  roundcube_enabled: false
+
+  # Set to false if you don't want to install (or remove) Cerebro
+  cerebro_enabled: false
+
+  # Set to false if you don't want to install (or remove) AKHQ
+  akhq_enabled: false
+
+  # Set to false if you don't want to install (or remove) Mongo Express
+  mongo_express_enabled: false
