@@ -101,11 +101,9 @@ elif cpak.lower()=='cp4ba':
 
     cp4ba_main = {'decisions','decisions_ads','content','application','document_processing','workflow','pm','rpa'}
     cp4ba_additionals = ['cloudbeaver_enabled','roundcube_enabled','cerebro_enabled','akhq_enabled','mongo_express_enabled']
-    cp4ba_optional_components = {('bas','bai','ae'):'foundation',('decision_center','decision_runner','decision_server_runtime'):'decisions',('ads_designer','ads_runtime'):'decisions_ads',('cmis','css','es','tm','ier'):'content',('app_designer','ae_data_persistence'):'application',('document_processing_designer','gpu_enabled'):'document_processing',('baw_authoring'):'workflow'}
+    cp4ba_optional_components = {'foundation':['bas','bai','ae'],'decisions':['decision_center','decision_runner','decision_server_runtime'],'decisions_ads':['ads_designer','ads_runtime'],'content':['cmis','css','es','tm','ier'],'application':['app_designer','ae_data_persistence'],'document_processing':['document_processing_designer'],'workflow':['baw_authoring','kafka']}
 
     # Reset all to false
-    cp4ba_optional_categories = {'foundation':['bas','bai','ae'],'decisions':['decision_center','decision_runner','decision_server_runtime'],'decisions_ads':['ads_designer','ads_runtime'],'content':['cmis','css','es','tm','ier'],'application':['app_designer','ae_data_persistence'],'document_processing':['document_processing_designer'],'workflow':['baw_authoring']}
-
     ## main
     for component in cp4ba_main:
         if component == "pm":
@@ -121,10 +119,9 @@ elif cpak.lower()=='cp4ba':
 
 
     ## optional components (only for cp4ba patterns)
-    for optional_category in cp4ba_optional_categories:
-        for each_optcomp in cp4ba_optional_categories[optional_category]:
-            list_cp4ba['cp4ba'][0]['cp4ba']['patterns'][optional_category]['optional_components'][each_optcomp] = bool('')
-
+    for component in cp4ba_optional_components:
+        for every_optcomp in cp4ba_optional_components[component]:
+            list_cp4ba['cp4ba'][0]['cp4ba']['patterns'][component]['optional_components'][every_optcomp] = bool('')
 
     # Set selections as per component list
     ## main
@@ -144,12 +141,12 @@ elif cpak.lower()=='cp4ba':
 
 
     ## optional components (only for cp4ba patterns)
-    for optional_comp in cp4ba_optional_components:
-        for component in component_list:
-            if component in optional_comp:
-                #print(cp4ba_optional_components[optional_comp])
-                list_cp4ba['cp4ba'][0]['cp4ba']['patterns'][cp4ba_optional_components[optional_comp]]['optional_components'][component] = bool('true')
-            
+    for component in component_list:
+        if component in cp4ba_optional_components and cp4ba_optional_components[component]:
+            for every_optcomp in cp4ba_optional_components[component]:
+                if every_optcomp in component_list:
+                    list_cp4ba['cp4ba'][0]['cp4ba']['patterns'][component]['optional_components'][every_optcomp] = bool('true')
+
 
     with open('cp4ba-config.yaml',"w") as f:
         yaml.dump(list_cp4ba, f, sort_keys=False)
