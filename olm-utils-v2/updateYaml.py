@@ -101,10 +101,10 @@ elif cpak.lower()=='cp4ba':
 
     cp4ba_main = {'decisions','decisions_ads','content','application','document_processing','workflow','pm','rpa'}
     cp4ba_additionals = ['cloudbeaver_enabled','roundcube_enabled','cerebro_enabled','akhq_enabled','mongo_express_enabled']
-    cp4ba_optional_components = {('bas','bai','ae'):'foundation',('decision_center','decision_runner','decision_server_runtime'):'decisions',('ads_designer','ads_runtime'):'decisions_ads',('cmis','css','es','tm','ier'):'content',('app_designer','ae_data_persistence'):'application',('document_processing_designer','gpu_enabled'):'document_processing',('baw_authoring'):'workflow'}
+    cp4ba_optional_components = {('bas','bai','ae'):'foundation',('decision_center','decision_runner','decision_server_runtime'):'decisions',('ads_designer','ads_runtime'):'decisions_ads',('cmis','css','es','tm','ier'):'content',('app_designer','ae_data_persistence'):'application',('document_processing_designer'):'document_processing',('baw_authoring','kafka'):'workflow'}
 
     # Reset all to false
-    cp4ba_optional_categories = {'foundation':['bas','bai','ae'],'decisions':['decision_center','decision_runner','decision_server_runtime'],'decisions_ads':['ads_designer','ads_runtime'],'content':['cmis','css','es','tm','ier'],'application':['app_designer','ae_data_persistence'],'document_processing':['document_processing_designer'],'workflow':['baw_authoring']}
+    cp4ba_optional_categories = {'foundation':['bas','bai','ae'],'decisions':['decision_center','decision_runner','decision_server_runtime'],'decisions_ads':['ads_designer','ads_runtime'],'content':['cmis','css','es','tm','ier'],'application':['app_designer','ae_data_persistence'],'document_processing':['document_processing_designer'],'workflow':['baw_authoring','kafka']}
 
     ## main
     for component in cp4ba_main:
