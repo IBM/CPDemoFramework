@@ -286,7 +286,7 @@ if cpak == "cp4ba":
 
     cp4ba_main = {'decisions','decisions_ads','content','application','document_processing','workflow','pm','rpa'}
     cp4ba_additionals = ['cloudbeaver_enabled','roundcube_enabled','cerebro_enabled','akhq_enabled','mongo_express_enabled']
-    cp4ba_optional_components = {'foundation':['bas','bai','ae'],'decisions':['decision_center','decision_runner','decision_server_runtime'],'decisions_ads':['ads_designer','ads_runtime'],'content':['cmis','css','es','tm','ier'],'application':['app_designer','ae_data_persistence'],'document_processing':['document_processing_designer'],'workflow':['baw_authoring']}
+    cp4ba_optional_components = {'foundation':['bas','bai','ae'],'decisions':['decision_center','decision_runner','decision_server_runtime'],'decisions_ads':['ads_designer','ads_runtime'],'content':['cmis','css','es','tm','ier'],'application':['app_designer','ae_data_persistence'],'document_processing':['document_processing_designer'],'workflow':['baw_authoring','kafka']}
 
 
     installed_services_list = []
