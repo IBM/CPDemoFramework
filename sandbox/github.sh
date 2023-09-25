@@ -149,7 +149,7 @@ result="$(curl \
   https://api.github.com/repos/${username}/${project_name}/pulls \
   -d '{"title":"Sandbox Demo by '$sandbox_username'","body":"","head":"'$sandbox_username-$demo_name'","base":"'$branch'"}')"
 
-requestNumber=$(echo "${result}" | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["number"]')
+requestNumber=$(echo "${result}" | python -c 'import json,sys;obj=json.load(sys.stdin);print(obj["number"])')
 
 re='^[0-9]+$'
 if ! [[ $requestNumber =~ $re ]] ; then
