@@ -1,5 +1,5 @@
-pandas==1.2.3
-requests==2.25.1
-python-decouple==3.4
+pandas
+requests
+python-decouple
 simple_term_menu
 PyYaml
