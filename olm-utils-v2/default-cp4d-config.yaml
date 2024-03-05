@@ -134,7 +134,7 @@ cp4d:
     tts_size: xsmall
     state: removed
     description: Watson Speech to Text
-  - name: watsonx-data
+  - name: watsonx_data
     description: watsonx.data
     state: removed
   # Please note that for watsonx.ai foundation models, you neeed to install the
