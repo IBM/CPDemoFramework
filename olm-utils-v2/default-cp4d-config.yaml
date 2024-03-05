@@ -137,6 +137,42 @@ cp4d:
   - name: watsonx-data
     description: watsonx.data
     state: removed
+  # Please note that for watsonx.ai foundation models, you neeed to install the
+  # Node Feature Discovery and NVIDIA GPU operators. You can do so by setting the openshift.gpu.install property to True
+  - name: watsonx_ai
+    description: watsonx.ai
+    state: removed
+    models:
+    - model_id: google-flan-t5-xxl
+      state: removed
+    - model_id: google-flan-ul2
+      state: removed
+    - model_id: eleutherai-gpt-neox-20b
+      state: removed
+    - model_id: ibm-granite-13b-chat-v1
+      state: removed
+    - model_id: ibm-granite-13b-chat-v2
+      state: removed
+    - model_id: ibm-granite-13b-instruct-v1
+      state: removed
+    - model_id: ibm-granite-13b-instruct-v2
+      state: removed
+    - model_id: meta-llama-llama-2-70b-chat
+      state: removed
+    - model_id: ibm-mpt-7b-instruct2
+      state: removed
+    - model_id: bigscience-mt0-xxl
+      state: removed
+    - model_id: bigcode-starcoder
+      state: removed
+  - name: watsonx_governance
+    description: watsonx.governance
+    state: removed
+    installation_options:
+      installType: all
+      enableFactsheet: true
+      enableOpenpages: true
+      enableOpenscale: true
   - name: wkc
     size: small
     state: removed
