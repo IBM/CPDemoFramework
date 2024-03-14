@@ -1,6 +1,7 @@
 ---
 cp4ba:
 - project: cp4ba
+  collateral_project: cp4ba-collateral
   openshift_cluster_name: cpd-demo
   openshift_storage_name: auto-storage
   accept_licenses: true 
@@ -113,3 +114,6 @@ cp4ba:
 
   # Set to false if you don't want to install (or remove) Mongo Express
   mongo_express_enabled: false
+
+  # Set to false if you don't want to install (or remove) phpLDAPAdmin
+  phpldapadmin_enabled: true
