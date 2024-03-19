@@ -116,4 +116,4 @@ cp4ba:
   mongo_express_enabled: false
 
   # Set to false if you don't want to install (or remove) phpLDAPAdmin
-  phpldapadmin_enabled: true
+  phpldapadmin_enabled: false
