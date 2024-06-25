@@ -22,10 +22,15 @@ vault:
   vault_authentication_type: none
 openshift:
 - name: cpd-demo
-  ocp_version: '4.12'
+  ocp_version: '4.14'
   cluster_name: cpd-demo
   domain_name: example.com
   console_banner: "Environment {{ env_id }}"
+  openshift_ai:
+    install: True
+    channel: fast
+  gpu:
+    install: True
   openshift_storage:
   - storage_name: auto-storage
     storage_type: auto
