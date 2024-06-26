@@ -188,7 +188,7 @@ cp4d:
   - name: ikc_premium
     description: IBM Knowledge Catalog - Premium edition
     size: small
-    state: installed
+    state: removed
     installation_options:
       enableKnowledgeGraph: False
       enableDataQuality: False
