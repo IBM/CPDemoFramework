@@ -1,7 +1,7 @@
 cp4d:
 - project: cpd
   openshift_cluster_name: cpd-demo
-  cp4d_version: 4.7.0
+  cp4d_version: 5.0.0
   accept_licenses: true
   sequential_install: false
   cartridges:
@@ -33,6 +33,9 @@ cp4d:
   - name: datagate
     state: removed
     description: Data Gate
+  - name: dataproduct
+    description: Data Product Hub
+    state: removed
   - name: datastage-ent
     state: removed
     description: DataStage Enterprise
@@ -142,6 +145,8 @@ cp4d:
   - name: watsonx_ai
     description: watsonx.ai
     state: removed
+    installation_options:
+      tuning_disabled: true
     models:
     - model_id: google-flan-t5-xxl
       state: removed
@@ -177,11 +182,23 @@ cp4d:
     size: small
     state: removed
     installation_options:
-      install_wkc_core_only: true
       enableKnowledgeGraph: false
       enableDataQuality: false
-      enableMANTA: false
     description: Watson Knowledge Catalog
+  - name: ikc_premium
+    description: IBM Knowledge Catalog - Premium edition
+    size: small
+    state: removed
+    installation_options:
+      enableKnowledgeGraph: False
+      enableDataQuality: False
+  - name: ikc_standard
+    description: IBM Knowledge Catalog - Standard edition
+    size: small
+    state: removed
+    installation_options:
+      enableKnowledgeGraph: False
+      enableDataQuality: False
   - name: wml
     size: small
     state: removed
@@ -200,12 +217,10 @@ cp4d:
   - name: ws-runtimes
     description: Watson Studio Runtimes
     runtimes:
-    # - ibm-cpd-ws-runtime-py39
-    - ibm-cpd-ws-runtime-222-py
-    # - ibm-cpd-ws-runtime-py39gpu
-    # - ibm-cpd-ws-runtime-222-pygpu
-    # - ibm-cpd-ws-runtime-231-pygpu
-    # - ibm-cpd-ws-runtime-r36
-    # - ibm-cpd-ws-runtime-222-r
+    - ibm-cpd-ws-runtime-241-py
+    - ibm-cpd-ws-runtime-231-py
+    - ibm-cpd-ws-runtime-241-pygpu
+    - ibm-cpd-ws-runtime-231-pygpu
+    - ibm-cpd-ws-runtime-241-r
     - ibm-cpd-ws-runtime-231-r
     state: removed
