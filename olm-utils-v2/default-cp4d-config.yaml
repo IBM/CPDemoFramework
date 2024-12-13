@@ -1,7 +1,7 @@
 cp4d:
 - project: cpd
   openshift_cluster_name: cpd-demo
-  cp4d_version: 5.0.0
+  cp4d_version: 5.1.0
   accept_licenses: true
   sequential_install: false
   cartridges:
@@ -30,6 +30,9 @@ cp4d:
   - name: dashboard
     state: removed
     description: Cognos Dashboards
+  - name: datalineage
+    state: removed
+    description: IBM Manta Data Lineage
   - name: datagate
     state: removed
     description: Data Gate
